@@ -1,4 +1,5 @@
-import { ReactNode } from "react";
+import MuiGrid from "@mui/material/Grid";
+import { Children, ReactNode } from "react";
 
 interface GridProps {
   children: ReactNode;
@@ -6,16 +7,23 @@ interface GridProps {
   className?: string;
 }
 
-export function Grid({ children, cols = 3, className = "" }: GridProps) {
-  const colStyles = {
-    2: "sm:grid-cols-2",
-    3: "sm:grid-cols-2 lg:grid-cols-3",
-    4: "sm:grid-cols-2 lg:grid-cols-4",
-  }[cols];
+// Maps our simplified `cols` prop to MUI v9's responsive `size` object
+const COLS_TO_SIZE = {
+  2: { xs: 12, sm: 6 },
+  3: { xs: 12, sm: 6, lg: 4 },
+  4: { xs: 12, sm: 6, lg: 3 },
+} as const;
+
+export function Grid({ children, cols = 3, className }: GridProps) {
+  const size = COLS_TO_SIZE[cols];
 
   return (
-    <div className={`grid grid-cols-1 gap-8 ${colStyles} ${className}`}>
-      {children}
-    </div>
+    <MuiGrid container spacing={4} className={className}>
+      {Children.map(children, (child, index) => (
+        <MuiGrid key={index} size={size}>
+          {child}
+        </MuiGrid>
+      ))}
+    </MuiGrid>
   );
 }

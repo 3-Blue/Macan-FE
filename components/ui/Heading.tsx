@@ -1,3 +1,4 @@
+import Typography from "@mui/material/Typography";
 import { ReactNode } from "react";
 
 interface HeadingProps {
@@ -6,20 +7,12 @@ interface HeadingProps {
   className?: string;
 }
 
-export function Heading({ children, level = 2, className = "" }: HeadingProps) {
-  const baseStyles = "font-semibold tracking-tight";
-  const sizeStyles = {
-    1: "text-4xl sm:text-5xl",
-    2: "text-3xl sm:text-4xl",
-    3: "text-2xl sm:text-3xl",
-    4: "text-xl sm:text-2xl",
-  }[level];
-
-  const Tag = `h${level}` as "h1" | "h2" | "h3" | "h4";
+export function Heading({ children, level = 2, className }: HeadingProps) {
+  const variant = `h${level}` as "h1" | "h2" | "h3" | "h4";
 
   return (
-    <Tag className={`${baseStyles} ${sizeStyles} ${className}`}>
+    <Typography variant={variant} component={variant} className={className}>
       {children}
-    </Tag>
+    </Typography>
   );
 }

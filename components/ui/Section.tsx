@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box";
 import { ReactNode } from "react";
 
 interface SectionProps {
@@ -5,10 +6,14 @@ interface SectionProps {
   className?: string;
 }
 
-export function Section({ children, className = "" }: SectionProps) {
+export function Section({ children, className }: SectionProps) {
   return (
-    <section className={`py-16 sm:py-24 ${className}`}>
+    <Box
+      component="section"
+      className={className}
+      sx={{ py: { xs: 8, sm: 12 } }}
+    >
       {children}
-    </section>
+    </Box>
   );
 }

@@ -1,14 +1,14 @@
+import MuiContainer, { ContainerProps as MuiContainerProps } from "@mui/material/Container";
 import { ReactNode } from "react";
 
-interface ContainerProps {
+interface ContainerProps extends Omit<MuiContainerProps, "maxWidth"> {
   children: ReactNode;
-  className?: string;
 }
 
-export function Container({ children, className = "" }: ContainerProps) {
+export function Container({ children, ...props }: ContainerProps) {
   return (
-    <div className={`mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>
+    <MuiContainer maxWidth="lg" {...props}>
       {children}
-    </div>
+    </MuiContainer>
   );
 }
