@@ -3,6 +3,9 @@
 import { useLocale } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
 
 const localeLabels: Record<string, string> = {
   en: "English",
@@ -16,23 +19,24 @@ export default function LocaleSwitcher() {
   const router = useRouter();
   const pathname = usePathname();
 
-  function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
+  function handleChange(event: SelectChangeEvent) {
     const nextLocale = event.target.value;
     router.replace(pathname, { locale: nextLocale });
   }
 
   return (
-    <select
-      aria-label="Select language"
-      value={locale}
-      onChange={handleChange}
-      className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-sm dark:border-white/[.145] dark:bg-black"
-    >
-      {routing.locales.map((loc) => (
-        <option key={loc} value={loc}>
-          {localeLabels[loc]}
-        </option>
-      ))}
-    </select>
+    <FormControl size="small">
+      <Select
+        aria-label="Select language"
+        value={locale}
+        onChange={handleChange}
+      >
+        {routing.locales.map((loc) => (
+          <MenuItem key={loc} value={loc}>
+            {localeLabels[loc]}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 }
