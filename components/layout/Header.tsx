@@ -1,7 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import NextLink from "next/link";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import IconButton from "@mui/material/IconButton";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -15,50 +28,63 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-zinc-200 bg-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <Link href="/" className="text-xl font-bold">
+    <AppBar
+      position="sticky"
+      color="inherit"
+      elevation={0}
+      sx={{ borderBottom: "1px solid", borderColor: "divider" }}
+    >
+      <Toolbar sx={{ maxWidth: "1280px", width: "100%", mx: "auto", px: { xs: 2, sm: 3, lg: 4 } }}>
+        <Typography
+          component={NextLink}
+          href="/"
+          variant="h6"
+          sx={{ fontWeight: 700, textDecoration: "none", color: "text.primary", flexGrow: 1 }}
+        >
           Macan
-        </Link>
+        </Typography>
 
         {/* Desktop nav */}
-        <nav className="hidden gap-8 md:flex">
+        <Box sx={{ display: { xs: "none", md: "flex" }, gap: 4 }}>
           {navLinks.map((link) => (
             <Link
               key={link.href}
+              component={NextLink}
               href={link.href}
-              className="text-sm font-medium text-zinc-700 hover:text-black"
+              underline="none"
+              sx={{ fontSize: "0.875rem", fontWeight: 500, color: "text.secondary", "&:hover": { color: "text.primary" } }}
             >
               {link.label}
             </Link>
           ))}
-        </nav>
+        </Box>
 
-        {/* Mobile menu button */}
-        <button
-          className="md:hidden"
+        {/* Mobile menu toggle */}
+        <IconButton
+          sx={{ display: { xs: "inline-flex", md: "none" } }}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle menu"
         >
-          {isMenuOpen ? "Close" : "Menu"}
-        </button>
-      </div>
+          {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
+        </IconButton>
+      </Toolbar>
 
       {/* Mobile nav */}
-      {isMenuOpen && (
-        <nav className="flex flex-col gap-4 border-t border-zinc-200 px-4 py-4 md:hidden">
+      <Drawer anchor="top" open={isMenuOpen} onClose={() => setIsMenuOpen(false)}>
+        <List sx={{ mt: 8 }}>
           {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-zinc-700 hover:text-black"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
+            <ListItem key={link.href} disablePadding>
+              <ListItemButton
+                component={NextLink}
+                href={link.href}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <ListItemText primary={link.label} />
+              </ListItemButton>
+            </ListItem>
           ))}
-        </nav>
-      )}
-    </header>
+        </List>
+      </Drawer>
+    </AppBar>
   );
 }

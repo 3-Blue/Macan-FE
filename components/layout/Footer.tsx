@@ -1,4 +1,9 @@
-import Link from "next/link";
+"use client";
+
+import NextLink from "next/link";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 
 const footerLinks = [
   { label: "About", href: "/about" },
@@ -11,33 +16,52 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-zinc-200 bg-white">
-      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-12 sm:px-6 lg:px-8 md:flex-row md:items-start md:justify-between">
-        <div>
-          <p className="text-xl font-bold">Macan</p>
-          <p className="mt-2 max-w-xs text-sm text-zinc-600">
+    <Box component="footer" sx={{ borderTop: "1px solid", borderColor: "divider" }}>
+      <Box
+        sx={{
+          maxWidth: "1280px",
+          mx: "auto",
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: { md: "flex-start" },
+          justifyContent: { md: "space-between" },
+          gap: 4,
+          px: { xs: 2, sm: 3, lg: 4 },
+          py: 6,
+        }}
+      >
+        <Box>
+          <Typography variant="h6" sx={{ fontWeight: 700 }}>
+            Macan
+          </Typography>
+          <Typography variant="body2" sx={{ mt: 1, maxWidth: 320, color: "text.secondary" }}>
             Engineering, construction, and project management solutions.
-          </p>
-        </div>
+          </Typography>
+        </Box>
 
-        <nav className="flex flex-col gap-2 sm:flex-row sm:gap-8">
+        <Box
+          component="nav"
+          sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: { xs: 1, sm: 4 } }}
+        >
           {footerLinks.map((link) => (
             <Link
               key={link.href}
+              component={NextLink}
               href={link.href}
-              className="text-sm font-medium text-zinc-700 hover:text-black"
+              underline="none"
+              sx={{ fontSize: "0.875rem", fontWeight: 500, color: "text.secondary", "&:hover": { color: "text.primary" } }}
             >
               {link.label}
             </Link>
           ))}
-        </nav>
-      </div>
+        </Box>
+      </Box>
 
-      <div className="border-t border-zinc-200 px-4 py-6 sm:px-6 lg:px-8">
-        <p className="text-sm text-zinc-500">
+      <Box sx={{ borderTop: "1px solid", borderColor: "divider", px: { xs: 2, sm: 3, lg: 4 }, py: 3 }}>
+        <Typography variant="body2" sx={{ color: "text.disabled" }}>
           © {year} Macan. All rights reserved.
-        </p>
-      </div>
-    </footer>
+        </Typography>
+      </Box>
+    </Box>
   );
 }
