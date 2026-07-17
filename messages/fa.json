@@ -2,5 +2,13 @@
   "HomePage": {
     "title": "خوش آمدید",
     "description": "این صفحه اصلی است."
+  },
+  "StatsSection": {
+    "items": [
+      { "value": 15, "suffix": "+", "label": "سال تجربه" },
+      { "value": 200, "suffix": "+", "label": "پروژه تکمیل‌شده" },
+      { "value": 50, "suffix": "+", "label": "مشتری راضی" },
+      { "value": 100, "suffix": "+", "label": "متخصص" }
+    ]
   }
 }

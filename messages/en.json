@@ -2,5 +2,13 @@
   "HomePage": {
     "title": "Welcome",
     "description": "This is the homepage."
+  },
+  "StatsSection": {
+    "items": [
+      { "value": 15, "suffix": "+", "label": "Years of experience" },
+      { "value": 200, "suffix": "+", "label": "Completed projects" },
+      { "value": 50, "suffix": "+", "label": "Satisfied clients" },
+      { "value": 100, "suffix": "+", "label": "Specialists" }
+    ]
   }
 }
