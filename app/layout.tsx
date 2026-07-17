@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Vazirmatn, Geist_Mono } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import ThemeRegistry from "@/components/ThemeRegistry";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
 const vazirmatn = Vazirmatn({
@@ -31,7 +33,11 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-          <ThemeRegistry>{children}</ThemeRegistry>
+          <ThemeRegistry>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </ThemeRegistry>
         </AppRouterCacheProvider>
       </body>
     </html>
