@@ -8,13 +8,13 @@ import ThemeRegistry from "@/components/ThemeRegistry";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { routing } from "@/i18n/routing";
+import { PageTransition } from "@/components/motion/PageTransition";
 import "../globals.css";
 
 const vazirmatn = Vazirmatn({
   variable: "--font-vazirmatn",
   subsets: ["arabic", "latin"],
 });
-
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -57,14 +57,11 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
-
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
-
   const dir = locale === "fa" ? "rtl" : "ltr";
   const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-
   return (
     <html
       lang={locale}
@@ -91,9 +88,11 @@ export default async function RootLayout({
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeRegistry>
             <NextIntlClientProvider>
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
+              <PageTransition>
+                <Header />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </PageTransition>
             </NextIntlClientProvider>
           </ThemeRegistry>
         </AppRouterCacheProvider>
