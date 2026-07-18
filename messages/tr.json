@@ -2,5 +2,10 @@
   "HomePage": {
     "title": "Hoş geldiniz",
     "description": "Bu ana sayfadır."
+  },
+  "Hero": {
+    "headline": "Bugün inşa ediyoruz, yarını mühendisliyoruz.",
+    "subheadline": "Uçtan uca mühendislik, inşaat ve proje yönetimi çözümleri.",
+    "cta": "Hizmetlerimizi keşfedin"
   }
 }

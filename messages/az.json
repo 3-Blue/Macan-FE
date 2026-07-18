@@ -2,5 +2,10 @@
   "HomePage": {
     "title": "Xoş gəlmisiniz",
     "description": "Bu ana səhifədir."
+  },
+  "Hero": {
+    "headline": "Bu gün tikirik, sabahı mühəndislik edirik.",
+    "subheadline": "Tam mühəndislik, tikinti və layihə idarəetməsi həlləri.",
+    "cta": "Xidmətlərimizi kəşf edin"
   }
 }
