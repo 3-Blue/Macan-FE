@@ -15,6 +15,7 @@ const vazirmatn = Vazirmatn({
   variable: "--font-vazirmatn",
   subsets: ["arabic", "latin"],
 });
+
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -57,11 +58,14 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
+
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+
   const dir = locale === "fa" ? "rtl" : "ltr";
   const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+
   return (
     <html
       lang={locale}
