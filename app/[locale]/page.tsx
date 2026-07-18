@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import LocaleSwitcher from "@/components/ui/LocaleSwitcher";
+import FeaturedProjectsCarousel from "@/components/featured-projects-carousel";
 
 export default function Home() {
   const t = useTranslations("HomePage");
@@ -51,6 +52,8 @@ export default function Home() {
           </a>
         </div>
       </main>
+
+      <FeaturedProjectsCarousel />
     </div>
   );
 }
