@@ -2,5 +2,13 @@
   "HomePage": {
     "title": "Welcome",
     "description": "This is the homepage."
+  },
+  "ProjectsCarousel": {
+    "eyebrow": "Selected work",
+    "heading": "Featured projects",
+    "previousProject": "Previous project",
+    "nextProject": "Next project",
+    "statusCompleted": "Completed",
+    "statusOngoing": "Ongoing"
   }
 }
