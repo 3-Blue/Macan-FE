@@ -2,5 +2,13 @@
   "HomePage": {
     "title": "Xoş gəlmisiniz",
     "description": "Bu ana səhifədir."
+  },
+  "ProjectsCarousel": {
+    "eyebrow": "Seçilmiş işlər",
+    "heading": "Seçilmiş layihələr",
+    "previousProject": "Əvvəlki layihə",
+    "nextProject": "Növbəti layihə",
+    "statusCompleted": "Tamamlanıb",
+    "statusOngoing": "Davam edir"
   }
 }
