@@ -3,6 +3,11 @@
     "title": "Welcome",
     "description": "This is the homepage."
   },
+  "Hero": {
+    "headline": "Building today, engineering tomorrow.",
+    "subheadline": "Full-service engineering, construction, and project management solutions.",
+    "cta": "Explore our services"
+  },
   "StatsSection": {
     "items": [
       { "value": 15, "suffix": "+", "label": "Years of experience" },

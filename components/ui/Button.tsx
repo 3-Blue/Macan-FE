@@ -1,3 +1,5 @@
+"use client";
+
 import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
 import { ReactNode } from "react";
 
