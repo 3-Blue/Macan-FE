@@ -7,5 +7,13 @@
     "headline": "Bugün inşa ediyoruz, yarını mühendisliyoruz.",
     "subheadline": "Uçtan uca mühendislik, inşaat ve proje yönetimi çözümleri.",
     "cta": "Hizmetlerimizi keşfedin"
+  },
+  "StatsSection": {
+    "items": [
+      { "value": 15, "suffix": "+", "label": "Yıllık deneyim" },
+      { "value": 200, "suffix": "+", "label": "Tamamlanan projeler" },
+      { "value": 50, "suffix": "+", "label": "Memnun müşteriler" },
+      { "value": 100, "suffix": "+", "label": "Uzmanlar" }
+    ]
   }
 }
