@@ -2,5 +2,26 @@
   "HomePage": {
     "title": "Welcome",
     "description": "This is the homepage."
+  },
+  "ProjectsCarousel": {
+    "eyebrow": "Selected work",
+    "heading": "Featured projects",
+    "previousProject": "Previous project",
+    "nextProject": "Next project",
+    "statusCompleted": "Completed",
+    "statusOngoing": "Ongoing"
+  },
+  "Hero": {
+    "headline": "Building today, engineering tomorrow.",
+    "subheadline": "Full-service engineering, construction, and project management solutions.",
+    "cta": "Explore our services"
+  },
+  "StatsSection": {
+    "items": [
+      { "value": 15, "suffix": "+", "label": "Years of experience" },
+      { "value": 200, "suffix": "+", "label": "Completed projects" },
+      { "value": 50, "suffix": "+", "label": "Satisfied clients" },
+      { "value": 100, "suffix": "+", "label": "Specialists" }
+    ]
   }
 }

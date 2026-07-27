@@ -1,16 +1,50 @@
- client: string;
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import NextLink from "next/link";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForwardIos";
+import { motion, useReducedMotion } from "framer-motion";
+import { useTranslations } from "next-intl";
+import { Section } from "@/components/ui/Section";
+import { Container } from "@/components/ui/Container";
+import { Heading } from "@/components/ui/Heading";
+import { Reveal, RevealGroup } from "@/components/motion/Reveal";
+
+/**
+ * Featured projects carousel/scroll section
+ * Issue: https://github.com/3-Blue/Macan-FE/issues/10
+ * Depends on CMS model for projects (#29) — takes `projects` as a
+ * prop so it can be wired to real data later without layout changes.
+ *
+ * Rebuilt on the project's actual design system (MUI theme +
+ * Section/Container/Heading, see lib/theme.ts) rather than a bespoke
+ * palette. Cards use the brand's cream/deep-green/terracotta tokens.
+ */
+
+export type ProjectStatus = "completed" | "ongoing";
+
+export interface ProjectItem {
+  id: string;
+  title: string;
+  client: string;
   sector: string;
   location: string;
-  outcome: string; // headline metric, e.g. "42% faster commissioning"
+  outcome: string;
   status: ProjectStatus;
   imageUrl?: string;
   href: string;
 }
 
 interface FeaturedProjectsCarouselProps {
+  /** Optional overrides; falls back to messages/*.json (ProjectsCarousel) when omitted. */
   eyebrow?: string;
   heading?: string;
-  projects: ProjectItem[];
+  projects?: ProjectItem[];
 }
 
 const DEFAULT_PROJECTS: ProjectItem[] = [
@@ -52,40 +86,7 @@ const DEFAULT_PROJECTS: ProjectItem[] = [
     location: "Bandar Complex",
     outcome: "6 skids, 11-month cycle",
     status: "completed",
-  "use client";
-
-import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { Reveal, RevealGroup } from "@/components/motion/Reveal";
-
-/**
- * Featured projects carousel/scroll section
- * Issue: https://github.com/3-Blue/Macan-FE/issues/10
- * Depends on CMS model for projects (#29) — this component takes
- * `projects` as a prop so it can be wired to real data later without
- * changing anything here.
- *
- * Design direction: continues the "engineering drawing" system from
- * the stats section (#8). Each card reads as a numbered drawing
- * sheet ("SHT 01/06") with a corner status stamp, and the scroll
- * position is shown on a ruler-tick track — the same tape-measure
- * motif used for the stat counters.
- *
- * Tokens (shared with StatsCounterSection):
- *   --proj-bg:       #14181C  (graphite)
- *   --proj-panel:    #1C2B3A  (blueprint navy, card fill)
- *   --proj-accent:   #F2A93B  (safety amber)
- *   --proj-rule:     #3B4A57  (rivet gray, dividers/ticks)
- *   --proj-fg:       #EDEFF1  (off-white)
- *   --proj-fg-muted: #93A1AC
- */
-
-export type ProjectStatus = "completed" | "ongoing";
-
-export interface ProjectItem {
-  id: string;
-  title: string;
-  href: "/projects/modular-skid-supply",
+    href: "/projects/modular-skid-supply",
   },
   {
     id: "p5",
@@ -99,130 +100,114 @@ export interface ProjectItem {
   },
 ];
 
-function StatusStamp({ status }: { status: ProjectStatus }) {
-  const label = status === "completed" ? "AS BUILT" : "IN PROGRESS";
+function StatusBadge({ status }: { status: ProjectStatus }) {
+  const t = useTranslations("ProjectsCarousel");
+  const label = status === "completed" ? t("statusCompleted") : t("statusOngoing");
   return (
-    <span
-      className="absolute right-3 top-3 rotate-[-8deg] border px-2 py-0.5 text-[10px] font-semibold tracking-widest"
-      style={{
-        borderColor: "#F2A93B",
-        color: "#F2A93B",
-        fontFamily: "'Inter', sans-serif",
+    <Box
+      component="span"
+      sx={{
+        position: "absolute",
+        top: 12,
+        left: 12,
+        px: 1.25,
+        py: 0.25,
+        fontSize: "0.6875rem",
+        fontWeight: 600,
+        letterSpacing: "0.04em",
+        borderRadius: 999,
+        bgcolor: "background.default",
+        color: status === "completed" ? "primary.main" : "secondary.main",
+        border: "1px solid",
+        borderColor: status === "completed" ? "primary.main" : "secondary.main",
       }}
     >
       {label}
-    </span>
+    </Box>
   );
 }
 
-function ProjectCard({
-  project,
-  index,
-  total,
-}: {
-  project: ProjectItem;
-  index: number;
-  total: number;
-}) {
-  const sheetNumber = String(index + 1).padStart(2, "0");
-  const sheetTotal = String(total).padStart(2, "0");
-
+function ProjectCard({ project }: { project: ProjectItem }) {
   return (
-    <a
+    <Link
+      component={NextLink}
       href={project.href}
+      underline="none"
       data-carousel-card
-      className="group relative flex w-[78vw] shrink-0 snap-start flex-col overflow-hidden border sm:w-[380px]"
-      style={{ borderColor: "#3B4A57", backgroundColor: "#1C2B3A" }}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        width: { xs: "78vw", sm: 360 },
+        flexShrink: 0,
+        scrollSnapAlign: "start",
+        border: "1px solid",
+        borderColor: "divider",
+        borderRadius: 2,
+        overflow: "hidden",
+        bgcolor: "background.paper",
+        transition: "box-shadow 0.2s ease",
+        "&:hover": { boxShadow: 3 },
+      }}
     >
-      <div
-        className="relative h-44 w-full overflow-hidden sm:h-52"
-        style={{ backgroundColor: "#0F1317" }}
+      <Box
+        sx={{
+          position: "relative",
+          height: { xs: 176, sm: 208 },
+          bgcolor: "primary.main",
+          backgroundImage: project.imageUrl ? `url(${project.imageUrl})` : undefined,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
       >
-        {project.imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={project.imageUrl}
-            alt={project.title}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div
-            className="flex h-full w-full items-center justify-center text-xs"
-            style={{ color: "#3B4A57", fontFamily: "'Inter', sans-serif" }}
-          >
-            No image yet
-          </div>
-        )}
-        <StatusStamp status={project.status} />
-        <span
-          className="absolute bottom-2 left-3 text-[11px] tabular-nums"
-          style={{
-            color: "#93A1AC",
-            fontFamily: "'Oswald', 'Arial Narrow', sans-serif",
-            letterSpacing: "0.05em",
-          }}
-        >
-          SHT {sheetNumber}/{sheetTotal}
-        </span>
-      </div>
+        <StatusBadge status={project.status} />
+      </Box>
 
-      <div className="flex flex-1 flex-col gap-2 p-5">
-        <span
-          className="text-[11px] uppercase"
-          style={{
-            color: "#F2A93B",
-            fontFamily: "'Inter', sans-serif",
-            letterSpacing: "0.14em",
-          }}
+      <Box sx={{ p: 3, display: "flex", flexDirection: "column", gap: 0.5 }}>
+        <Typography
+          variant="overline"
+          sx={{ color: "secondary.main", letterSpacing: "0.08em" }}
         >
           {project.sector} · {project.location}
-        </span>
-        <h3
-          style={{
-            fontFamily: "'Oswald', 'Arial Narrow', sans-serif",
-            fontWeight: 500,
-            fontSize: "1.15rem",
-            color: "#EDEFF1",
-          }}
-        >
+        </Typography>
+        <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
           {project.title}
-        </h3>
-        <p
-          className="mt-auto text-sm"
-          style={{ color: "#93A1AC", fontFamily: "'Inter', sans-serif" }}
-        >
+        </Typography>
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {project.client}
-        </p>
-        <p
-          className="text-sm font-medium"
-          style={{ color: "#EDEFF1", fontFamily: "'Inter', sans-serif" }}
-        >
+        </Typography>
+        <Typography variant="body2" sx={{ fontWeight: 600, mt: 0.5 }}>
           {project.outcome}
-        </p>
-      </div>
-    </a>
+        </Typography>
+      </Box>
+    </Link>
   );
 }
 
 export default function FeaturedProjectsCarousel({
-  eyebrow = "Selected work",
-  heading = "Featured projects",
+  eyebrow,
+  heading,
   projects = DEFAULT_PROJECTS,
 }: FeaturedProjectsCarouselProps) {
+  const t = useTranslations("ProjectsCarousel");
+  const resolvedEyebrow = eyebrow ?? t("eyebrow");
+  const resolvedHeading = heading ?? t("heading");
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const prefersReducedMotion = useReducedMotion();
 
-  const scrollByCard = useCallback((direction: 1 | -1) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const card = track.querySelector<HTMLElement>("[data-carousel-card]");
-    const cardWidth = card ? card.offsetWidth + 24 : track.clientWidth * 0.8;
-    track.scrollBy({
-      left: direction * cardWidth,
-      behavior: prefersReducedMotion ? "auto" : "smooth",
-    });
-  }, [prefersReducedMotion]);
+  const scrollByCard = useCallback(
+    (direction: 1 | -1) => {
+      const track = trackRef.current;
+      if (!track) return;
+      const card = track.querySelector<HTMLElement>("[data-carousel-card]");
+      const cardWidth = card ? card.offsetWidth + 24 : track.clientWidth * 0.8;
+      track.scrollBy({
+        left: direction * cardWidth,
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+      });
+    },
+    [prefersReducedMotion]
+  );
 
   useEffect(() => {
     const track = trackRef.current;
@@ -255,95 +240,91 @@ export default function FeaturedProjectsCarousel({
   };
 
   return (
-    <section
-      className="w-full py-16 sm:py-24"
-      style={{ backgroundColor: "#14181C" }}
-      aria-label="Featured projects"
-    >
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:mb-12 sm:flex-row sm:items-end">
-          <div>
-            <p
-              className="mb-3 text-xs uppercase sm:text-sm"
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                letterSpacing: "0.2em",
-                color: "#F2A93B",
-              }}
+    <Section aria-label="Featured projects">
+      <Container>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: { xs: "flex-start", sm: "flex-end" },
+            justifyContent: "space-between",
+            gap: 2,
+            mb: { xs: 4, sm: 6 },
+          }}
+        >
+          <Box>
+            <Typography
+              variant="overline"
+              sx={{ color: "secondary.main", letterSpacing: "0.18em" }}
             >
-              {eyebrow}
-            </p>
+              {resolvedEyebrow}
+            </Typography>
             <Reveal>
-              <h2
-                style={{
-                  fontFamily: "'Oswald', 'Arial Narrow', sans-serif",
-                  fontWeight: 500,
-                  fontSize: "clamp(1.5rem, 3.5vw, 2.25rem)",
-                  color: "#EDEFF1",
-                }}
-              >
-                {heading}
-              </h2>
+              <Heading level={2}>{resolvedHeading}</Heading>
             </Reveal>
-          </div>
+          </Box>
 
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <IconButton
               onClick={() => scrollByCard(-1)}
-              aria-label="Previous project"
-              className="flex h-9 w-9 items-center justify-center border transition-colors hover:border-[#F2A93B] hover:text-[#F2A93B]"
-              style={{ borderColor: "#3B4A57", color: "#EDEFF1" }}
+              aria-label={t("previousProject")}
+              sx={{ border: "1px solid", borderColor: "divider" }}
             >
-              ←
-            </button>
-            <button
-              type="button"
+              <ArrowBackIcon fontSize="small" />
+            </IconButton>
+            <IconButton
               onClick={() => scrollByCard(1)}
-              aria-label="Next project"
-              className="flex h-9 w-9 items-center justify-center border transition-colors hover:border-[#F2A93B] hover:text-[#F2A93B]"
-              style={{ borderColor: "#3B4A57", color: "#EDEFF1" }}
+              aria-label={t("nextProject")}
+              sx={{ border: "1px solid", borderColor: "divider" }}
             >
-              →
-            </button>
-          </div>
-        </div>
+              <ArrowForwardIcon fontSize="small" />
+            </IconButton>
+          </Box>
+        </Box>
 
         <RevealGroup>
-          <div
+          <Box
             ref={trackRef}
             role="region"
             aria-label="Project cards, scrollable"
             tabIndex={0}
             onKeyDown={handleKeyDown}
-            className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            sx={{
+              display: "flex",
+              gap: 3,
+              overflowX: "auto",
+              pb: 2,
+              scrollSnapType: "x mandatory",
+              scrollBehavior: "smooth",
+              "&::-webkit-scrollbar": { display: "none" },
+              scrollbarWidth: "none",
+            }}
           >
-            {projects.map((project, i) => (
+            {projects.map((project) => (
               <Reveal key={project.id} variant="fade" as="div">
-                <ProjectCard
-                  project={project}
-                  index={i}
-                  total={projects.length}
-                />
+                <ProjectCard project={project} />
               </Reveal>
             ))}
-          </div>
+          </Box>
         </RevealGroup>
 
-        {/* signature: ruler-tick progress track, matching the stats section */}
-        <div className="mt-6 flex items-center gap-1">
+        {/* progress indicator */}
+        <Box sx={{ display: "flex", gap: 0.5, mt: 3 }}>
           {projects.map((_, i) => (
-            <motion.span
+            <motion.div
               key={i}
-              className="h-1 flex-1"
+              style={{ height: 3, flex: 1, borderRadius: 2 }}
               animate={{
-                backgroundColor: i === activeIndex ? "#F2A93B" : "#3B4A57",
+                backgroundColor:
+                  i === activeIndex
+                    ? "var(--mui-palette-secondary-main, #bb6a45)"
+                    : "var(--mui-palette-divider, #e0e0e0)",
               }}
               transition={{ duration: 0.25 }}
             />
           ))}
-        </div>
-      </div>
-    </section>
+        </Box>
+      </Container>
+    </Section>
   );
 }
