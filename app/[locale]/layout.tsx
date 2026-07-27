@@ -8,6 +8,7 @@ import ThemeRegistry from "@/components/ThemeRegistry";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { routing } from "@/i18n/routing";
+import { PageTransition } from "@/components/motion/PageTransition";
 import "../globals.css";
 
 const vazirmatn = Vazirmatn({
@@ -91,9 +92,11 @@ export default async function RootLayout({
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeRegistry>
             <NextIntlClientProvider>
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
+              <PageTransition>
+                <Header />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </PageTransition>
             </NextIntlClientProvider>
           </ThemeRegistry>
         </AppRouterCacheProvider>
