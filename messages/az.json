@@ -3,6 +3,14 @@
     "title": "Xoş gəlmisiniz",
     "description": "Bu ana səhifədir."
   },
+  "ProjectsCarousel": {
+    "eyebrow": "Seçilmiş işlər",
+    "heading": "Seçilmiş layihələr",
+    "previousProject": "Əvvəlki layihə",
+    "nextProject": "Növbəti layihə",
+    "statusCompleted": "Tamamlanıb",
+    "statusOngoing": "Davam edir"
+  },
   "Hero": {
     "headline": "Bu gün tikirik, sabahı mühəndislik edirik.",
     "subheadline": "Tam mühəndislik, tikinti və layihə idarəetməsi həlləri.",
