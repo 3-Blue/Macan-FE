@@ -8,20 +8,31 @@
     "heading": "Seçilmiş layihələr",
     "previousProject": "Əvvəlki layihə",
     "nextProject": "Növbəti layihə",
-    "statusCompleted": "Tamamlanıb",
+    "statusCompleted": "Tamamlanib",
     "statusOngoing": "Davam edir"
   },
   "Hero": {
-    "headline": "Bu gün tikirik, sabahı mühəndislik edirik.",
+    "headline": "Bu gün tikirik, sabahi mühəndislik edirik.",
     "subheadline": "Tam mühəndislik, tikinti və layihə idarəetməsi həlləri.",
     "cta": "Xidmətlərimizi kəşf edin"
   },
   "StatsSection": {
     "items": [
       { "value": 15, "suffix": "+", "label": "İllik təcrübə" },
-      { "value": 200, "suffix": "+", "label": "Tamamlanmış layihələr" },
+      { "value": 200, "suffix": "+", "label": "Tamamlanmiş layihələr" },
       { "value": 50, "suffix": "+", "label": "Məmnun müştərilər" },
       { "value": 100, "suffix": "+", "label": "Mütəxəssislər" }
     ]
+  },
+  "ContactSection": {
+    "eyebrow": "Bizimlə əlaqə saxlayin",
+    "heading": "Ofisimizə baş çəkin",
+    "addressLabel": "Ünvan",
+    "address": "Ünvan tezliklə əlavə olunacaq",
+    "phoneLabel": "Telefon",
+    "phone": "Telefon nömrəsi tezliklə əlavə olunacaq",
+    "emailLabel": "E-poçt",
+    "email": "E-poçt tezliklə əlavə olunacaq",
+    "mapPlaceholder": "Xəritə tezliklə əlavə olunacaq"
   }
 }

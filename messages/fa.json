@@ -23,5 +23,16 @@
       { "value": 50, "suffix": "+", "label": "مشتری راضی" },
       { "value": 100, "suffix": "+", "label": "متخصص" }
     ]
+  },
+  "ContactSection": {
+    "eyebrow": "تماس با ما",
+    "heading": "از دفتر ما بازدید کنید",
+    "addressLabel": "آدرس",
+    "address": "آدرس به‌زودی اضافه می‌شود",
+    "phoneLabel": "تلفن",
+    "phone": "شماره تلفن به‌زودی اضافه می‌شود",
+    "emailLabel": "ایمیل",
+    "email": "ایمیل به‌زودی اضافه می‌شود",
+    "mapPlaceholder": "نقشه به‌زودی اضافه می‌شود"
   }
 }

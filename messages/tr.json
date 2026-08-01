@@ -23,5 +23,16 @@
       { "value": 50, "suffix": "+", "label": "Memnun müşteriler" },
       { "value": 100, "suffix": "+", "label": "Uzmanlar" }
     ]
+  },
+  "ContactSection": {
+    "eyebrow": "İletişime geçin",
+    "heading": "Ofisimizi ziyaret edin",
+    "addressLabel": "Adres",
+    "address": "Adres yakında eklenecek",
+    "phoneLabel": "Telefon",
+    "phone": "Telefon numarası yakında eklenecek",
+    "emailLabel": "E-posta",
+    "email": "E-posta yakında eklenecek",
+    "mapPlaceholder": "Harita buraya eklenecek"
   }
 }
