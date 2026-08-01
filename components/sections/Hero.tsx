@@ -1,6 +1,6 @@
 "use client";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
-import NextLink from "next/link";
 import { useTranslations } from "next-intl";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -40,19 +40,19 @@ export function Hero() {
       <Container sx={{ position: "relative", zIndex: 1 }}>
         <Box sx={{ maxWidth: 640 }}>
           <Heading level={1} className="hero-headline">
-            <Box component="span" sx={{ color: "#f2ede3" }}>
+            <Box component="span" sx={{ color: "background.default" }}>
               {t("headline")}
             </Box>
           </Heading>
           <Typography
             variant="h6"
             component="p"
-            sx={{ color: "#e0b69e", mt: 2, mb: 4, fontWeight: 400 }}
+            sx={{ color: "secondary.light", mt: 2, mb: 4, fontWeight: 400 }}
           >
             {t("subheadline")}
           </Typography>
           <Button
-            component={NextLink}
+            component={Link}
             href="/services"
             variant="primary"
             size="large"
