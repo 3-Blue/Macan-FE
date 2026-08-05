@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Vazirmatn, Geist_Mono } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import Script from "next/script";
 import ThemeRegistry from "@/components/ThemeRegistry";
@@ -62,6 +63,10 @@ export default async function RootLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+
+  // Enable static rendering (required for `output: export`); tells next-intl
+  // the active locale without reading request headers.
+  setRequestLocale(locale);
 
   const dir = locale === "fa" ? "rtl" : "ltr";
   const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
