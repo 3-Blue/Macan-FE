@@ -1,0 +1,109 @@
+{
+  "slug": "home",
+  "updatedAt": "2026-08-11T00:00:00.000Z",
+  "blocks": [
+    {
+      "id": "hero-1",
+      "type": "hero",
+      "order": 1,
+      "headline": {
+        "en": "Build faster with Macan",
+        "fa": "با ماکان سریع‌تر بسازید"
+      },
+      "subheadline": {
+        "en": "The platform teams trust to ship modern web experiences.",
+        "fa": "پلتفرمی که تیم‌ها برای ساخت تجربه‌های وب مدرن به آن اعتماد دارند."
+      },
+      "primaryCta": {
+        "label": {
+          "en": "Get started",
+          "fa": "شروع کنید"
+        },
+        "href": "/contact"
+      }
+    },
+    {
+      "id": "highlights-1",
+      "type": "highlights",
+      "order": 2,
+      "heading": {
+        "en": "Why teams choose us",
+        "fa": "چرا تیم‌ها ما را انتخاب می‌کنند"
+      },
+      "items": [
+        {
+          "id": "highlight-1",
+          "icon": "bolt",
+          "title": { "en": "Fast delivery", "fa": "تحویل سریع" },
+          "description": {
+            "en": "Ship features in days, not months.",
+            "fa": "ویژگی‌ها را در چند روز، نه چند ماه، تحویل دهید."
+          }
+        },
+        {
+          "id": "highlight-2",
+          "icon": "shield",
+          "title": { "en": "Reliable", "fa": "قابل اعتماد" },
+          "description": {
+            "en": "Built on infrastructure you can trust.",
+            "fa": "بر بستری قابل اعتماد ساخته شده است."
+          }
+        },
+        {
+          "id": "highlight-3",
+          "icon": "sparkles",
+          "title": { "en": "Modern design", "fa": "طراحی مدرن" },
+          "description": {
+            "en": "A design system that stays consistent everywhere.",
+            "fa": "سیستم طراحی‌ای که همه‌جا یکدست می‌ماند."
+          }
+        }
+      ]
+    },
+    {
+      "id": "stats-1",
+      "type": "stats",
+      "order": 3,
+      "heading": {
+        "en": "By the numbers",
+        "fa": "به عدد و رقم"
+      },
+      "items": [
+        {
+          "id": "stat-1",
+          "label": { "en": "Projects launched", "fa": "پروژه‌های راه‌اندازی‌شده" },
+          "value": 120,
+          "suffix": "+"
+        },
+        {
+          "id": "stat-2",
+          "label": { "en": "Client satisfaction", "fa": "رضایت مشتری" },
+          "value": 98,
+          "suffix": "%"
+        },
+        {
+          "id": "stat-3",
+          "label": { "en": "Countries served", "fa": "کشورهای تحت پوشش" },
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": "cta-1",
+      "type": "cta",
+      "order": 4,
+      "heading": {
+        "en": "Ready to get started?",
+        "fa": "آماده شروع هستید؟"
+      },
+      "body": {
+        "en": "Talk to our team and see what we can build together.",
+        "fa": "با تیم ما صحبت کنید و ببینید چه چیزی می‌توانیم با هم بسازیم."
+      },
+      "button": {
+        "label": { "en": "Contact us", "fa": "تماس با ما" },
+        "href": "/contact"
+      }
+    }
+  ]
+}
