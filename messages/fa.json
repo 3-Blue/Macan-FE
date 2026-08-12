@@ -23,5 +23,9 @@
       { "value": 50, "suffix": "+", "label": "مشتری راضی" },
       { "value": 100, "suffix": "+", "label": "متخصص" }
     ]
+  },
+  "IndustriesPage": {
+    "eyebrow": "حوزه‌های فعالیت ما",
+    "heading": "صنایع"
   }
 }

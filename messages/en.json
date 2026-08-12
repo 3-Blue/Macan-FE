@@ -23,5 +23,9 @@
       { "value": 50, "suffix": "+", "label": "Satisfied clients" },
       { "value": 100, "suffix": "+", "label": "Specialists" }
     ]
+  },
+  "IndustriesPage": {
+    "eyebrow": "Where we work",
+    "heading": "Industries"
   }
 }

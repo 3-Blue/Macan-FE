@@ -23,5 +23,9 @@
       { "value": 50, "suffix": "+", "label": "Memnun müşteriler" },
       { "value": 100, "suffix": "+", "label": "Uzmanlar" }
     ]
+  },
+  "IndustriesPage": {
+    "eyebrow": "Çalıştığımız alanlar",
+    "heading": "Sektörler"
   }
 }
