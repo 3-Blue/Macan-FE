@@ -8,20 +8,32 @@
     "heading": "Seçilmiş layihələr",
     "previousProject": "Əvvəlki layihə",
     "nextProject": "Növbəti layihə",
-    "statusCompleted": "Tamamlanıb",
+    "statusCompleted": "Tamamlanib",
     "statusOngoing": "Davam edir"
   },
   "Hero": {
-    "headline": "Bu gün tikirik, sabahı mühəndislik edirik.",
+    "headline": "Bu gün tikirik, sabahi mühəndislik edirik.",
     "subheadline": "Tam mühəndislik, tikinti və layihə idarəetməsi həlləri.",
     "cta": "Xidmətlərimizi kəşf edin"
   },
   "StatsSection": {
     "items": [
       { "value": 15, "suffix": "+", "label": "İllik təcrübə" },
-      { "value": 200, "suffix": "+", "label": "Tamamlanmış layihələr" },
+      { "value": 200, "suffix": "+", "label": "Tamamlanmiş layihələr" },
       { "value": 50, "suffix": "+", "label": "Məmnun müştərilər" },
       { "value": 100, "suffix": "+", "label": "Mütəxəssislər" }
     ]
+  },
+  "About": {
+    "eyebrow": "Biz kimik",
+    "heading": " və vizyonumuz",
+    "mission": {
+      "title": "Missiyamiz",
+      "body": "Müştərilərimiz və cəmiyyətlərimiz üçün davamli dəyər yaradan tam biznes, tikinti və layihə idarəetməsi həlləri təqdim etmək."
+    },
+    "vision": {
+      "title": "Vizyonumuz",
+      "body": "Dəqiqlik, dürüstlük və irəliyə baxan biznes ilə taninan, iddialı və mürəkkəb layihələr üçün regionun ən etibarlı tərəfdaşı olmaq."
+    }
   }
 }
