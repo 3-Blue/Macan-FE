@@ -1,27 +1,37 @@
 {
   "HomePage": {
     "title": "Hoş geldiniz",
-    "description": "Bu ana sayfadır."
+    "description": "Bu ana sayfadir."
   },
   "ProjectsCarousel": {
-    "eyebrow": "Seçilmiş çalışmalar",
-    "heading": "Öne çıkan projeler",
+    "eyebrow": "Seçilmiş çalişmalar",
+    "heading": "Öne çikan projeler",
     "previousProject": "Önceki proje",
     "nextProject": "Sonraki proje",
-    "statusCompleted": "Tamamlandı",
+    "statusCompleted": "Tamamlandi",
     "statusOngoing": "Devam ediyor"
   },
   "Hero": {
-    "headline": "Bugün inşa ediyoruz, yarını mühendisliyoruz.",
+    "headline": "Bugün inşa ediyoruz, yarini mühendisliyoruz.",
     "subheadline": "Uçtan uca mühendislik, inşaat ve proje yönetimi çözümleri.",
     "cta": "Hizmetlerimizi keşfedin"
   },
   "StatsSection": {
     "items": [
-      { "value": 15, "suffix": "+", "label": "Yıllık deneyim" },
+      { "value": 15, "suffix": "+", "label": "Yillik deneyim" },
       { "value": 200, "suffix": "+", "label": "Tamamlanan projeler" },
       { "value": 50, "suffix": "+", "label": "Memnun müşteriler" },
       { "value": 100, "suffix": "+", "label": "Uzmanlar" }
     ]
+  },
+  "ProjectsPage": {
+    "eyebrow": "Çalişmalarimiz",
+    "heading": "Projeler",
+    "sectorLabel": "Sektör",
+    "serviceLabel": "Hizmet",
+    "yearLabel": "Yil",
+    "locationLabel": "Konum",
+    "allOption": "Tümü",
+    "noResults": "Bu filtrelere uyan proje yok."
   }
 }

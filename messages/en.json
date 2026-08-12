@@ -23,5 +23,15 @@
       { "value": 50, "suffix": "+", "label": "Satisfied clients" },
       { "value": 100, "suffix": "+", "label": "Specialists" }
     ]
+  },
+  "ProjectsPage": {
+    "eyebrow": "Our work",
+    "heading": "Projects",
+    "sectorLabel": "Sector",
+    "serviceLabel": "Service",
+    "yearLabel": "Year",
+    "locationLabel": "Location",
+    "allOption": "All",
+    "noResults": "No projects match these filters."
   }
 }

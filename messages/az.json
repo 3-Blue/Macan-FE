@@ -23,5 +23,15 @@
       { "value": 50, "suffix": "+", "label": "Məmnun müştərilər" },
       { "value": 100, "suffix": "+", "label": "Mütəxəssislər" }
     ]
+  },
+  "ProjectsPage": {
+    "eyebrow": "İşlərimiz",
+    "heading": "Layihələr",
+    "sectorLabel": "Sektor",
+    "serviceLabel": "Xidmət",
+    "yearLabel": "İl",
+    "locationLabel": "Yer",
+    "allOption": "Hamısı",
+    "noResults": "Bu filtrlərə uyğun layihə tapılmadı."
   }
 }

@@ -23,5 +23,15 @@
       { "value": 50, "suffix": "+", "label": "مشتری راضی" },
       { "value": 100, "suffix": "+", "label": "متخصص" }
     ]
+  },
+  "ProjectsPage": {
+    "eyebrow": "کارهای ما",
+    "heading": "پروژه‌ها",
+    "sectorLabel": "بخش",
+    "serviceLabel": "خدمت",
+    "yearLabel": "سال",
+    "locationLabel": "مکان",
+    "allOption": "همه",
+    "noResults": "پروژه‌ای با این فیلترها یافت نشد."
   }
 }
