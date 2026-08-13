@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import NextLink from "next/link";
+import { Link as LocaleLink } from "@/i18n/navigation";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
@@ -15,6 +15,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import LocaleSwitcher from "@/components/ui/LocaleSwitcher";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -36,7 +37,7 @@ export function Header() {
     >
       <Toolbar sx={{ maxWidth: "1280px", width: "100%", mx: "auto", px: { xs: 2, sm: 3, lg: 4 } }}>
         <Typography
-          component={NextLink}
+          component={LocaleLink}
           href="/"
           variant="h6"
           sx={{ fontWeight: 700, textDecoration: "none", color: "text.primary", flexGrow: 1 }}
@@ -45,11 +46,11 @@ export function Header() {
         </Typography>
 
         {/* Desktop nav */}
-        <Box sx={{ display: { xs: "none", md: "flex" }, gap: 4 }}>
+        <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", gap: 4 }}>
           {navLinks.map((link) => (
             <Link
               key={link.href}
-              component={NextLink}
+              component={LocaleLink}
               href={link.href}
               underline="none"
               sx={{ fontSize: "0.875rem", fontWeight: 500, color: "text.secondary", "&:hover": { color: "text.primary" } }}
@@ -57,16 +58,19 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          <LocaleSwitcher />
         </Box>
 
-        {/* Mobile menu toggle */}
-        <IconButton
-          sx={{ display: { xs: "inline-flex", md: "none" } }}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
-        </IconButton>
+        {/* Mobile: switcher + menu toggle */}
+        <Box sx={{ display: { xs: "flex", md: "none" }, alignItems: "center", gap: 1 }}>
+          <LocaleSwitcher />
+          <IconButton
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
+          </IconButton>
+        </Box>
       </Toolbar>
 
       {/* Mobile nav */}
@@ -75,7 +79,7 @@ export function Header() {
           {navLinks.map((link) => (
             <ListItem key={link.href} disablePadding>
               <ListItemButton
-                component={NextLink}
+                component={LocaleLink}
                 href={link.href}
                 onClick={() => setIsMenuOpen(false)}
               >

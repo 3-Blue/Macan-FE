@@ -24,6 +24,17 @@
       { "value": 100, "suffix": "+", "label": "Specialists" }
     ]
   },
+  "ContactSection": {
+    "eyebrow": "Get in touch",
+    "heading": "Visit our office",
+    "addressLabel": "Address",
+    "address": "Address coming soon",
+    "phoneLabel": "Phone",
+    "phone": "Phone number coming soon",
+    "emailLabel": "Email",
+    "email": "Email coming soon",
+    "mapPlaceholder": "Map will be added here"
+  },
   "Timeline": {
     "eyebrow": "Our journey",
     "heading": "Company timeline",
