@@ -1,6 +1,5 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
-
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 // When deploying to a GitHub Pages *project* site the app is served from
@@ -14,8 +13,13 @@ const nextConfig: NextConfig = {
   output: "export",
   // Emit /en/index.html instead of /en.html so sub-path routing works on Pages.
   trailingSlash: true,
-  // GitHub Pages has no Image Optimization server.
-  images: { unoptimized: true },
+  images: {
+    // GitHub Pages has no Image Optimization server.
+    unoptimized: true,
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  },
   basePath: basePath || undefined,
   assetPrefix: basePath || undefined,
 };
