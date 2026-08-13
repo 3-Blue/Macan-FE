@@ -35,5 +35,28 @@
       "title": "Vizyonumuz",
       "body": "Hassasiyet, dürüstlük ve ileri görüşlü iş ile tanınan, iddialı ve karmaşık projeler için bölgenin en güvenilir ortağı olmak."
     }
+  },
+  "Contact": {
+    "eyebrow": "Bizimle iletişime geçin",
+    "heading": "Bize ulaşın",
+    "subheading": "Aklınızda bir proje mi var? Bize mesaj gönderin, ekibimiz sizinle iletişime geçsin.",
+    "nameLabel": "Ad soyad",
+    "emailLabel": "E-posta adresi",
+    "subjectLabel": "Konu",
+    "messageLabel": "Mesaj",
+    "submit": "Mesaj gönder",
+    "submitting": "Gönderiliyor...",
+    "successTitle": "Mesaj gönderildi",
+    "successBody": "Bize ulaştığınız için teşekkürler. Ekibimiz kısa süre içinde sizinle iletişime geçecek.",
+    "errorTitle": "Bir sorun oluştu",
+    "errorBody": "Mesajınız gönderilemedi. Lütfen tekrar deneyin.",
+    "errors": {
+      "nameRequired": "Lütfen adınızı girin",
+      "emailRequired": "Lütfen e-posta adresinizi girin",
+      "emailInvalid": "Lütfen geçerli bir e-posta adresi girin",
+      "subjectRequired": "Lütfen bir konu girin",
+      "messageRequired": "Lütfen mesajınızı girin",
+      "messageTooShort": "Mesaj en az 10 karakter olmalıdır"
+    }
   }
 }

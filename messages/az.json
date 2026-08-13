@@ -8,32 +8,55 @@
     "heading": "Seçilmiş layihələr",
     "previousProject": "Əvvəlki layihə",
     "nextProject": "Növbəti layihə",
-    "statusCompleted": "Tamamlanib",
+    "statusCompleted": "Tamamlanıb",
     "statusOngoing": "Davam edir"
   },
   "Hero": {
-    "headline": "Bu gün tikirik, sabahi mühəndislik edirik.",
+    "headline": "Bu gün tikirik, sabahı mühəndislik edirik.",
     "subheadline": "Tam mühəndislik, tikinti və layihə idarəetməsi həlləri.",
     "cta": "Xidmətlərimizi kəşf edin"
   },
   "StatsSection": {
     "items": [
       { "value": 15, "suffix": "+", "label": "İllik təcrübə" },
-      { "value": 200, "suffix": "+", "label": "Tamamlanmiş layihələr" },
+      { "value": 200, "suffix": "+", "label": "Tamamlanmış layihələr" },
       { "value": 50, "suffix": "+", "label": "Məmnun müştərilər" },
       { "value": 100, "suffix": "+", "label": "Mütəxəssislər" }
     ]
   },
   "About": {
     "eyebrow": "Biz kimik",
-    "heading": " və vizyonumuz",
+    "heading": "Missiyamız və vizyonumuz",
     "mission": {
-      "title": "Missiyamiz",
-      "body": "Müştərilərimiz və cəmiyyətlərimiz üçün davamli dəyər yaradan tam biznes, tikinti və layihə idarəetməsi həlləri təqdim etmək."
+      "title": "Missiyamız",
+      "body": "Müştərilərimiz və cəmiyyətlərimiz üçün davamlı dəyər yaradan tam biznes, tikinti və layihə idarəetməsi həlləri təqdim etmək."
     },
     "vision": {
       "title": "Vizyonumuz",
-      "body": "Dəqiqlik, dürüstlük və irəliyə baxan biznes ilə taninan, iddialı və mürəkkəb layihələr üçün regionun ən etibarlı tərəfdaşı olmaq."
+      "body": "Dəqiqlik, dürüstlük və irəliyə baxan biznes ilə tanınan, iddialı və mürəkkəb layihələr üçün regionun ən etibarlı tərəfdaşı olmaq."
+    }
+  },
+  "Contact": {
+    "eyebrow": "Bizimlə əlaqə saxlayın",
+    "heading": "Bizimlə əlaqə",
+    "subheading": "Layihəniz var? Bizə mesaj göndərin, komandamız sizinlə əlaqə saxlayacaq.",
+    "nameLabel": "Ad soyad",
+    "emailLabel": "E-poçt ünvanı",
+    "subjectLabel": "Mövzu",
+    "messageLabel": "Mesaj",
+    "submit": "Mesaj göndər",
+    "submitting": "Göndərilir...",
+    "successTitle": "Mesaj göndərildi",
+    "successBody": "Müraciətiniz üçün təşəkkürlər. Komandamız tezliklə sizinlə əlaqə saxlayacaq.",
+    "errorTitle": "Xəta baş verdi",
+    "errorBody": "Mesajınızı göndərmək mümkün olmadı. Zəhmət olmasa yenidən cəhd edin.",
+    "errors": {
+      "nameRequired": "Zəhmət olmasa adınızı daxil edin",
+      "emailRequired": "Zəhmət olmasa e-poçt ünvanınızı daxil edin",
+      "emailInvalid": "Zəhmət olmasa düzgün e-poçt ünvanı daxil edin",
+      "subjectRequired": "Zəhmət olmasa mövzunu daxil edin",
+      "messageRequired": "Zəhmət olmasa mesajınızı daxil edin",
+      "messageTooShort": "Mesaj ən azı 10 simvol olmalıdır"
     }
   }
 }
