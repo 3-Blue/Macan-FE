@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Vazirmatn, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import Script from "next/script";
 import ThemeRegistry from "@/components/ThemeRegistry";
@@ -11,14 +12,13 @@ import { routing } from "@/i18n/routing";
 import { PageTransition } from "@/components/motion/PageTransition";
 import "../globals.css";
 
-const vazirmatn = Vazirmatn({
+const vazirmatn = localFont({
+  src: "../../fonts/Vazirmatn[wght].ttf",
   variable: "--font-vazirmatn",
-  subsets: ["arabic", "latin"],
 });
-
-const geistMono = Geist_Mono({
+const geistMono = localFont({
+  src: "../../fonts/GeistMono[wght].ttf",
   variable: "--font-geist-mono",
-  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -58,14 +58,14 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
-
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
-
+  // Enable static rendering (required for `output: export`); tells next-intl
+  // the active locale without reading request headers.
+  setRequestLocale(locale);
   const dir = locale === "fa" ? "rtl" : "ltr";
   const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-
   return (
     <html
       lang={locale}

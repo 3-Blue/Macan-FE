@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import NextLink from "next/link";
+import Image from "next/image";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
@@ -24,6 +25,11 @@ import { Reveal, RevealGroup } from "@/components/motion/Reveal";
  * Rebuilt on the project's actual design system (MUI theme +
  * Section/Container/Heading, see lib/theme.ts) rather than a bespoke
  * palette. Cards use the brand's cream/deep-green/terracotta tokens.
+ *
+ * Performance pass (#12): card images now use next/image instead of
+ * a CSS backgroundImage, so they're automatically resized, served in
+ * modern formats, and lazy-loaded (default behavior — these are below
+ * the fold, so no `priority` needed).
  */
 
 export type ProjectStatus = "completed" | "ongoing";
@@ -120,6 +126,7 @@ function StatusBadge({ status }: { status: ProjectStatus }) {
         color: status === "completed" ? "primary.main" : "secondary.main",
         border: "1px solid",
         borderColor: status === "completed" ? "primary.main" : "secondary.main",
+        zIndex: 1,
       }}
     >
       {label}
@@ -154,11 +161,18 @@ function ProjectCard({ project }: { project: ProjectItem }) {
           position: "relative",
           height: { xs: 176, sm: 208 },
           bgcolor: "primary.main",
-          backgroundImage: project.imageUrl ? `url(${project.imageUrl})` : undefined,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          overflow: "hidden",
         }}
       >
+        {project.imageUrl && (
+          <Image
+            src={project.imageUrl}
+            alt=""
+            fill
+            sizes="(max-width: 600px) 78vw, 360px"
+            style={{ objectFit: "cover" }}
+          />
+        )}
         <StatusBadge status={project.status} />
       </Box>
 
