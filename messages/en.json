@@ -24,6 +24,9 @@
       { "value": 100, "suffix": "+", "label": "Specialists" }
     ]
   },
+  "IndustriesPage": {
+    "eyebrow": "Where we work",
+    "heading": "Industries"
   "About": {
     "eyebrow": "Who we are",
     "heading": "Our mission & vision",

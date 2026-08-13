@@ -24,6 +24,9 @@
       { "value": 100, "suffix": "+", "label": "Mütəxəssislər" }
     ]
   },
+  "IndustriesPage": {
+    "eyebrow": "Fəaliyyət göstərdiyimiz sahələr",
+    "heading": "Sənayelər"
   "About": {
     "eyebrow": "Biz kimik",
     "heading": "Missiyamız və vizyonumuz",
