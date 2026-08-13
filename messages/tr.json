@@ -24,6 +24,18 @@
       { "value": 100, "suffix": "+", "label": "Uzmanlar" }
     ]
   },
+  "About": {
+    "eyebrow": "Biz kimiz",
+    "heading": "Misyonumuz ve vizyonumuz",
+    "mission": {
+      "title": "Misyonumuz",
+      "body": "Müşterilerimiz ve topluluklarımız için kalıcı değer yaratan uçtan uca iş, inşaat ve proje yönetimi çözümleri sunmak."
+    },
+    "vision": {
+      "title": "Vizyonumuz",
+      "body": "Hassasiyet, dürüstlük ve ileri görüşlü iş ile tanınan, iddialı ve karmaşık projeler için bölgenin en güvenilir ortağı olmak."
+    }
+  },
   "Contact": {
     "eyebrow": "Bizimle iletişime geçin",
     "heading": "Bize ulaşın",

@@ -24,6 +24,18 @@
       { "value": 100, "suffix": "+", "label": "Mütəxəssislər" }
     ]
   },
+  "About": {
+    "eyebrow": "Biz kimik",
+    "heading": "Missiyamız və vizyonumuz",
+    "mission": {
+      "title": "Missiyamız",
+      "body": "Müştərilərimiz və cəmiyyətlərimiz üçün davamlı dəyər yaradan tam biznes, tikinti və layihə idarəetməsi həlləri təqdim etmək."
+    },
+    "vision": {
+      "title": "Vizyonumuz",
+      "body": "Dəqiqlik, dürüstlük və irəliyə baxan biznes ilə tanınan, iddialı və mürəkkəb layihələr üçün regionun ən etibarlı tərəfdaşı olmaq."
+    }
+  },
   "Contact": {
     "eyebrow": "Bizimlə əlaqə saxlayın",
     "heading": "Bizimlə əlaqə",
