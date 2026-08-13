@@ -23,5 +23,28 @@
       { "value": 50, "suffix": "+", "label": "Məmnun müştərilər" },
       { "value": 100, "suffix": "+", "label": "Mütəxəssislər" }
     ]
+  },
+  "Contact": {
+    "eyebrow": "Bizimlə əlaqə saxlayın",
+    "heading": "Bizimlə əlaqə",
+    "subheading": "Layihəniz var? Bizə mesaj göndərin, komandamız sizinlə əlaqə saxlayacaq.",
+    "nameLabel": "Ad soyad",
+    "emailLabel": "E-poçt ünvanı",
+    "subjectLabel": "Mövzu",
+    "messageLabel": "Mesaj",
+    "submit": "Mesaj göndər",
+    "submitting": "Göndərilir...",
+    "successTitle": "Mesaj göndərildi",
+    "successBody": "Müraciətiniz üçün təşəkkürlər. Komandamız tezliklə sizinlə əlaqə saxlayacaq.",
+    "errorTitle": "Xəta baş verdi",
+    "errorBody": "Mesajınızı göndərmək mümkün olmadı. Zəhmət olmasa yenidən cəhd edin.",
+    "errors": {
+      "nameRequired": "Zəhmət olmasa adınızı daxil edin",
+      "emailRequired": "Zəhmət olmasa e-poçt ünvanınızı daxil edin",
+      "emailInvalid": "Zəhmət olmasa düzgün e-poçt ünvanı daxil edin",
+      "subjectRequired": "Zəhmət olmasa mövzunu daxil edin",
+      "messageRequired": "Zəhmət olmasa mesajınızı daxil edin",
+      "messageTooShort": "Mesaj ən azı 10 simvol olmalıdır"
+    }
   }
 }
