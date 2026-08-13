@@ -34,9 +34,11 @@
       { "year": "2023", "title": "Milestone placeholder", "description": "Placeholder — replace with a recent milestone." },
       { "year": "2026", "title": "Today", "description": "Placeholder — replace with current milestone/status." }
     ]
+  },
   "IndustriesPage": {
     "eyebrow": "Where we work",
     "heading": "Industries"
+  },
   "About": {
     "eyebrow": "Who we are",
     "heading": "Our mission & vision",
