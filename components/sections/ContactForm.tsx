@@ -23,6 +23,9 @@ function buildContactSchema(t: ReturnType<typeof useTranslations>) {
       .string()
       .min(1, t("errors.messageRequired"))
       .min(10, t("errors.messageTooShort")),
+    // Honeypot: hidden from real users. If a bot fills this in, we
+    // silently drop the submission server-side.
+    company: z.string().optional(),
   });
 }
 
@@ -40,14 +43,16 @@ export function ContactForm() {
     control,
     handleSubmit,
     reset,
-    formState: { errors },
-  } = useForm<ContactFormValues>({
+    register,
+    formState: { errors }, 
+    } = useForm<ContactFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: "",
       email: "",
       subject: "",
       message: "",
+      company: "",
     },
   });
 
@@ -55,17 +60,15 @@ export function ContactForm() {
     setSubmitState("submitting");
 
     try {
-      // TODO(#42): replace with real API route + email delivery.
-      // Simulated request for now so the UI/UX can be reviewed independently.
-      await new Promise<void>((resolve, reject) => {
-        setTimeout(() => {
-          if (values.email.includes("@")) {
-            resolve();
-          } else {
-            reject(new Error("Invalid submission"));
-          }
-        }, 1000);
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
       });
+
+      if (!response.ok) {
+        throw new Error("Submission failed");
+      }
 
       setSubmitState("success");
       reset();
@@ -96,6 +99,22 @@ export function ContactForm() {
           {t("errorBody")}
         </Alert>
       )}
+
+      {/* Honeypot field for spam bots — hidden from real users */}
+      <input
+        type="text"
+        {...register("company")}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          left: "-9999px",
+          width: 1,
+          height: 1,
+          opacity: 0,
+        }}
+      />
 
       <Controller
         name="name"

@@ -58,6 +58,7 @@ jobs:
       - name: Build static site
         env:
           NEXT_PUBLIC_BASE_PATH: ${{ steps.bp.outputs.value }}
+          GITHUB_PAGES_BUILD: "true"
         run: npm run build
 
       - name: Upload artifact
