@@ -18,10 +18,26 @@
   },
   "StatsSection": {
     "items": [
-      { "value": 15, "suffix": "+", "label": "Years of experience" },
-      { "value": 200, "suffix": "+", "label": "Completed projects" },
-      { "value": 50, "suffix": "+", "label": "Satisfied clients" },
-      { "value": 100, "suffix": "+", "label": "Specialists" }
+      {
+        "value": 15,
+        "suffix": "+",
+        "label": "Years of experience"
+      },
+      {
+        "value": 200,
+        "suffix": "+",
+        "label": "Completed projects"
+      },
+      {
+        "value": 50,
+        "suffix": "+",
+        "label": "Satisfied clients"
+      },
+      {
+        "value": 100,
+        "suffix": "+",
+        "label": "Specialists"
+      }
     ]
   },
   "ContactSection": {
@@ -39,11 +55,31 @@
     "eyebrow": "Our journey",
     "heading": "Company timeline",
     "items": [
-      { "year": "2011", "title": "Company founded", "description": "Placeholder — replace with real founding story." },
-      { "year": "2015", "title": "Milestone placeholder", "description": "Placeholder — replace with a real early milestone." },
-      { "year": "2019", "title": "Milestone placeholder", "description": "Placeholder — replace with a real mid-history milestone." },
-      { "year": "2023", "title": "Milestone placeholder", "description": "Placeholder — replace with a recent milestone." },
-      { "year": "2026", "title": "Today", "description": "Placeholder — replace with current milestone/status." }
+      {
+        "year": "2011",
+        "title": "Company founded",
+        "description": "Placeholder — replace with real founding story."
+      },
+      {
+        "year": "2015",
+        "title": "Milestone placeholder",
+        "description": "Placeholder — replace with a real early milestone."
+      },
+      {
+        "year": "2019",
+        "title": "Milestone placeholder",
+        "description": "Placeholder — replace with a real mid-history milestone."
+      },
+      {
+        "year": "2023",
+        "title": "Milestone placeholder",
+        "description": "Placeholder — replace with a recent milestone."
+      },
+      {
+        "year": "2026",
+        "title": "Today",
+        "description": "Placeholder — replace with current milestone/status."
+      }
     ]
   },
   "IndustriesPage": {
@@ -84,5 +120,10 @@
       "messageRequired": "Please enter a message",
       "messageTooShort": "Message must be at least 10 characters"
     }
+  },
+  "IndustryDetailPage": {
+    "challengesHeading": "Challenges",
+    "solutionsHeading": "How MACAN helps",
+    "relatedProjectsHeading": "Related projects"
   }
 }

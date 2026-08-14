@@ -18,10 +18,26 @@
   },
   "StatsSection": {
     "items": [
-      { "value": 15, "suffix": "+", "label": "İllik təcrübə" },
-      { "value": 200, "suffix": "+", "label": "Tamamlanmiş layihələr" },
-      { "value": 50, "suffix": "+", "label": "Məmnun müştərilər" },
-      { "value": 100, "suffix": "+", "label": "Mütəxəssislər" }
+      {
+        "value": 15,
+        "suffix": "+",
+        "label": "İllik təcrübə"
+      },
+      {
+        "value": 200,
+        "suffix": "+",
+        "label": "Tamamlanmiş layihələr"
+      },
+      {
+        "value": 50,
+        "suffix": "+",
+        "label": "Məmnun müştərilər"
+      },
+      {
+        "value": 100,
+        "suffix": "+",
+        "label": "Mütəxəssislər"
+      }
     ]
   },
   "ContactSection": {
@@ -73,5 +89,10 @@
       "messageRequired": "Zəhmət olmasa mesajınızı daxil edin",
       "messageTooShort": "Mesaj ən azı 10 simvol olmalıdır"
     }
+  },
+  "IndustryDetailPage": {
+    "challengesHeading": "Çətinliklər",
+    "solutionsHeading": "MACAN necə kömək edir",
+    "relatedProjectsHeading": "Əlaqəli layihələr"
   }
 }
