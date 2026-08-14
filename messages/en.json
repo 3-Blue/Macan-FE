@@ -84,5 +84,17 @@
       "messageRequired": "Please enter a message",
       "messageTooShort": "Message must be at least 10 characters"
     }
+  },
+  "PartnersSection": {
+    "eyebrow": "Trusted by",
+    "heading": "Our partners & clients",
+    "items": [
+      { "name": "Partner One" },
+      { "name": "Partner Two" },
+      { "name": "Partner Three" },
+      { "name": "Partner Four" },
+      { "name": "Partner Five" },
+      { "name": "Partner Six" }
+    ]
   }
 }

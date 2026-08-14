@@ -73,5 +73,17 @@
       "messageRequired": "لطفاً پیام خود را وارد کنید",
       "messageTooShort": "پیام باید حداقل 10 کاراکتر باشد"
     }
+  },
+  "PartnersSection": {
+    "eyebrow": "مورد اعتماد",
+    "heading": "شرکا و مشتریان ما",
+    "items": [
+      { "name": "Partner One" },
+      { "name": "Partner Two" },
+      { "name": "Partner Three" },
+      { "name": "Partner Four" },
+      { "name": "Partner Five" },
+      { "name": "Partner Six" }
+    ]
   }
 }
