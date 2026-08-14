@@ -73,5 +73,17 @@
       "messageRequired": "Lütfen mesajınızı girin",
       "messageTooShort": "Mesaj en az 10 karakter olmalıdır"
     }
+  },
+  "PartnersSection": {
+    "eyebrow": "Bize güvenenler",
+    "heading": "Ortaklarımız ve müşterilerimiz",
+    "items": [
+      { "name": "Partner One" },
+      { "name": "Partner Two" },
+      { "name": "Partner Three" },
+      { "name": "Partner Four" },
+      { "name": "Partner Five" },
+      { "name": "Partner Six" }
+    ]
   }
 }
