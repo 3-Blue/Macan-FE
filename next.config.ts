@@ -10,7 +10,10 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const nextConfig: NextConfig = {
   // Produce a fully static site in ./out that GitHub Pages can serve.
-  output: "export",
+  // Only applied in the GitHub Pages CI build (see .github/workflows) —
+  // static export can't run API routes or middleware, so local dev and
+  // any server-based deploy (e.g. Vercel, tracked in issue #18) must skip it.
+  ...(process.env.GITHUB_PAGES_BUILD === "true" ? { output: "export" as const } : {}),
   // Emit /en/index.html instead of /en.html so sub-path routing works on Pages.
   trailingSlash: true,
   images: {
