@@ -96,5 +96,15 @@
       { "name": "Partner Five" },
       { "name": "Partner Six" }
     ]
+  },
+  "CertificationsSection": {
+    "eyebrow": "Quality & safety",
+    "heading": "Certifications & compliance",
+    "items": [
+      { "name": "ISO 9001", "description": "Placeholder — replace with real certification details." },
+      { "name": "ISO 45001", "description": "Placeholder — replace with real certification details." },
+      { "name": "ISO 14001", "description": "Placeholder — replace with real certification details." },
+      { "name": "OHSAS Compliance", "description": "Placeholder — replace with real certification details." }
+    ]
   }
 }

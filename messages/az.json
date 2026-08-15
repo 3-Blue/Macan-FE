@@ -85,5 +85,15 @@
       { "name": "Partner Five" },
       { "name": "Partner Six" }
     ]
+  },
+  "CertificationsSection": {
+    "eyebrow": "Keyfiyyət və təhlükəsizlik",
+    "heading": "Sertifikatlar və uyğunluq",
+    "items": [
+      { "name": "ISO 9001", "description": "Yer tutucu — real sertifikat məlumatları ilə əvəz edin." },
+      { "name": "ISO 45001", "description": "Yer tutucu — real sertifikat məlumatları ilə əvəz edin." },
+      { "name": "ISO 14001", "description": "Yer tutucu — real sertifikat məlumatları ilə əvəz edin." },
+      { "name": "OHSAS Compliance", "description": "Yer tutucu — real sertifikat məlumatları ilə əvəz edin." }
+    ]
   }
 }
