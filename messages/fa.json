@@ -85,5 +85,15 @@
       { "name": "Partner Five" },
       { "name": "Partner Six" }
     ]
+  },
+  "CertificationsSection": {
+    "eyebrow": "کیفیت و ایمنی",
+    "heading": "گواهینامه‌ها و انطباق",
+    "items": [
+      { "name": "ISO 9001", "description": "جایگزین — با جزئیات واقعی گواهینامه جایگزین کنید." },
+      { "name": "ISO 45001", "description": "جایگزین — با جزئیات واقعی گواهینامه جایگزین کنید." },
+      { "name": "ISO 14001", "description": "جایگزین — با جزئیات واقعی گواهینامه جایگزین کنید." },
+      { "name": "OHSAS Compliance", "description": "جایگزین — با جزئیات واقعی گواهینامه جایگزین کنید." }
+    ]
   }
 }
