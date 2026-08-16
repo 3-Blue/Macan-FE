@@ -106,5 +106,16 @@
       { "name": "ISO 14001", "description": "Placeholder — replace with real certification details." },
       { "name": "OHSAS Compliance", "description": "Placeholder — replace with real certification details." }
     ]
+  },
+  "NotFound": {
+    "heading": "Page not found",
+    "body": "The page you're looking for doesn't exist or may have been moved.",
+    "cta": "Back to homepage"
+  },
+  "ErrorPage": {
+    "heading": "Something went wrong",
+    "body": "An unexpected error occurred. Please try again.",
+    "retry": "Try again",
+    "cta": "Back to homepage"
   }
 }
