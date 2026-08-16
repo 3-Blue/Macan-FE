@@ -95,5 +95,16 @@
       { "name": "ISO 14001", "description": "Yer tutucu — real sertifikat məlumatları ilə əvəz edin." },
       { "name": "OHSAS Compliance", "description": "Yer tutucu — real sertifikat məlumatları ilə əvəz edin." }
     ]
+  },
+  "NotFound": {
+    "heading": "Səhifə tapılmadı",
+    "body": "Axtardığınız səhifə mövcud deyil və ya başqa yerə köçürülüb.",
+    "cta": "Ana səhifəyə qayıt"
+  },
+  "ErrorPage": {
+    "heading": "Nəsə səhv getdi",
+    "body": "Gözlənilməz bir xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.",
+    "retry": "Yenidən cəhd et",
+    "cta": "Ana səhifəyə qayıt"
   }
 }
