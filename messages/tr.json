@@ -94,5 +94,38 @@
     "challengesHeading": "Zorluklar",
     "solutionsHeading": "MACAN nasıl yardımcı olur",
     "relatedProjectsHeading": "İlgili projeler"
+  },
+  "PartnersSection": {
+    "eyebrow": "Bize güvenenler",
+    "heading": "Ortaklarımız ve müşterilerimiz",
+    "items": [
+      { "name": "Partner One" },
+      { "name": "Partner Two" },
+      { "name": "Partner Three" },
+      { "name": "Partner Four" },
+      { "name": "Partner Five" },
+      { "name": "Partner Six" }
+    ]
+  },
+  "CertificationsSection": {
+    "eyebrow": "Kalite & güvenlik",
+    "heading": "Sertifikalar ve uygunluk",
+    "items": [
+      { "name": "ISO 9001", "description": "Yer tutucu — gerçek sertifika bilgileriyle değiştirin." },
+      { "name": "ISO 45001", "description": "Yer tutucu — gerçek sertifika bilgileriyle değiştirin." },
+      { "name": "ISO 14001", "description": "Yer tutucu — gerçek sertifika bilgileriyle değiştirin." },
+      { "name": "OHSAS Compliance", "description": "Yer tutucu — gerçek sertifika bilgileriyle değiştirin." }
+    ]
+  },
+  "NotFound": {
+    "heading": "Sayfa bulunamadı",
+    "body": "Aradığınız sayfa mevcut değil veya taşınmış olabilir.",
+    "cta": "Ana sayfaya dön"
+  },
+  "ErrorPage": {
+    "heading": "Bir şeyler ters gitti",
+    "body": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.",
+    "retry": "Tekrar dene",
+    "cta": "Ana sayfaya dön"
   }
 }

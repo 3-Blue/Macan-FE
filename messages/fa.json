@@ -94,5 +94,38 @@
     "challengesHeading": "چالش‌ها",
     "solutionsHeading": "راهکارهای ماکان",
     "relatedProjectsHeading": "پروژه‌های مرتبط"
+  },
+  "PartnersSection": {
+    "eyebrow": "مورد اعتماد",
+    "heading": "شرکا و مشتریان ما",
+    "items": [
+      { "name": "Partner One" },
+      { "name": "Partner Two" },
+      { "name": "Partner Three" },
+      { "name": "Partner Four" },
+      { "name": "Partner Five" },
+      { "name": "Partner Six" }
+    ]
+  },
+  "CertificationsSection": {
+    "eyebrow": "کیفیت و ایمنی",
+    "heading": "گواهینامه‌ها و انطباق",
+    "items": [
+      { "name": "ISO 9001", "description": "جایگزین — با جزئیات واقعی گواهینامه جایگزین کنید." },
+      { "name": "ISO 45001", "description": "جایگزین — با جزئیات واقعی گواهینامه جایگزین کنید." },
+      { "name": "ISO 14001", "description": "جایگزین — با جزئیات واقعی گواهینامه جایگزین کنید." },
+      { "name": "OHSAS Compliance", "description": "جایگزین — با جزئیات واقعی گواهینامه جایگزین کنید." }
+    ]
+  },
+  "NotFound": {
+    "heading": "صفحه پیدا نشد",
+    "body": "صفحه‌ای که به دنبال آن هستید وجود ندارد یا ممکن است جابه‌جا شده باشد.",
+    "cta": "بازگشت به صفحه اصلی"
+  },
+  "ErrorPage": {
+    "heading": "مشکلی پیش آمد",
+    "body": "خطای غیرمنتظره‌ای رخ داد. لطفاً دوباره تلاش کنید.",
+    "retry": "تلاش مجدد",
+    "cta": "بازگشت به صفحه اصلی"
   }
 }

@@ -125,5 +125,38 @@
     "challengesHeading": "Challenges",
     "solutionsHeading": "How MACAN helps",
     "relatedProjectsHeading": "Related projects"
+  },
+  "PartnersSection": {
+    "eyebrow": "Trusted by",
+    "heading": "Our partners & clients",
+    "items": [
+      { "name": "Partner One" },
+      { "name": "Partner Two" },
+      { "name": "Partner Three" },
+      { "name": "Partner Four" },
+      { "name": "Partner Five" },
+      { "name": "Partner Six" }
+    ]
+  },
+  "CertificationsSection": {
+    "eyebrow": "Quality & safety",
+    "heading": "Certifications & compliance",
+    "items": [
+      { "name": "ISO 9001", "description": "Placeholder — replace with real certification details." },
+      { "name": "ISO 45001", "description": "Placeholder — replace with real certification details." },
+      { "name": "ISO 14001", "description": "Placeholder — replace with real certification details." },
+      { "name": "OHSAS Compliance", "description": "Placeholder — replace with real certification details." }
+    ]
+  },
+  "NotFound": {
+    "heading": "Page not found",
+    "body": "The page you're looking for doesn't exist or may have been moved.",
+    "cta": "Back to homepage"
+  },
+  "ErrorPage": {
+    "heading": "Something went wrong",
+    "body": "An unexpected error occurred. Please try again.",
+    "retry": "Try again",
+    "cta": "Back to homepage"
   }
 }

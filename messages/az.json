@@ -8,40 +8,24 @@
     "heading": "Seçilmiş layihələr",
     "previousProject": "Əvvəlki layihə",
     "nextProject": "Növbəti layihə",
-    "statusCompleted": "Tamamlanib",
+    "statusCompleted": "Tamamlanıb",
     "statusOngoing": "Davam edir"
   },
   "Hero": {
-    "headline": "Bu gün tikirik, sabahi mühəndislik edirik.",
+    "headline": "Bu gün tikirik, sabahı mühəndislik edirik.",
     "subheadline": "Tam mühəndislik, tikinti və layihə idarəetməsi həlləri.",
     "cta": "Xidmətlərimizi kəşf edin"
   },
   "StatsSection": {
     "items": [
-      {
-        "value": 15,
-        "suffix": "+",
-        "label": "İllik təcrübə"
-      },
-      {
-        "value": 200,
-        "suffix": "+",
-        "label": "Tamamlanmiş layihələr"
-      },
-      {
-        "value": 50,
-        "suffix": "+",
-        "label": "Məmnun müştərilər"
-      },
-      {
-        "value": 100,
-        "suffix": "+",
-        "label": "Mütəxəssislər"
-      }
+      { "value": 15, "suffix": "+", "label": "İllik təcrübə" },
+      { "value": 200, "suffix": "+", "label": "Tamamlanmış layihələr" },
+      { "value": 50, "suffix": "+", "label": "Məmnun müştərilər" },
+      { "value": 100, "suffix": "+", "label": "Mütəxəssislər" }
     ]
   },
   "ContactSection": {
-    "eyebrow": "Bizimlə əlaqə saxlayin",
+    "eyebrow": "Bizimlə əlaqə saxlayın",
     "heading": "Ofisimizə baş çəkin",
     "addressLabel": "Ünvan",
     "address": "Ünvan tezliklə əlavə olunacaq",
@@ -94,5 +78,38 @@
     "challengesHeading": "Çətinliklər",
     "solutionsHeading": "MACAN necə kömək edir",
     "relatedProjectsHeading": "Əlaqəli layihələr"
+  },
+  "PartnersSection": {
+    "eyebrow": "Etibar edənlər",
+    "heading": "Tərəfdaşlarımız və müştərilərimiz",
+    "items": [
+      { "name": "Partner One" },
+      { "name": "Partner Two" },
+      { "name": "Partner Three" },
+      { "name": "Partner Four" },
+      { "name": "Partner Five" },
+      { "name": "Partner Six" }
+    ]
+  },
+  "CertificationsSection": {
+    "eyebrow": "Keyfiyyət və təhlükəsizlik",
+    "heading": "Sertifikatlar və uyğunluq",
+    "items": [
+      { "name": "ISO 9001", "description": "Yer tutucu — real sertifikat məlumatları ilə əvəz edin." },
+      { "name": "ISO 45001", "description": "Yer tutucu — real sertifikat məlumatları ilə əvəz edin." },
+      { "name": "ISO 14001", "description": "Yer tutucu — real sertifikat məlumatları ilə əvəz edin." },
+      { "name": "OHSAS Compliance", "description": "Yer tutucu — real sertifikat məlumatları ilə əvəz edin." }
+    ]
+  },
+  "NotFound": {
+    "heading": "Səhifə tapılmadı",
+    "body": "Axtardığınız səhifə mövcud deyil və ya başqa yerə köçürülüb.",
+    "cta": "Ana səhifəyə qayıt"
+  },
+  "ErrorPage": {
+    "heading": "Nəsə səhv getdi",
+    "body": "Gözlənilməz bir xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.",
+    "retry": "Yenidən cəhd et",
+    "cta": "Ana səhifəyə qayıt"
   }
 }

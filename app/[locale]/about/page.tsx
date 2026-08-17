@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { AboutMissionVision } from "@/components/sections/AboutMissionVision";
-
+import { CertificationsSection } from "@/components/sections/CertificationsSection";
 export default async function About({
   params,
 }: {
@@ -9,10 +9,10 @@ export default async function About({
   const { locale } = await params;
   // Enable static rendering (required for `output: export`).
   setRequestLocale(locale);
-
   return (
     <>
       <AboutMissionVision />
+      <CertificationsSection />
     </>
   );
 }
