@@ -55,11 +55,13 @@
     "heading": "Our mission & vision",
     "mission": {
       "title": "Our Mission",
-      "body": "To deliver full-service business, construction, and project management solutions that build lasting value for our clients and communities."
+      "body": "To deliver full-service business, construction, and project management solutions that build lasting value for our clients and communities.",
+      "imageAlt": "Macan team collaborating on a project plan"
     },
     "vision": {
       "title": "Our Vision",
-      "body": "To be the region's most trusted partner for ambitious, complex projects — known for precision, integrity, and forward-thinking business."
+      "body": "To be the region's most trusted partner for ambitious, complex projects — known for precision, integrity, and forward-thinking business.",
+      "imageAlt": "Macan engineers reviewing site progress"
     }
   },
   "Contact": {

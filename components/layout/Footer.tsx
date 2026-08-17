@@ -41,6 +41,7 @@ export function Footer() {
 
         <Box
           component="nav"
+          aria-label="Footer navigation"
           sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: { xs: 1, sm: 4 } }}
         >
           {footerLinks.map((link) => (

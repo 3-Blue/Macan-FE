@@ -123,7 +123,7 @@ function StatusBadge({ status }: { status: ProjectStatus }) {
         letterSpacing: "0.04em",
         borderRadius: 999,
         bgcolor: "background.default",
-        color: status === "completed" ? "primary.main" : "secondary.main",
+        color: status === "completed" ? "primary.main" : "secondary.dark",
         border: "1px solid",
         borderColor: status === "completed" ? "primary.main" : "secondary.main",
         zIndex: 1,
@@ -167,7 +167,7 @@ function ProjectCard({ project }: { project: ProjectItem }) {
         {project.imageUrl && (
           <Image
             src={project.imageUrl}
-            alt=""
+            alt={project.title}
             fill
             sizes="(max-width: 600px) 78vw, 360px"
             style={{ objectFit: "cover" }}
@@ -179,7 +179,7 @@ function ProjectCard({ project }: { project: ProjectItem }) {
       <Box sx={{ p: 3, display: "flex", flexDirection: "column", gap: 0.5 }}>
         <Typography
           variant="overline"
-          sx={{ color: "secondary.main", letterSpacing: "0.08em" }}
+          sx={{ color: "secondary.dark", letterSpacing: "0.08em" }}
         >
           {project.sector} · {project.location}
         </Typography>
@@ -269,7 +269,7 @@ export default function FeaturedProjectsCarousel({
           <Box>
             <Typography
               variant="overline"
-              sx={{ color: "secondary.main", letterSpacing: "0.18em" }}
+              sx={{ color: "secondary.dark", letterSpacing: "0.18em" }}
             >
               {resolvedEyebrow}
             </Typography>
