@@ -24,24 +24,27 @@ export default function IndustriesPage() {
         <Heading level={1}>{t("heading")}</Heading>
 
         <Grid cols={4}>
-          {industriesData.map((industry) => (
-            <Card key={industry.slug} sx={{ height: "100%" }}>
-              <CardActionArea
-                component={Link}
-                href={`/projects?sector=${encodeURIComponent(industry.sector)}`}
-                sx={{ height: "100%", alignItems: "flex-start" }}
-              >
-                <CardContent>
-                  <Typography variant="h6" component="h3" gutterBottom>
-                    {industry.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {industry.description}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          ))}
+          {industriesData
+            .filter((industry) => industry.published)
+            .sort((a, b) => a.order - b.order)
+            .map((industry) => (
+              <Card key={industry.slug} sx={{ height: "100%" }}>
+                <CardActionArea
+                  component={Link}
+                  href={`/industries/${industry.slug}`}
+                  sx={{ height: "100%", alignItems: "flex-start" }}
+                >
+                  <CardContent>
+                    <Typography variant="h6" component="h3" gutterBottom>
+                      {industry.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {industry.summary}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            ))}
         </Grid>
       </Container>
     </Section>

@@ -74,6 +74,11 @@
       "messageTooShort": "Mesaj ən azı 10 simvol olmalıdır"
     }
   },
+  "IndustryDetailPage": {
+    "challengesHeading": "Çətinliklər",
+    "solutionsHeading": "MACAN necə kömək edir",
+    "relatedProjectsHeading": "Əlaqəli layihələr"
+  },
   "PartnersSection": {
     "eyebrow": "Etibar edənlər",
     "heading": "Tərəfdaşlarımız və müştərilərimiz",

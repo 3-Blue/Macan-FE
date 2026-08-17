@@ -18,10 +18,26 @@
   },
   "StatsSection": {
     "items": [
-      { "value": 15, "suffix": "+", "label": "سال تجربه" },
-      { "value": 200, "suffix": "+", "label": "پروژه تکمیل‌شده" },
-      { "value": 50, "suffix": "+", "label": "مشتری راضی" },
-      { "value": 100, "suffix": "+", "label": "متخصص" }
+      {
+        "value": 15,
+        "suffix": "+",
+        "label": "سال تجربه"
+      },
+      {
+        "value": 200,
+        "suffix": "+",
+        "label": "پروژه تکمیل‌شده"
+      },
+      {
+        "value": 50,
+        "suffix": "+",
+        "label": "مشتری راضی"
+      },
+      {
+        "value": 100,
+        "suffix": "+",
+        "label": "متخصص"
+      }
     ]
   },
   "ContactSection": {
@@ -73,6 +89,11 @@
       "messageRequired": "لطفاً پیام خود را وارد کنید",
       "messageTooShort": "پیام باید حداقل 10 کاراکتر باشد"
     }
+  },
+  "IndustryDetailPage": {
+    "challengesHeading": "چالش‌ها",
+    "solutionsHeading": "راهکارهای ماکان",
+    "relatedProjectsHeading": "پروژه‌های مرتبط"
   },
   "PartnersSection": {
     "eyebrow": "مورد اعتماد",
