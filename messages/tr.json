@@ -18,26 +18,10 @@
   },
   "StatsSection": {
     "items": [
-      {
-        "value": 15,
-        "suffix": "+",
-        "label": "Yıllık deneyim"
-      },
-      {
-        "value": 200,
-        "suffix": "+",
-        "label": "Tamamlanan projeler"
-      },
-      {
-        "value": 50,
-        "suffix": "+",
-        "label": "Memnun müşteriler"
-      },
-      {
-        "value": 100,
-        "suffix": "+",
-        "label": "Uzmanlar"
-      }
+      { "value": 15, "suffix": "+", "label": "Yıllık deneyim" },
+      { "value": 200, "suffix": "+", "label": "Tamamlanan projeler" },
+      { "value": 50, "suffix": "+", "label": "Memnun müşteriler" },
+      { "value": 100, "suffix": "+", "label": "Uzmanlar" }
     ]
   },
   "ContactSection": {
@@ -127,5 +111,11 @@
     "body": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.",
     "retry": "Tekrar dene",
     "cta": "Ana sayfaya dön"
+  },
+  "ServicesPage": {
+    "eyebrow": "Ne yapıyoruz",
+    "heading": "Çözüm ekosistemimiz",
+    "intro": "Hizmetlerimiz tek bir bağlantılı tedarik zinciri oluşturur — küresel pazarlardan malzeme ve ekipman tedariki ve ithalatından, mühendislik, inşaat uygulaması ve eksiksiz proje teslimine kadar. İhracat-ithalat ortağı olarak, uluslararası tedariki sahadaki uygulamayla birleştiriyoruz, böylece her aşama tek ve kesintisiz bir operasyon gibi ilerliyor.",
+    "learnMore": "Daha fazla bilgi"
   }
 }

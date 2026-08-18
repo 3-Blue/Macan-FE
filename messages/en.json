@@ -18,26 +18,10 @@
   },
   "StatsSection": {
     "items": [
-      {
-        "value": 15,
-        "suffix": "+",
-        "label": "Years of experience"
-      },
-      {
-        "value": 200,
-        "suffix": "+",
-        "label": "Completed projects"
-      },
-      {
-        "value": 50,
-        "suffix": "+",
-        "label": "Satisfied clients"
-      },
-      {
-        "value": 100,
-        "suffix": "+",
-        "label": "Specialists"
-      }
+      { "value": 15, "suffix": "+", "label": "Years of experience" },
+      { "value": 200, "suffix": "+", "label": "Completed projects" },
+      { "value": 50, "suffix": "+", "label": "Satisfied clients" },
+      { "value": 100, "suffix": "+", "label": "Specialists" }
     ]
   },
   "ContactSection": {
@@ -55,31 +39,11 @@
     "eyebrow": "Our journey",
     "heading": "Company timeline",
     "items": [
-      {
-        "year": "2011",
-        "title": "Company founded",
-        "description": "Placeholder — replace with real founding story."
-      },
-      {
-        "year": "2015",
-        "title": "Milestone placeholder",
-        "description": "Placeholder — replace with a real early milestone."
-      },
-      {
-        "year": "2019",
-        "title": "Milestone placeholder",
-        "description": "Placeholder — replace with a real mid-history milestone."
-      },
-      {
-        "year": "2023",
-        "title": "Milestone placeholder",
-        "description": "Placeholder — replace with a recent milestone."
-      },
-      {
-        "year": "2026",
-        "title": "Today",
-        "description": "Placeholder — replace with current milestone/status."
-      }
+      { "year": "2011", "title": "Company founded", "description": "Placeholder — replace with real founding story." },
+      { "year": "2015", "title": "Milestone placeholder", "description": "Placeholder — replace with a real early milestone." },
+      { "year": "2019", "title": "Milestone placeholder", "description": "Placeholder — replace with a real mid-history milestone." },
+      { "year": "2023", "title": "Milestone placeholder", "description": "Placeholder — replace with a recent milestone." },
+      { "year": "2026", "title": "Today", "description": "Placeholder — replace with current milestone/status." }
     ]
   },
   "IndustriesPage": {
@@ -158,5 +122,11 @@
     "body": "An unexpected error occurred. Please try again.",
     "retry": "Try again",
     "cta": "Back to homepage"
-  }
+  },
+  "ServicesPage": {
+  "eyebrow": "What we do",
+  "heading": "Our solution ecosystem",
+  "intro": "Our services form one connected supply chain — from sourcing and importing materials and equipment across global markets, to engineering, construction execution, and full project delivery. As an import-export partner, we bridge international supply with on-the-ground execution, so every phase moves as one seamless operation.",
+  "learnMore": "Learn more"
+}
 }

@@ -111,5 +111,11 @@
     "body": "Gözlənilməz bir xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.",
     "retry": "Yenidən cəhd et",
     "cta": "Ana səhifəyə qayıt"
+  },
+  "ServicesPage": {
+    "eyebrow": "Nə edirik",
+    "heading": "Həllər ekosistemimiz",
+    "intro": "Xidmətlərimiz vahid, bağlı bir tədarik zənciri təşkil edir — qlobal bazarlardan material və avadanlıq təchizatı və idxalından, mühəndislik, tikinti icrası və tam layihə təhvilinə qədər. İxrac-idxal tərəfdaşı olaraq, beynəlxalq təchizatı sahədəki icra ilə birləşdiririk ki, hər mərhələ vahid, kəsintisiz bir əməliyyat kimi irəliləsin.",
+    "learnMore": "Daha ətraflı"
   }
 }
