@@ -3,6 +3,7 @@ import { Hero } from "@/components/sections/Hero";
 import { StatsSection } from "@/components/sections/StatsSection";
 import { ServicesTeaserGrid } from "@/components/home/ServicesTeaserGrid";
 import FeaturedProjectsCarousel from "@/components/featured-projects-carousel";
+import { TestimonialsGrid } from "@/components/home/TestimonialsGrid";
 import { ContactSection } from "@/components/sections/ContactSection";
 
 export default async function Home({
@@ -19,6 +20,7 @@ export default async function Home({
       <StatsSection />
       <ServicesTeaserGrid />
       <FeaturedProjectsCarousel />
+      <TestimonialsGrid />
       <ContactSection />
     </>
   );
