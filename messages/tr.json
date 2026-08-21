@@ -44,11 +44,13 @@
     "heading": "Misyonumuz ve vizyonumuz",
     "mission": {
       "title": "Misyonumuz",
-      "body": "Müşterilerimiz ve topluluklarımız için kalıcı değer yaratan uçtan uca iş, inşaat ve proje yönetimi çözümleri sunmak."
+      "body": "Müşterilerimiz ve topluluklarımız için kalıcı değer yaratan uçtan uca iş, inşaat ve proje yönetimi çözümleri sunmak.",
+      "imageAlt": "Macan ekibi proje planı üzerinde çalışıyor"
     },
     "vision": {
       "title": "Vizyonumuz",
-      "body": "Hassasiyet, dürüstlük ve ileri görüşlü iş ile tanınan, iddialı ve karmaşık projeler için bölgenin en güvenilir ortağı olmak."
+      "body": "Hassasiyet, dürüstlük ve ileri görüşlü iş ile tanınan, iddialı ve karmaşık projeler için bölgenin en güvenilir ortağı olmak.",
+      "imageAlt": "Macan mühendisleri saha ilerlemesini inceliyor"
     }
   },
   "Contact": {

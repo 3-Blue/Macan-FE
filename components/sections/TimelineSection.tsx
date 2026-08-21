@@ -56,7 +56,7 @@ export function TimelineSection() {
     <Box component="section" sx={{ bgcolor: "background.default", py: { xs: 6, md: 10 } }}>
       <Container>
         <Box sx={{ textAlign: "center", mb: { xs: 4, md: 6 } }}>
-          <Typography variant="overline" sx={{ color: "secondary.main", fontWeight: 600 }}>
+          <Typography variant="overline" sx={{ color: "secondary.dark", fontWeight: 600 }}>
             {t("eyebrow")}
           </Typography>
           <Heading level={2}>{t("heading")}</Heading>

@@ -6,6 +6,7 @@ const brand = {
   lightGreen: "#173028",  // primary, lighter variant
   cream: "#f2ede3",       // background
   terracotta: "#bb6a45",  // accent
+  terracottaDark: "#9c5433", // accent, darkened for WCAG AA text contrast (~4.83:1 on cream)
   peach: "#e0b69e",       // accent, light
 };
 
@@ -22,6 +23,7 @@ const theme = createTheme({
     secondary: {
       main: brand.terracotta,
       light: brand.peach,
+      dark: brand.terracottaDark,
     },
     background: {
       default: brand.cream,

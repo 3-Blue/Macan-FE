@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Link as LocaleLink } from "@/i18n/navigation";
+import { usePathname } from "@/i18n/navigation";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
@@ -27,6 +28,7 @@ const navLinks = [
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <AppBar
@@ -46,18 +48,31 @@ export function Header() {
         </Typography>
 
         {/* Desktop nav */}
-        <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", gap: 4 }}>
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              component={LocaleLink}
-              href={link.href}
-              underline="none"
-              sx={{ fontSize: "0.875rem", fontWeight: 500, color: "text.secondary", "&:hover": { color: "text.primary" } }}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <Box
+          component="nav"
+          aria-label="Main navigation"
+          sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", gap: 4 }}
+        >
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                component={LocaleLink}
+                href={link.href}
+                underline="none"
+                aria-current={isActive ? "page" : undefined}
+                sx={{
+                  fontSize: "0.875rem",
+                  fontWeight: 500,
+                  color: isActive ? "text.primary" : "text.secondary",
+                  "&:hover": { color: "text.primary" },
+                }}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           <LocaleSwitcher />
         </Box>
 
@@ -66,7 +81,9 @@ export function Header() {
           <LocaleSwitcher />
           <IconButton
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-nav-menu"
           >
             {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
           </IconButton>
@@ -74,19 +91,29 @@ export function Header() {
       </Toolbar>
 
       {/* Mobile nav */}
-      <Drawer anchor="top" open={isMenuOpen} onClose={() => setIsMenuOpen(false)}>
+      <Drawer
+        anchor="top"
+        open={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        id="mobile-nav-menu"
+        aria-label="Mobile navigation"
+      >
         <List sx={{ mt: 8 }}>
-          {navLinks.map((link) => (
-            <ListItem key={link.href} disablePadding>
-              <ListItemButton
-                component={LocaleLink}
-                href={link.href}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <ListItemText primary={link.label} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <ListItem key={link.href} disablePadding>
+                <ListItemButton
+                  component={LocaleLink}
+                  href={link.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  <ListItemText primary={link.label} />
+                </ListItemButton>
+              </ListItem>
+            );
+          })}
         </List>
       </Drawer>
     </AppBar>

@@ -18,7 +18,7 @@ export default function IndustriesPage() {
   return (
     <Section>
       <Container>
-        <Typography variant="overline" sx={{ color: "secondary.main", letterSpacing: "0.18em" }}>
+        <Typography variant="overline" sx={{ color: "secondary.dark", letterSpacing: "0.18em" }}>
           {t("eyebrow")}
         </Typography>
         <Heading level={1}>{t("heading")}</Heading>

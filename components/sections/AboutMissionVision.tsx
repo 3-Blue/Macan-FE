@@ -8,11 +8,13 @@ import { useTranslations } from "next-intl";
 
 function MissionVisionBlock({
   imageSrc,
+  imageAlt,
   title,
   body,
   reverse = false,
 }: {
   imageSrc: string;
+  imageAlt: string;
   title: string;
   body: string;
   reverse?: boolean;
@@ -40,7 +42,7 @@ function MissionVisionBlock({
           flexShrink: 0,
         }}
       >
-        <Image src={imageSrc} alt="" fill style={{ objectFit: "cover" }} />
+        <Image src={imageSrc} alt={imageAlt} fill style={{ objectFit: "cover" }} />
       </Box>
       <Box sx={{ width: { xs: "100%", md: "50%" } }}>
         <Heading level={2}>{title}</Heading>
@@ -59,7 +61,7 @@ export function AboutMissionVision() {
     <Box component="section" sx={{ bgcolor: "background.default" }}>
       <Container>
         <Box sx={{ textAlign: "center", pt: { xs: 6, md: 10 }, pb: 2 }}>
-          <Typography variant="overline" sx={{ color: "secondary.main", fontWeight: 600 }}>
+          <Typography variant="overline" sx={{ color: "secondary.dark", fontWeight: 600 }}>
             {t("eyebrow")}
           </Typography>
           <Heading level={1}>{t("heading")}</Heading>
@@ -67,12 +69,14 @@ export function AboutMissionVision() {
 
         <MissionVisionBlock
           imageSrc="/about/mission-placeholder.svg"
+          imageAlt={t("mission.imageAlt")}
           title={t("mission.title")}
           body={t("mission.body")}
         />
 
         <MissionVisionBlock
           imageSrc="/about/vision-placeholder.svg"
+          imageAlt={t("vision.imageAlt")}
           title={t("vision.title")}
           body={t("vision.body")}
           reverse
