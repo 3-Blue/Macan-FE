@@ -119,5 +119,53 @@
     "heading": "Həllər ekosistemimiz",
     "intro": "Xidmətlərimiz vahid, bağlı bir tədarik zənciri təşkil edir — qlobal bazarlardan material və avadanlıq təchizatı və idxalından, mühəndislik, tikinti icrası və tam layihə təhvilinə qədər. İxrac-idxal tərəfdaşı olaraq, beynəlxalq təchizatı sahədəki icra ilə birləşdiririk ki, hər mərhələ vahid, kəsintisiz bir əməliyyat kimi irəliləsin.",
     "learnMore": "Daha ətraflı"
+  },
+  "CookieConsent": {
+    "message": "Təcrübənizi yaxşılaşdırmaq və sayt trafikini təhlil etmək üçün kukilərdən istifadə edirik. Vacib olmayan kukiləri qəbul və ya rədd edə bilərsiniz.",
+    "accept": "Qəbul et",
+    "decline": "Rədd et",
+    "learnMore": "Daha ətraflı"
+  },
+  "PrivacyPage": {
+    "heading": "Məxfilik Siyasəti",
+    "lastUpdated": "Son yenilənmə: yer tutucu — nəşr zamanı real tarix qoyun",
+    "intro": "Yer tutucu — nəşrdən əvvəl təşkilatınızın real məxfilik siyasəti ilə əvəz edin.",
+    "sections": {
+      "dataCollection": {
+        "title": "Topladığımız Məlumatlar",
+        "body": "Yer tutucu — hansı məlumatların toplandığını təsvir edin (məsələn, əlaqə formu, analitika)."
+      },
+      "dataUse": {
+        "title": "Məlumatlardan Necə İstifadə Edirik",
+        "body": "Yer tutucu — toplanan məlumatların necə istifadə edildiyini təsvir edin."
+      },
+      "cookies": {
+        "title": "Kukilər",
+        "body": "Yer tutucu — kuki istifadəsini və istifadəçilərin tərcihlərini necə idarə edə biləcəyini təsvir edin."
+      },
+      "contact": {
+        "title": "Bizimlə Əlaqə",
+        "body": "Yer tutucu — məxfilik sualları üçün real əlaqə üsulu göstərin."
+      }
+    }
+  },
+  "TermsPage": {
+    "heading": "Şərtlər və Qaydalar",
+    "lastUpdated": "Son yenilənmə: yer tutucu — nəşr zamanı real tarix qoyun",
+    "intro": "Yer tutucu — nəşrdən əvvəl təşkilatınızın real şərtləri ilə əvəz edin.",
+    "sections": {
+      "usage": {
+        "title": "Qəbul Edilən İstifadə",
+        "body": "Yer tutucu — saytın qəbul edilən istifadəsini təsvir edin."
+      },
+      "liability": {
+        "title": "Məsuliyyətin Məhdudlaşdırılması",
+        "body": "Yer tutucu — məsuliyyət məhdudiyyətlərini təsvir edin."
+      },
+      "changes": {
+        "title": "Bu Şərtlərdə Dəyişikliklər",
+        "body": "Yer tutucu — şərtlərdəki yeniliklərin necə bildirildiyini təsvir edin."
+      }
+    }
   }
 }
