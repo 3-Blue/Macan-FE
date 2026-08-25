@@ -11,6 +11,8 @@ import { Footer } from "@/components/layout/Footer";
 import { routing } from "@/i18n/routing";
 import { PageTransition } from "@/components/motion/PageTransition";
 import "../globals.css";
+import { cookies } from "next/headers";
+import { CookieConsentBanner } from "@/components/legal/CookieConsentBanner";
 
 const vazirmatn = localFont({
   src: "../../fonts/Vazirmatn[wght].ttf",
@@ -66,6 +68,8 @@ export default async function RootLayout({
   setRequestLocale(locale);
   const dir = locale === "fa" ? "rtl" : "ltr";
   const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+  const cookieStore = await cookies();
+  const hasConsent = cookieStore.get("cookie-consent")?.value === "accepted";
   return (
     <html
       lang={locale}
@@ -79,7 +83,7 @@ export default async function RootLayout({
         >
           Skip to main content
         </a>
-        {GA_ID && (
+        {GA_ID && hasConsent && (
           <>
             <Script
               src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
@@ -105,6 +109,7 @@ export default async function RootLayout({
                 </main>
               </PageTransition>
               <Footer />
+              <CookieConsentBanner />
             </NextIntlClientProvider>
           </ThemeRegistry>
         </AppRouterCacheProvider>

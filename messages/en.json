@@ -130,5 +130,53 @@
   "heading": "Our solution ecosystem",
   "intro": "Our services form one connected supply chain — from sourcing and importing materials and equipment across global markets, to engineering, construction execution, and full project delivery. As an import-export partner, we bridge international supply with on-the-ground execution, so every phase moves as one seamless operation.",
   "learnMore": "Learn more"
-}
+},
+  "CookieConsent": {
+      "message": "We use cookies to improve your experience and analyze site traffic. You can accept or decline non-essential cookies.",
+      "accept": "Accept",
+      "decline": "Decline",
+      "learnMore": "Learn more"
+    },
+    "PrivacyPage": {
+      "heading": "Privacy Policy",
+      "lastUpdated": "Last updated: placeholder — set real date on publish",
+      "intro": "Placeholder — replace with your organization's actual privacy policy before launch.",
+      "sections": {
+        "dataCollection": {
+          "title": "Information We Collect",
+          "body": "Placeholder — describe what data is collected (e.g. contact form submissions, analytics)."
+        },
+        "dataUse": {
+          "title": "How We Use Information",
+          "body": "Placeholder — describe how collected data is used."
+        },
+        "cookies": {
+          "title": "Cookies",
+          "body": "Placeholder — describe cookie usage and how users can manage preferences."
+        },
+        "contact": {
+          "title": "Contact Us",
+          "body": "Placeholder — provide a real contact method for privacy questions."
+        }
+      }
+    },
+    "TermsPage": {
+      "heading": "Terms & Conditions",
+      "lastUpdated": "Last updated: placeholder — set real date on publish",
+      "intro": "Placeholder — replace with your organization's actual terms and conditions before launch.",
+      "sections": {
+        "usage": {
+          "title": "Acceptable Use",
+          "body": "Placeholder — describe acceptable use of the site."
+        },
+        "liability": {
+          "title": "Limitation of Liability",
+          "body": "Placeholder — describe liability limitations."
+        },
+        "changes": {
+          "title": "Changes to These Terms",
+          "body": "Placeholder — describe how updates to terms are communicated."
+        }
+      }
+    }
 }

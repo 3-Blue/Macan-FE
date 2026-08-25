@@ -119,5 +119,53 @@
     "heading": "Çözüm ekosistemimiz",
     "intro": "Hizmetlerimiz tek bir bağlantılı tedarik zinciri oluşturur — küresel pazarlardan malzeme ve ekipman tedariki ve ithalatından, mühendislik, inşaat uygulaması ve eksiksiz proje teslimine kadar. İhracat-ithalat ortağı olarak, uluslararası tedariki sahadaki uygulamayla birleştiriyoruz, böylece her aşama tek ve kesintisiz bir operasyon gibi ilerliyor.",
     "learnMore": "Daha fazla bilgi"
+  },
+  "CookieConsent": {
+    "message": "Deneyiminizi geliştirmek ve site trafiğini analiz etmek için çerezler kullanıyoruz. Zorunlu olmayan çerezleri kabul edebilir veya reddedebilirsiniz.",
+    "accept": "Kabul et",
+    "decline": "Reddet",
+    "learnMore": "Daha fazla bilgi"
+  },
+  "PrivacyPage": {
+    "heading": "Gizlilik Politikası",
+    "lastUpdated": "Son güncelleme: yer tutucu — yayınlarken gerçek tarihi girin",
+    "intro": "Yer tutucu — yayınlamadan önce kuruluşunuzun gerçek gizlilik politikasıyla değiştirin.",
+    "sections": {
+      "dataCollection": {
+        "title": "Topladığımız Bilgiler",
+        "body": "Yer tutucu — hangi verilerin toplandığını açıklayın (örn. iletişim formu, analitik)."
+      },
+      "dataUse": {
+        "title": "Bilgileri Nasıl Kullanıyoruz",
+        "body": "Yer tutucu — toplanan verilerin nasıl kullanıldığını açıklayın."
+      },
+      "cookies": {
+        "title": "Çerezler",
+        "body": "Yer tutucu — çerez kullanımını ve kullanıcıların tercihlerini nasıl yönetebileceğini açıklayın."
+      },
+      "contact": {
+        "title": "Bize Ulaşın",
+        "body": "Yer tutucu — gizlilik soruları için gerçek bir iletişim yöntemi sağlayın."
+      }
+    }
+  },
+  "TermsPage": {
+    "heading": "Şartlar ve Koşullar",
+    "lastUpdated": "Son güncelleme: yer tutucu — yayınlarken gerçek tarihi girin",
+    "intro": "Yer tutucu — yayınlamadan önce kuruluşunuzun gerçek şartları ve koşullarıyla değiştirin.",
+    "sections": {
+      "usage": {
+        "title": "Kabul Edilebilir Kullanım",
+        "body": "Yer tutucu — sitenin kabul edilebilir kullanımını açıklayın."
+      },
+      "liability": {
+        "title": "Sorumluluk Sınırlaması",
+        "body": "Yer tutucu — sorumluluk sınırlamalarını açıklayın."
+      },
+      "changes": {
+        "title": "Bu Şartlardaki Değişiklikler",
+        "body": "Yer tutucu — şartlardaki güncellemelerin nasıl duyurulduğunu açıklayın."
+      }
+    }
   }
 }
