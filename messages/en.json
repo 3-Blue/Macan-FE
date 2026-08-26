@@ -1,4 +1,26 @@
 {
+  "Nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "industries": "Industries",
+    "contact": "Contact",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "mainNavigation": "Main navigation",
+    "selectLanguage": "Select language"
+  },
+  "Footer": {
+    "tagline": "Engineering, construction, and project management solutions.",
+    "navigation": "Footer navigation",
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Conditions",
+    "rights": "All rights reserved."
+  },
+  "Home": {
+    "servicesTeaserHeading": "What We Do",
+    "testimonialsHeading": "What Our Clients Say"
+  },
   "HomePage": {
     "title": "Welcome",
     "description": "This is the homepage."
@@ -132,6 +154,7 @@
   "learnMore": "Learn more"
 },
   "CookieConsent": {
+      "ariaLabel": "Cookie consent",
       "message": "We use cookies to improve your experience and analyze site traffic. You can accept or decline non-essential cookies.",
       "accept": "Accept",
       "decline": "Decline",

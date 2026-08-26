@@ -3,23 +3,29 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import { useTranslations } from "next-intl";
 
 import { Container } from "@/components/ui/Container";
 import { Grid } from "@/components/ui/Grid";
 import { Heading } from "@/components/ui/Heading";
 import { Section } from "@/components/ui/Section";
-import { testimonialsData } from "@/components/home/testimonials-data";
+import type { Testimonial } from "@/lib/content";
 
-// Client testimonials -- placeholder quotes only, see testimonials-data.ts.
-// Minimal static grid per issue #36; no carousel/animation needed.
-export function TestimonialsGrid() {
+// Client testimonials. Content is passed in (resolved for the active locale)
+// by the page. Quotes are currently placeholder demo data.
+export function TestimonialsGrid({
+  testimonials,
+}: {
+  testimonials: Testimonial[];
+}) {
+  const t = useTranslations("Home");
   return (
     <Section>
       <Container>
-        <Heading level={2}>What Our Clients Say</Heading>
+        <Heading level={2}>{t("testimonialsHeading")}</Heading>
 
         <Grid cols={3}>
-          {testimonialsData.map((testimonial) => (
+          {testimonials.map((testimonial) => (
             <Card key={testimonial.id} sx={{ height: "100%" }}>
               <CardContent
                 sx={{

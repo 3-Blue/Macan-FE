@@ -1,5 +1,5 @@
 "use client";
-import NextLink from "next/link";
+import { Link as LocaleLink } from "@/i18n/navigation";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import Box from "@mui/material/Box";
@@ -52,7 +52,7 @@ export function Hero() {
             {t("subheadline")}
           </Typography>
           <Button
-            component={NextLink}
+            component={LocaleLink}
             href="/services"
             variant="primary"
             size="large"

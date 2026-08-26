@@ -1,0 +1,29 @@
+// payload/collections/Projects.ts
+import type { CollectionConfig } from "payload";
+
+export const Projects: CollectionConfig = {
+  slug: "projects",
+  admin: { useAsTitle: "title", defaultColumns: ["title", "sector", "status", "order"] },
+  access: { read: () => true },
+  versions: { drafts: true },
+  fields: [
+    { name: "title", type: "text", required: true, localized: true },
+    { name: "client", type: "text", localized: true },
+    { name: "sector", type: "text", localized: true },
+    { name: "location", type: "text", localized: true },
+    { name: "outcome", type: "text", localized: true },
+    {
+      name: "status",
+      type: "select",
+      required: true,
+      defaultValue: "completed",
+      options: [
+        { label: "Completed", value: "completed" },
+        { label: "Ongoing", value: "ongoing" },
+      ],
+    },
+    { name: "image", type: "upload", relationTo: "media" },
+    { name: "featured", type: "checkbox", defaultValue: false },
+    { name: "order", type: "number", defaultValue: 0 },
+  ],
+};

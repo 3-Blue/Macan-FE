@@ -1,20 +1,25 @@
 "use client";
 
-import NextLink from "next/link";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
+import { useTranslations } from "next-intl";
+import { Link as LocaleLink } from "@/i18n/navigation";
 
-const footerLinks = [
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Projects", href: "/projects" },
-  { label: "Contact", href: "/contact" },
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Terms & Conditions", href: "/terms" },
-];
+// Locale-aware hrefs (the i18n <Link> prepends the active locale). Labels are
+// pulled from the Nav / Footer namespaces so the footer is translated too.
+const FOOTER_ITEMS = [
+  { key: "about", href: "/about", ns: "Nav" },
+  { key: "services", href: "/services", ns: "Nav" },
+  { key: "industries", href: "/industries", ns: "Nav" },
+  { key: "contact", href: "/contact", ns: "Nav" },
+  { key: "privacy", href: "/privacy", ns: "Footer" },
+  { key: "terms", href: "/terms", ns: "Footer" },
+] as const;
 
 export function Footer() {
+  const tNav = useTranslations("Nav");
+  const tFooter = useTranslations("Footer");
   const year = new Date().getFullYear();
 
   return (
@@ -37,24 +42,24 @@ export function Footer() {
             Macan
           </Typography>
           <Typography variant="body2" sx={{ mt: 1, maxWidth: 320, color: "text.secondary" }}>
-            Engineering, construction, and project management solutions.
+            {tFooter("tagline")}
           </Typography>
         </Box>
 
         <Box
           component="nav"
-          aria-label="Footer navigation"
+          aria-label={tFooter("navigation")}
           sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: { xs: 1, sm: 4 } }}
         >
-          {footerLinks.map((link) => (
+          {FOOTER_ITEMS.map((item) => (
             <Link
-              key={link.href}
-              component={NextLink}
-              href={link.href}
+              key={item.href}
+              component={LocaleLink}
+              href={item.href}
               underline="none"
               sx={{ fontSize: "0.875rem", fontWeight: 500, color: "text.secondary", "&:hover": { color: "text.primary" } }}
             >
-              {link.label}
+              {item.ns === "Nav" ? tNav(item.key) : tFooter(item.key)}
             </Link>
           ))}
         </Box>
@@ -62,7 +67,7 @@ export function Footer() {
 
       <Box sx={{ borderTop: "1px solid", borderColor: "divider", px: { xs: 2, sm: 3, lg: 4 }, py: 3 }}>
         <Typography variant="body2" sx={{ color: "text.disabled" }}>
-          © {year} Macan. All rights reserved.
+          © {year} Macan. {tFooter("rights")}
         </Typography>
       </Box>
     </Box>

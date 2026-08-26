@@ -4,25 +4,29 @@ import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import { useTranslations } from "next-intl";
 
 import { Container } from "@/components/ui/Container";
 import { Grid } from "@/components/ui/Grid";
 import { Heading } from "@/components/ui/Heading";
 import { Section } from "@/components/ui/Section";
 import { Link } from "@/i18n/navigation";
-import { servicesTeaserData } from "@/components/home/services-data";
+import type { Service } from "@/lib/content";
 
-// "What we do" teaser grid -- links to service detail pages that don't exist
-// yet (issue #22/#23 are still in the backlog), so these routes will 404
-// until that work lands. Content is placeholder; see services-data.ts.
-export function ServicesTeaserGrid() {
+// "What we do" teaser grid. Content is passed in (resolved for the active
+// locale) by the page; this component is purely presentational.
+//
+// Cards link to /services/[slug] detail pages that don't exist yet, so those
+// routes will 404 until the service detail work lands.
+export function ServicesTeaserGrid({ services }: { services: Service[] }) {
+  const t = useTranslations("Home");
   return (
     <Section>
       <Container>
-        <Heading level={2}>What We Do</Heading>
+        <Heading level={2}>{t("servicesTeaserHeading")}</Heading>
 
         <Grid cols={4}>
-          {servicesTeaserData.map((service) => (
+          {services.map((service) => (
             <Card key={service.slug} sx={{ height: "100%" }}>
               <CardActionArea
                 component={Link}

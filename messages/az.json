@@ -1,4 +1,26 @@
 {
+  "Nav": {
+    "home": "Ana səhifə",
+    "about": "Haqqımızda",
+    "services": "Xidmətlər",
+    "industries": "Sənayelər",
+    "contact": "Əlaqə",
+    "openMenu": "Menyunu aç",
+    "closeMenu": "Menyunu bağla",
+    "mainNavigation": "Əsas naviqasiya",
+    "selectLanguage": "Dil seçin"
+  },
+  "Footer": {
+    "tagline": "Mühəndislik, tikinti və layihə idarəetməsi həlləri.",
+    "navigation": "Alt bilgi naviqasiyası",
+    "privacy": "Məxfilik Siyasəti",
+    "terms": "Şərtlər və Qaydalar",
+    "rights": "Bütün hüquqlar qorunur."
+  },
+  "Home": {
+    "servicesTeaserHeading": "Nə edirik",
+    "testimonialsHeading": "Müştərilərimiz nə deyir"
+  },
   "HomePage": {
     "title": "Xoş gəlmisiniz",
     "description": "Bu ana səhifədir."
@@ -121,6 +143,7 @@
     "learnMore": "Daha ətraflı"
   },
   "CookieConsent": {
+    "ariaLabel": "Kuki razılığı",
     "message": "Təcrübənizi yaxşılaşdırmaq və sayt trafikini təhlil etmək üçün kukilərdən istifadə edirik. Vacib olmayan kukiləri qəbul və ya rədd edə bilərsiniz.",
     "accept": "Qəbul et",
     "decline": "Rədd et",

@@ -1,4 +1,26 @@
 {
+  "Nav": {
+    "home": "Ana Sayfa",
+    "about": "Hakkımızda",
+    "services": "Hizmetler",
+    "industries": "Sektörler",
+    "contact": "İletişim",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat",
+    "mainNavigation": "Ana gezinme",
+    "selectLanguage": "Dil seçin"
+  },
+  "Footer": {
+    "tagline": "Mühendislik, inşaat ve proje yönetimi çözümleri.",
+    "navigation": "Alt bilgi gezinmesi",
+    "privacy": "Gizlilik Politikası",
+    "terms": "Şartlar ve Koşullar",
+    "rights": "Tüm hakları saklıdır."
+  },
+  "Home": {
+    "servicesTeaserHeading": "Ne Yapıyoruz",
+    "testimonialsHeading": "Müşterilerimiz Ne Diyor"
+  },
   "HomePage": {
     "title": "Hoş geldiniz",
     "description": "Bu ana sayfadır."
@@ -121,6 +143,7 @@
     "learnMore": "Daha fazla bilgi"
   },
   "CookieConsent": {
+    "ariaLabel": "Çerez onayı",
     "message": "Deneyiminizi geliştirmek ve site trafiğini analiz etmek için çerezler kullanıyoruz. Zorunlu olmayan çerezleri kabul edebilir veya reddedebilirsiniz.",
     "accept": "Kabul et",
     "decline": "Reddet",

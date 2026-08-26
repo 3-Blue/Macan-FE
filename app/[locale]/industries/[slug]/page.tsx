@@ -7,7 +7,11 @@ import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { Section } from "@/components/ui/Section";
 import { routing } from "@/i18n/routing";
-import { industriesData } from "@/lib/industries-data";
+import {
+  getIndustry,
+  getPublishedIndustrySlugs,
+  type Locale,
+} from "@/lib/content";
 
 // TODO(#28): once PR #66 (lib/projects-data.ts) merges, replace this
 // local title map with a real PROJECTS import + lookup by id.
@@ -19,11 +23,10 @@ const PROJECT_TITLES: Record<string, string> = {
   p5: "District Cooling Network",
 };
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const slugs = await getPublishedIndustrySlugs();
   return routing.locales.flatMap((locale) =>
-    industriesData
-      .filter((industry) => industry.published)
-      .map((industry) => ({ locale, slug: industry.slug }))
+    slugs.map((slug) => ({ locale, slug }))
   );
 }
 
@@ -35,9 +38,7 @@ export default async function IndustryDetailPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
-  const industry = industriesData.find(
-    (item) => item.slug === slug && item.published
-  );
+  const industry = await getIndustry(slug, locale as Locale);
 
   if (!industry) {
     notFound();

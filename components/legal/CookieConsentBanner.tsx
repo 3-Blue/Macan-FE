@@ -1,52 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
-import NextLink from "next/link";
+import { Link as LocaleLink } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
-
-const CONSENT_COOKIE_NAME = "cookie-consent";
-const CONSENT_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 365 days
-
-function getCookie(name: string): string | null {
-  if (typeof document === "undefined") return null;
-  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : null;
-}
-
-function setCookie(name: string, value: string) {
-  document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${CONSENT_COOKIE_MAX_AGE}; SameSite=Lax`;
-}
+import { getConsent, setConsent, subscribeConsent } from "@/lib/consent";
 
 export function CookieConsentBanner() {
   const t = useTranslations("CookieConsent");
-  const [visible, setVisible] = useState(false);
+  // Read consent from the shared client store. On the server we report "no
+  // decision yet" as null but render nothing (SSR snapshot below) to avoid a
+  // hydration flash; the client then reads the real cookie.
+  const consent = useSyncExternalStore(
+    subscribeConsent,
+    () => getConsent(),
+    () => "declined" as const, // server snapshot: hide banner during SSR
+  );
 
-  useEffect(() => {
-    const existing = getCookie(CONSENT_COOKIE_NAME);
-    if (!existing) {
-      setVisible(true);
-    }
-  }, []);
-
-  const handleChoice = (choice: "accepted" | "declined") => {
-    setCookie(CONSENT_COOKIE_NAME, choice);
-    setVisible(false);
-    // Reload so the server-rendered layout picks up the new cookie value
-    // and can decide whether to inject analytics scripts.
-    window.location.reload();
-  };
-
-  if (!visible) return null;
+  if (consent !== null) return null;
 
   return (
     <Box
       role="dialog"
       aria-live="polite"
-      aria-label="Cookie consent"
+      aria-label={t("ariaLabel")}
       sx={{
         position: "fixed",
         bottom: 0,
@@ -68,16 +48,16 @@ export function CookieConsentBanner() {
     >
       <Typography variant="body2" sx={{ color: "text.secondary", maxWidth: 640 }}>
         {t("message")}{" "}
-        <Link component={NextLink} href="/privacy" underline="always">
+        <Link component={LocaleLink} href="/privacy" underline="always">
           {t("learnMore")}
         </Link>
       </Typography>
 
       <Box sx={{ display: "flex", gap: 1.5, flexShrink: 0 }}>
-        <Button onClick={() => handleChoice("declined")} variant="secondary">
+        <Button onClick={() => setConsent("declined")} variant="secondary">
           {t("decline")}
         </Button>
-        <Button onClick={() => handleChoice("accepted")} variant="primary">
+        <Button onClick={() => setConsent("accepted")} variant="primary">
           {t("accept")}
         </Button>
       </Box>

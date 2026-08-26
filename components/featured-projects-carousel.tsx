@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import NextLink from "next/link";
+import { Link as LocaleLink } from "@/i18n/navigation";
 import Image from "next/image";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -32,79 +32,19 @@ import { Reveal, RevealGroup } from "@/components/motion/Reveal";
  * the fold, so no `priority` needed).
  */
 
-export type ProjectStatus = "completed" | "ongoing";
+import type { FeaturedProject, ProjectStatus } from "@/lib/content";
+export type { FeaturedProject, ProjectStatus };
 
-export interface ProjectItem {
-  id: string;
-  title: string;
-  client: string;
-  sector: string;
-  location: string;
-  outcome: string;
-  status: ProjectStatus;
-  imageUrl?: string;
-  href: string;
-}
+/** @deprecated Use FeaturedProject from lib/content. Kept as an alias for back-compat. */
+export type ProjectItem = FeaturedProject;
 
 interface FeaturedProjectsCarouselProps {
-  /** Optional overrides; falls back to messages/*.json (ProjectsCarousel) when omitted. */
+  /** Optional overrides; fall back to messages/*.json (ProjectsCarousel) when omitted. */
   eyebrow?: string;
   heading?: string;
-  projects?: ProjectItem[];
+  /** Locale-resolved projects, provided by the page via lib/content. */
+  projects: FeaturedProject[];
 }
-
-const DEFAULT_PROJECTS: ProjectItem[] = [
-  {
-    id: "p1",
-    title: "Offshore Platform Refit",
-    client: "Confidential Operator",
-    sector: "Oil & Gas",
-    location: "Caspian Sea",
-    outcome: "42% faster commissioning",
-    status: "completed",
-    href: "/projects/offshore-platform-refit",
-  },
-  {
-    id: "p2",
-    title: "Combined-Cycle Plant Expansion",
-    client: "Regional Utility",
-    sector: "Power",
-    location: "Aran Plain",
-    outcome: "+180MW capacity added",
-    status: "ongoing",
-    href: "/projects/combined-cycle-expansion",
-  },
-  {
-    id: "p3",
-    title: "Highway Interchange Upgrade",
-    client: "Ministry of Roads",
-    sector: "Infrastructure",
-    location: "Tabriz Corridor",
-    outcome: "Zero lost-time incidents",
-    status: "completed",
-    href: "/projects/highway-interchange-upgrade",
-  },
-  {
-    id: "p4",
-    title: "Modular Processing Skid Supply",
-    client: "Petrochemical JV",
-    sector: "Supply",
-    location: "Bandar Complex",
-    outcome: "6 skids, 11-month cycle",
-    status: "completed",
-    href: "/projects/modular-skid-supply",
-  },
-  {
-    id: "p5",
-    title: "District Cooling Network",
-    client: "Municipal Authority",
-    sector: "Infrastructure",
-    location: "Coastal District",
-    outcome: "30% energy reduction",
-    status: "ongoing",
-    href: "/projects/district-cooling-network",
-  },
-];
 
 function StatusBadge({ status }: { status: ProjectStatus }) {
   const t = useTranslations("ProjectsCarousel");
@@ -135,13 +75,18 @@ function StatusBadge({ status }: { status: ProjectStatus }) {
 }
 
 function ProjectCard({ project }: { project: ProjectItem }) {
+  // Detail routes don't exist yet, so cards without an href render as a plain
+  // (non-interactive) container instead of linking to a 404.
+  const linkProps = project.href
+    ? { component: LocaleLink, href: project.href }
+    : {};
   return (
     <Link
-      component={NextLink}
-      href={project.href}
+      {...linkProps}
       underline="none"
       data-carousel-card
       sx={{
+        cursor: project.href ? "pointer" : "default",
         display: "flex",
         flexDirection: "column",
         width: { xs: "78vw", sm: 360 },
@@ -200,7 +145,7 @@ function ProjectCard({ project }: { project: ProjectItem }) {
 export default function FeaturedProjectsCarousel({
   eyebrow,
   heading,
-  projects = DEFAULT_PROJECTS,
+  projects,
 }: FeaturedProjectsCarouselProps) {
   const t = useTranslations("ProjectsCarousel");
   const resolvedEyebrow = eyebrow ?? t("eyebrow");
