@@ -4,15 +4,14 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import Script from "next/script";
 import ThemeRegistry from "@/components/ThemeRegistry";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { routing } from "@/i18n/routing";
 import { PageTransition } from "@/components/motion/PageTransition";
 import "../globals.css";
-import { cookies } from "next/headers";
 import { CookieConsentBanner } from "@/components/legal/CookieConsentBanner";
+import { Analytics } from "@/components/legal/Analytics";
 
 const vazirmatn = localFont({
   src: "../../fonts/Vazirmatn[wght].ttf",
@@ -67,9 +66,6 @@ export default async function RootLayout({
   // the active locale without reading request headers.
   setRequestLocale(locale);
   const dir = locale === "fa" ? "rtl" : "ltr";
-  const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-  const cookieStore = await cookies();
-  const hasConsent = cookieStore.get("cookie-consent")?.value === "accepted";
   return (
     <html
       lang={locale}
@@ -83,22 +79,7 @@ export default async function RootLayout({
         >
           Skip to main content
         </a>
-        {GA_ID && hasConsent && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="ga-init" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${GA_ID}');
-              `}
-            </Script>
-          </>
-        )}
+        <Analytics />
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeRegistry>
             <NextIntlClientProvider>

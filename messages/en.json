@@ -154,6 +154,7 @@
   "learnMore": "Learn more"
 },
   "CookieConsent": {
+      "ariaLabel": "Cookie consent",
       "message": "We use cookies to improve your experience and analyze site traffic. You can accept or decline non-essential cookies.",
       "accept": "Accept",
       "decline": "Decline",
