@@ -18,7 +18,7 @@ export default async function Home({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  // Enable static rendering (required for `output: export`).
+  // Opt this route into static rendering (SSG) for the given locale.
   setRequestLocale(locale);
 
   const [services, projects, testimonials] = await Promise.all([

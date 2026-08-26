@@ -63,7 +63,7 @@ export default async function RootLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
-  // Enable static rendering (required for `output: export`); tells next-intl
+  // Opt into static rendering (SSG) for this locale; tells next-intl
   // the active locale without reading request headers.
   setRequestLocale(locale);
   const dir = locale === "fa" ? "rtl" : "ltr";
