@@ -1,28 +1,42 @@
 import type { MetadataRoute } from "next";
+import { routing } from "@/i18n/routing";
+import { getPublishedIndustrySlugs } from "@/lib/content";
+import { siteUrl } from "@/lib/site";
 
 export const dynamic = "force-static";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://www.macan-example.com";
+// Locale-agnostic paths that exist for every locale.
+const STATIC_PATHS = [
+  "",
+  "/about",
+  "/services",
+  "/industries",
+  "/contact",
+  "/privacy",
+  "/terms",
+] as const;
 
-  return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const industrySlugs = await getPublishedIndustrySlugs();
+  const paths = [
+    ...STATIC_PATHS,
+    ...industrySlugs.map((slug) => `/industries/${slug}`),
   ];
+
+  const now = new Date();
+
+  return paths.map((path) => {
+    // hreflang alternates: one URL per locale for this path.
+    const languages = Object.fromEntries(
+      routing.locales.map((locale) => [locale, `${siteUrl}/${locale}${path}`]),
+    );
+
+    return {
+      url: `${siteUrl}/${routing.defaultLocale}${path}`,
+      lastModified: now,
+      changeFrequency: path === "" ? "weekly" : "monthly",
+      priority: path === "" ? 1 : 0.7,
+      alternates: { languages },
+    };
+  });
 }

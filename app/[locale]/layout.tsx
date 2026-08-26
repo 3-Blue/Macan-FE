@@ -8,6 +8,7 @@ import ThemeRegistry from "@/components/ThemeRegistry";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { routing } from "@/i18n/routing";
+import { siteUrl } from "@/lib/site";
 import { PageTransition } from "@/components/motion/PageTransition";
 import "../globals.css";
 import { CookieConsentBanner } from "@/components/legal/CookieConsentBanner";
@@ -23,7 +24,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.macan-example.com"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "MACAN",
     template: "%s | MACAN",
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
     title: "MACAN",
     description:
       "MACAN provides engineering, construction, supply, and project management solutions.",
-    url: "https://www.macan-example.com",
+    url: siteUrl,
     siteName: "MACAN",
     locale: "en_US",
     type: "website",
