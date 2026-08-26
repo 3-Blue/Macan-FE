@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
-import NextLink from "next/link";
+import { Link as LocaleLink } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
 
 const CONSENT_COOKIE_NAME = "cookie-consent";
@@ -68,7 +68,7 @@ export function CookieConsentBanner() {
     >
       <Typography variant="body2" sx={{ color: "text.secondary", maxWidth: 640 }}>
         {t("message")}{" "}
-        <Link component={NextLink} href="/privacy" underline="always">
+        <Link component={LocaleLink} href="/privacy" underline="always">
           {t("learnMore")}
         </Link>
       </Typography>

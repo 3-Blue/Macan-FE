@@ -1,4 +1,22 @@
 {
+  "Nav": {
+    "home": "Ana səhifə",
+    "about": "Haqqımızda",
+    "services": "Xidmətlər",
+    "industries": "Sənayelər",
+    "contact": "Əlaqə",
+    "openMenu": "Menyunu aç",
+    "closeMenu": "Menyunu bağla",
+    "mainNavigation": "Əsas naviqasiya",
+    "selectLanguage": "Dil seçin"
+  },
+  "Footer": {
+    "tagline": "Mühəndislik, tikinti və layihə idarəetməsi həlləri.",
+    "navigation": "Alt bilgi naviqasiyası",
+    "privacy": "Məxfilik Siyasəti",
+    "terms": "Şərtlər və Qaydalar",
+    "rights": "Bütün hüquqlar qorunur."
+  },
   "HomePage": {
     "title": "Xoş gəlmisiniz",
     "description": "Bu ana səhifədir."

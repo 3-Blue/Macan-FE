@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Link as LocaleLink } from "@/i18n/navigation";
-import { usePathname } from "@/i18n/navigation";
+import { Link as LocaleLink, usePathname } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
@@ -18,15 +18,22 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LocaleSwitcher from "@/components/ui/LocaleSwitcher";
 
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Projects", href: "/projects" },
-  { label: "Contact", href: "/contact" },
-];
+// href values are locale-agnostic; the i18n <Link> prepends the active locale.
+const NAV_ITEMS = [
+  { key: "home", href: "/" },
+  { key: "about", href: "/about" },
+  { key: "services", href: "/services" },
+  { key: "industries", href: "/industries" },
+  { key: "contact", href: "/contact" },
+] as const;
+
+function isActivePath(pathname: string, href: string): boolean {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
 export function Header() {
+  const t = useTranslations("Nav");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -50,16 +57,16 @@ export function Header() {
         {/* Desktop nav */}
         <Box
           component="nav"
-          aria-label="Main navigation"
+          aria-label={t("mainNavigation")}
           sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", gap: 4 }}
         >
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href;
+          {NAV_ITEMS.map((item) => {
+            const isActive = isActivePath(pathname, item.href);
             return (
               <Link
-                key={link.href}
+                key={item.href}
                 component={LocaleLink}
-                href={link.href}
+                href={item.href}
                 underline="none"
                 aria-current={isActive ? "page" : undefined}
                 sx={{
@@ -69,7 +76,7 @@ export function Header() {
                   "&:hover": { color: "text.primary" },
                 }}
               >
-                {link.label}
+                {t(item.key)}
               </Link>
             );
           })}
@@ -81,7 +88,7 @@ export function Header() {
           <LocaleSwitcher />
           <IconButton
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-label={isMenuOpen ? t("closeMenu") : t("openMenu")}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-nav-menu"
           >
@@ -96,20 +103,20 @@ export function Header() {
         open={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
         id="mobile-nav-menu"
-        aria-label="Mobile navigation"
+        aria-label={t("mainNavigation")}
       >
         <List sx={{ mt: 8 }}>
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href;
+          {NAV_ITEMS.map((item) => {
+            const isActive = isActivePath(pathname, item.href);
             return (
-              <ListItem key={link.href} disablePadding>
+              <ListItem key={item.href} disablePadding>
                 <ListItemButton
                   component={LocaleLink}
-                  href={link.href}
+                  href={item.href}
                   onClick={() => setIsMenuOpen(false)}
                   aria-current={isActive ? "page" : undefined}
                 >
-                  <ListItemText primary={link.label} />
+                  <ListItemText primary={t(item.key)} />
                 </ListItemButton>
               </ListItem>
             );

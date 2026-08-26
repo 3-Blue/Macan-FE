@@ -1,4 +1,22 @@
 {
+  "Nav": {
+    "home": "Ana Sayfa",
+    "about": "Hakkımızda",
+    "services": "Hizmetler",
+    "industries": "Sektörler",
+    "contact": "İletişim",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat",
+    "mainNavigation": "Ana gezinme",
+    "selectLanguage": "Dil seçin"
+  },
+  "Footer": {
+    "tagline": "Mühendislik, inşaat ve proje yönetimi çözümleri.",
+    "navigation": "Alt bilgi gezinmesi",
+    "privacy": "Gizlilik Politikası",
+    "terms": "Şartlar ve Koşullar",
+    "rights": "Tüm hakları saklıdır."
+  },
   "HomePage": {
     "title": "Hoş geldiniz",
     "description": "Bu ana sayfadır."

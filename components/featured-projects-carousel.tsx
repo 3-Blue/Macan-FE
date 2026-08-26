@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import NextLink from "next/link";
+import { Link as LocaleLink } from "@/i18n/navigation";
 import Image from "next/image";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -43,7 +43,8 @@ export interface ProjectItem {
   outcome: string;
   status: ProjectStatus;
   imageUrl?: string;
-  href: string;
+  /** Detail-page link. Omit until project detail routes exist — the card then renders as a non-link. */
+  href?: string;
 }
 
 interface FeaturedProjectsCarouselProps {
@@ -62,7 +63,6 @@ const DEFAULT_PROJECTS: ProjectItem[] = [
     location: "Caspian Sea",
     outcome: "42% faster commissioning",
     status: "completed",
-    href: "/projects/offshore-platform-refit",
   },
   {
     id: "p2",
@@ -72,7 +72,6 @@ const DEFAULT_PROJECTS: ProjectItem[] = [
     location: "Aran Plain",
     outcome: "+180MW capacity added",
     status: "ongoing",
-    href: "/projects/combined-cycle-expansion",
   },
   {
     id: "p3",
@@ -82,7 +81,6 @@ const DEFAULT_PROJECTS: ProjectItem[] = [
     location: "Tabriz Corridor",
     outcome: "Zero lost-time incidents",
     status: "completed",
-    href: "/projects/highway-interchange-upgrade",
   },
   {
     id: "p4",
@@ -92,7 +90,6 @@ const DEFAULT_PROJECTS: ProjectItem[] = [
     location: "Bandar Complex",
     outcome: "6 skids, 11-month cycle",
     status: "completed",
-    href: "/projects/modular-skid-supply",
   },
   {
     id: "p5",
@@ -102,7 +99,6 @@ const DEFAULT_PROJECTS: ProjectItem[] = [
     location: "Coastal District",
     outcome: "30% energy reduction",
     status: "ongoing",
-    href: "/projects/district-cooling-network",
   },
 ];
 
@@ -135,13 +131,18 @@ function StatusBadge({ status }: { status: ProjectStatus }) {
 }
 
 function ProjectCard({ project }: { project: ProjectItem }) {
+  // Detail routes don't exist yet, so cards without an href render as a plain
+  // (non-interactive) container instead of linking to a 404.
+  const linkProps = project.href
+    ? { component: LocaleLink, href: project.href }
+    : {};
   return (
     <Link
-      component={NextLink}
-      href={project.href}
+      {...linkProps}
       underline="none"
       data-carousel-card
       sx={{
+        cursor: project.href ? "pointer" : "default",
         display: "flex",
         flexDirection: "column",
         width: { xs: "78vw", sm: 360 },

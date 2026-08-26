@@ -1,4 +1,22 @@
 {
+  "Nav": {
+    "home": "خانه",
+    "about": "درباره ما",
+    "services": "خدمات",
+    "industries": "صنایع",
+    "contact": "تماس با ما",
+    "openMenu": "باز کردن منو",
+    "closeMenu": "بستن منو",
+    "mainNavigation": "ناوبری اصلی",
+    "selectLanguage": "انتخاب زبان"
+  },
+  "Footer": {
+    "tagline": "راهکارهای مهندسی، ساخت‌وساز و مدیریت پروژه.",
+    "navigation": "ناوبری فوتر",
+    "privacy": "حریم خصوصی",
+    "terms": "شرایط و ضوابط",
+    "rights": "تمامی حقوق محفوظ است."
+  },
   "HomePage": {
     "title": "خوش آمدید",
     "description": "این صفحه اصلی است."
