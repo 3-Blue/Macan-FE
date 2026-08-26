@@ -1,0 +1,423 @@
+From be034ae2c209efccde296915427ac1f9724278c8 Mon Sep 17 00:00:00 2001
+From: Refactor Bot <refactor@local>
+Date: Tue, 25 Aug 2026 06:33:41 +0000
+Subject: [PATCH 7/9] refactor(analytics): consent-gated, client-side GA; keep
+ pages static
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The root layout read cookies() to decide whether to inject Google Analytics,
+which forced every locale route to render dynamically. Move the whole flow to
+the client:
+
+- lib/consent.ts: small cookie-backed, subscribable consent store.
+- components/legal/Analytics.tsx: injects GA only after consent === accepted,
+  reading NEXT_PUBLIC_GA_ID on the client.
+- CookieConsentBanner subscribes to the same store — accept/decline updates the
+  UI instantly (no more full-page reload).
+- layout.tsx drops cookies()/next-headers and the inline GA <Script> block.
+
+Also splits the industries card grid into a client component
+(IndustriesGrid) and re-marks ServicesTeaserGrid 'use client', because a
+Server Component cannot pass the i18n <Link> as a `component` prop.
+
+Result: all /[locale] routes are prerendered (SSG) again; only /api/contact
+is dynamic. Verified with `next build`.
+---
+ app/[locale]/industries/page.tsx         | 27 +------------
+ app/[locale]/layout.tsx                  | 23 +----------
+ components/home/ServicesTeaserGrid.tsx   |  2 +
+ components/industries/IndustriesGrid.tsx | 37 ++++++++++++++++++
+ components/legal/Analytics.tsx           | 39 +++++++++++++++++++
+ components/legal/CookieConsentBanner.tsx | 49 +++++++-----------------
+ lib/consent.ts                           | 41 ++++++++++++++++++++
+ messages/az.json                         |  1 +
+ messages/en.json                         |  1 +
+ messages/fa.json                         |  1 +
+ messages/tr.json                         |  1 +
+ 11 files changed, 140 insertions(+), 82 deletions(-)
+ create mode 100644 components/industries/IndustriesGrid.tsx
+ create mode 100644 components/legal/Analytics.tsx
+ create mode 100644 lib/consent.ts
+
+diff --git a/app/[locale]/industries/page.tsx b/app/[locale]/industries/page.tsx
+index 0087ba6..2f75bcc 100644
+--- a/app/[locale]/industries/page.tsx
++++ b/app/[locale]/industries/page.tsx
+@@ -1,13 +1,9 @@
+ import { getTranslations, setRequestLocale } from "next-intl/server";
+-import Card from "@mui/material/Card";
+-import CardActionArea from "@mui/material/CardActionArea";
+-import CardContent from "@mui/material/CardContent";
+ import Typography from "@mui/material/Typography";
+ import { Container } from "@/components/ui/Container";
+-import { Grid } from "@/components/ui/Grid";
+ import { Heading } from "@/components/ui/Heading";
+ import { Section } from "@/components/ui/Section";
+-import { Link } from "@/i18n/navigation";
++import { IndustriesGrid } from "@/components/industries/IndustriesGrid";
+ import { getIndustries, type Locale } from "@/lib/content";
+ 
+ export default async function IndustriesPage({
+@@ -30,26 +26,7 @@ export default async function IndustriesPage({
+         </Typography>
+         <Heading level={1}>{t("heading")}</Heading>
+ 
+-        <Grid cols={4}>
+-          {industries.map((industry) => (
+-            <Card key={industry.slug} sx={{ height: "100%" }}>
+-              <CardActionArea
+-                component={Link}
+-                href={`/industries/${industry.slug}`}
+-                sx={{ height: "100%", alignItems: "flex-start" }}
+-              >
+-                <CardContent>
+-                  <Typography variant="h6" component="h3" gutterBottom>
+-                    {industry.name}
+-                  </Typography>
+-                  <Typography variant="body2" color="text.secondary">
+-                    {industry.summary}
+-                  </Typography>
+-                </CardContent>
+-              </CardActionArea>
+-            </Card>
+-          ))}
+-        </Grid>
++        <IndustriesGrid industries={industries} />
+       </Container>
+     </Section>
+   );
+diff --git a/app/[locale]/layout.tsx b/app/[locale]/layout.tsx
+index 1adccd8..42431a9 100644
+--- a/app/[locale]/layout.tsx
++++ b/app/[locale]/layout.tsx
+@@ -4,15 +4,14 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
+ import { hasLocale, NextIntlClientProvider } from "next-intl";
+ import { setRequestLocale } from "next-intl/server";
+ import { notFound } from "next/navigation";
+-import Script from "next/script";
+ import ThemeRegistry from "@/components/ThemeRegistry";
+ import { Header } from "@/components/layout/Header";
+ import { Footer } from "@/components/layout/Footer";
+ import { routing } from "@/i18n/routing";
+ import { PageTransition } from "@/components/motion/PageTransition";
+ import "../globals.css";
+-import { cookies } from "next/headers";
+ import { CookieConsentBanner } from "@/components/legal/CookieConsentBanner";
++import { Analytics } from "@/components/legal/Analytics";
+ 
+ const vazirmatn = localFont({
+   src: "../../fonts/Vazirmatn[wght].ttf",
+@@ -67,9 +66,6 @@ export default async function RootLayout({
+   // the active locale without reading request headers.
+   setRequestLocale(locale);
+   const dir = locale === "fa" ? "rtl" : "ltr";
+-  const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+-  const cookieStore = await cookies();
+-  const hasConsent = cookieStore.get("cookie-consent")?.value === "accepted";
+   return (
+     <html
+       lang={locale}
+@@ -83,22 +79,7 @@ export default async function RootLayout({
+         >
+           Skip to main content
+         </a>
+-        {GA_ID && hasConsent && (
+-          <>
+-            <Script
+-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+-              strategy="afterInteractive"
+-            />
+-            <Script id="ga-init" strategy="afterInteractive">
+-              {`
+-                window.dataLayer = window.dataLayer || [];
+-                function gtag(){dataLayer.push(arguments);}
+-                gtag('js', new Date());
+-                gtag('config', '${GA_ID}');
+-              `}
+-            </Script>
+-          </>
+-        )}
++        <Analytics />
+         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+           <ThemeRegistry>
+             <NextIntlClientProvider>
+diff --git a/components/home/ServicesTeaserGrid.tsx b/components/home/ServicesTeaserGrid.tsx
+index 06ad5aa..f7c5267 100644
+--- a/components/home/ServicesTeaserGrid.tsx
++++ b/components/home/ServicesTeaserGrid.tsx
+@@ -1,3 +1,5 @@
++"use client";
++
+ import Card from "@mui/material/Card";
+ import CardActionArea from "@mui/material/CardActionArea";
+ import CardContent from "@mui/material/CardContent";
+diff --git a/components/industries/IndustriesGrid.tsx b/components/industries/IndustriesGrid.tsx
+new file mode 100644
+index 0000000..186b029
+--- /dev/null
++++ b/components/industries/IndustriesGrid.tsx
+@@ -0,0 +1,37 @@
++"use client";
++
++import Card from "@mui/material/Card";
++import CardActionArea from "@mui/material/CardActionArea";
++import CardContent from "@mui/material/CardContent";
++import Typography from "@mui/material/Typography";
++import { Grid } from "@/components/ui/Grid";
++import { Link } from "@/i18n/navigation";
++import type { Industry } from "@/lib/content";
++
++// Client component: uses the locale-aware <Link> as CardActionArea's
++// `component`, which can't be passed across the server→client boundary. The
++// page stays a Server Component and passes plain `industries` data down.
++export function IndustriesGrid({ industries }: { industries: Industry[] }) {
++  return (
++    <Grid cols={4}>
++      {industries.map((industry) => (
++        <Card key={industry.slug} sx={{ height: "100%" }}>
++          <CardActionArea
++            component={Link}
++            href={`/industries/${industry.slug}`}
++            sx={{ height: "100%", alignItems: "flex-start" }}
++          >
++            <CardContent>
++              <Typography variant="h6" component="h3" gutterBottom>
++                {industry.name}
++              </Typography>
++              <Typography variant="body2" color="text.secondary">
++                {industry.summary}
++              </Typography>
++            </CardContent>
++          </CardActionArea>
++        </Card>
++      ))}
++    </Grid>
++  );
++}
+diff --git a/components/legal/Analytics.tsx b/components/legal/Analytics.tsx
+new file mode 100644
+index 0000000..8ef2974
+--- /dev/null
++++ b/components/legal/Analytics.tsx
+@@ -0,0 +1,39 @@
++"use client";
++
++import { useSyncExternalStore } from "react";
++import Script from "next/script";
++import { getConsent, subscribeConsent } from "@/lib/consent";
++
++/**
++ * Loads Google Analytics on the client, but only after the visitor has
++ * accepted cookies. Reading consent client-side (instead of via cookies() in
++ * the server layout) keeps pages statically renderable.
++ */
++export function Analytics() {
++  const gaId = process.env.NEXT_PUBLIC_GA_ID;
++
++  const consent = useSyncExternalStore(
++    subscribeConsent,
++    () => getConsent(),
++    () => null, // server snapshot: never inject during SSR
++  );
++
++  if (!gaId || consent !== "accepted") return null;
++
++  return (
++    <>
++      <Script
++        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
++        strategy="afterInteractive"
++      />
++      <Script id="ga-init" strategy="afterInteractive">
++        {`
++          window.dataLayer = window.dataLayer || [];
++          function gtag(){dataLayer.push(arguments);}
++          gtag('js', new Date());
++          gtag('config', '${gaId}');
++        `}
++      </Script>
++    </>
++  );
++}
+diff --git a/components/legal/CookieConsentBanner.tsx b/components/legal/CookieConsentBanner.tsx
+index fd85e49..d952d9a 100644
+--- a/components/legal/CookieConsentBanner.tsx
++++ b/components/legal/CookieConsentBanner.tsx
+@@ -7,49 +7,26 @@ import Typography from "@mui/material/Typography";
+ import Link from "@mui/material/Link";
+ import { Link as LocaleLink } from "@/i18n/navigation";
+ import { Button } from "@/components/ui/Button";
+-
+-const CONSENT_COOKIE_NAME = "cookie-consent";
+-const CONSENT_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 365 days
+-
+-function getCookie(name: string): string | null {
+-  if (typeof document === "undefined") return null;
+-  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+-  return match ? decodeURIComponent(match[1]) : null;
+-}
+-
+-function setCookie(name: string, value: string) {
+-  document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${CONSENT_COOKIE_MAX_AGE}; SameSite=Lax`;
+-}
+-
+-// No live subscription is needed: a choice triggers a full reload, so the next
+-// render reads the fresh cookie snapshot. On the server we report "consent
+-// present" so the banner is not rendered during SSR (no hydration flash);
+-// the client then reads the real cookie.
+-const emptySubscribe = () => () => {};
++import { getConsent, setConsent, subscribeConsent } from "@/lib/consent";
+ 
+ export function CookieConsentBanner() {
+   const t = useTranslations("CookieConsent");
+-  const hasConsent = useSyncExternalStore(
+-    emptySubscribe,
+-    () => getCookie(CONSENT_COOKIE_NAME) !== null,
+-    () => true,
++  // Read consent from the shared client store. On the server we report "no
++  // decision yet" as null but render nothing (SSR snapshot below) to avoid a
++  // hydration flash; the client then reads the real cookie.
++  const consent = useSyncExternalStore(
++    subscribeConsent,
++    () => getConsent(),
++    () => "declined" as const, // server snapshot: hide banner during SSR
+   );
+-  const visible = !hasConsent;
+ 
+-  const handleChoice = (choice: "accepted" | "declined") => {
+-    setCookie(CONSENT_COOKIE_NAME, choice);
+-    // Reload so the server-rendered layout picks up the new cookie value
+-    // and can decide whether to inject analytics scripts.
+-    window.location.reload();
+-  };
+-
+-  if (!visible) return null;
++  if (consent !== null) return null;
+ 
+   return (
+     <Box
+       role="dialog"
+       aria-live="polite"
+-      aria-label="Cookie consent"
++      aria-label={t("ariaLabel")}
+       sx={{
+         position: "fixed",
+         bottom: 0,
+@@ -77,13 +54,13 @@ export function CookieConsentBanner() {
+       </Typography>
+ 
+       <Box sx={{ display: "flex", gap: 1.5, flexShrink: 0 }}>
+-        <Button onClick={() => handleChoice("declined")} variant="secondary">
++        <Button onClick={() => setConsent("declined")} variant="secondary">
+           {t("decline")}
+         </Button>
+-        <Button onClick={() => handleChoice("accepted")} variant="primary">
++        <Button onClick={() => setConsent("accepted")} variant="primary">
+           {t("accept")}
+         </Button>
+       </Box>
+     </Box>
+   );
+-}
+\ No newline at end of file
++}
+diff --git a/lib/consent.ts b/lib/consent.ts
+new file mode 100644
+index 0000000..bca5b37
+--- /dev/null
++++ b/lib/consent.ts
+@@ -0,0 +1,41 @@
++/**
++ * Client-side cookie-consent store.
++ *
++ * Consent lives in a first-party cookie and is read entirely on the client, so
++ * pages stay statically renderable (no cookies() in the server layout). The
++ * banner and the analytics loader both subscribe here, so accepting/declining
++ * updates the UI immediately — no page reload.
++ */
++
++export const CONSENT_COOKIE_NAME = "cookie-consent";
++const CONSENT_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 365 days
++
++export type ConsentValue = "accepted" | "declined";
++
++const listeners = new Set<() => void>();
++
++export function getConsent(): ConsentValue | null {
++  if (typeof document === "undefined") return null;
++  const match = document.cookie.match(
++    new RegExp(`(?:^|; )${CONSENT_COOKIE_NAME}=([^;]*)`),
++  );
++  const value = match ? decodeURIComponent(match[1]) : null;
++  return value === "accepted" || value === "declined" ? value : null;
++}
++
++export function setConsent(value: ConsentValue): void {
++  document.cookie = `${CONSENT_COOKIE_NAME}=${encodeURIComponent(
++    value,
++  )}; path=/; max-age=${CONSENT_COOKIE_MAX_AGE}; SameSite=Lax`;
++  listeners.forEach((listener) => listener());
++}
++
++export function subscribeConsent(listener: () => void): () => void {
++  listeners.add(listener);
++  // Sync across tabs.
++  window.addEventListener("storage", listener);
++  return () => {
++    listeners.delete(listener);
++    window.removeEventListener("storage", listener);
++  };
++}
+diff --git a/messages/az.json b/messages/az.json
+index 4298f76..f063520 100644
+--- a/messages/az.json
++++ b/messages/az.json
+@@ -143,6 +143,7 @@
+     "learnMore": "Daha ətraflı"
+   },
+   "CookieConsent": {
++    "ariaLabel": "Kuki razılığı",
+     "message": "Təcrübənizi yaxşılaşdırmaq və sayt trafikini təhlil etmək üçün kukilərdən istifadə edirik. Vacib olmayan kukiləri qəbul və ya rədd edə bilərsiniz.",
+     "accept": "Qəbul et",
+     "decline": "Rədd et",
+diff --git a/messages/en.json b/messages/en.json
+index b4b0459..fe66e52 100644
+--- a/messages/en.json
++++ b/messages/en.json
+@@ -154,6 +154,7 @@
+   "learnMore": "Learn more"
+ },
+   "CookieConsent": {
++      "ariaLabel": "Cookie consent",
+       "message": "We use cookies to improve your experience and analyze site traffic. You can accept or decline non-essential cookies.",
+       "accept": "Accept",
+       "decline": "Decline",
+diff --git a/messages/fa.json b/messages/fa.json
+index 296e354..e430120 100644
+--- a/messages/fa.json
++++ b/messages/fa.json
+@@ -143,6 +143,7 @@
+     "learnMore": "بیشتر بدانید"
+   },
+   "CookieConsent": {
++    "ariaLabel": "رضایت کوکی",
+     "message": "ما از کوکی‌ها برای بهبود تجربه شما و تحلیل ترافیک سایت استفاده می‌کنیم. می‌توانید کوکی‌های غیرضروری را بپذیرید یا رد کنید.",
+     "accept": "پذیرفتن",
+     "decline": "رد کردن",
+diff --git a/messages/tr.json b/messages/tr.json
+index 5fa71e1..97dfec4 100644
+--- a/messages/tr.json
++++ b/messages/tr.json
+@@ -143,6 +143,7 @@
+     "learnMore": "Daha fazla bilgi"
+   },
+   "CookieConsent": {
++    "ariaLabel": "Çerez onayı",
+     "message": "Deneyiminizi geliştirmek ve site trafiğini analiz etmek için çerezler kullanıyoruz. Zorunlu olmayan çerezleri kabul edebilir veya reddedebilirsiniz.",
+     "accept": "Kabul et",
+     "decline": "Reddet",
+-- 
+2.43.0
+

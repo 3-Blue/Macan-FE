@@ -7,7 +7,7 @@
     "build": "next build",
     "postbuild": "node scripts/gh-pages-postbuild.mjs",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint .",
     "format": "prettier --write ."
   },
   "dependencies": {

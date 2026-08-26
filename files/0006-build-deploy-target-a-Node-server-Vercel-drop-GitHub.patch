@@ -1,0 +1,344 @@
+From 523578fed3347eb26b84dd28dbdca63db8743d67 Mon Sep 17 00:00:00 2001
+From: Refactor Bot <refactor@local>
+Date: Tue, 25 Aug 2026 06:18:32 +0000
+Subject: [PATCH 6/9] build(deploy): target a Node server (Vercel), drop GitHub
+ Pages static export
+
+The app has server-only features (contact API route, next-intl proxy, and
+cookie-gated analytics) that a static export to GitHub Pages silently breaks.
+Path A: deploy to a Node host instead, which makes all three work.
+
+- next.config.ts: remove output:export, trailingSlash, basePath/assetPrefix
+  and images.unoptimized (all GitHub-Pages-only). Keep safe SVG handling.
+- Remove .github/workflows/deploy.yml and scripts/gh-pages-postbuild.mjs;
+  drop the postbuild npm script. Vercel deploys via its Git integration.
+- Add .github/workflows/ci.yml (lint + typecheck + build) as a quality gate.
+- Add a typecheck script; document NEXT_PUBLIC_GA_ID in .env.example.
+- Fix stale 'required for output: export' comments.
+
+Verified with a full `next build`: /api/contact and Proxy (Middleware) are
+now part of the build output.
+---
+ .env.example                   |  7 +++
+ .github/workflows/ci.yml       | 31 ++++++++++++++
+ .github/workflows/deploy.yml   | 78 ----------------------------------
+ app/[locale]/about/page.tsx    |  2 +-
+ app/[locale]/contact/page.tsx  |  2 +-
+ app/[locale]/layout.tsx        |  2 +-
+ app/[locale]/page.tsx          |  2 +-
+ app/[locale]/services/page.tsx |  2 +-
+ next.config.ts                 | 21 ++-------
+ package.json                   |  2 +-
+ scripts/gh-pages-postbuild.mjs | 42 ------------------
+ 11 files changed, 47 insertions(+), 144 deletions(-)
+ create mode 100644 .github/workflows/ci.yml
+ delete mode 100644 .github/workflows/deploy.yml
+ delete mode 100644 scripts/gh-pages-postbuild.mjs
+
+diff --git a/.env.example b/.env.example
+index ba29cf7..6f149ab 100644
+--- a/.env.example
++++ b/.env.example
+@@ -1,4 +1,11 @@
++# Public site URL (used for canonical/OG/sitemap once wired up).
+ NEXT_PUBLIC_SITE_URL=http://localhost:3000
++
++# Google Analytics (optional). When set, analytics loads only after the
++# visitor accepts cookies via the consent banner.
++NEXT_PUBLIC_GA_ID=
++
++# Contact form email delivery (server-side, via Resend).
+ RESEND_API_KEY=
+ CONTACT_EMAIL_TO=
+ CONTACT_EMAIL_FROM=
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+new file mode 100644
+index 0000000..827a965
+--- /dev/null
++++ b/.github/workflows/ci.yml
+@@ -0,0 +1,31 @@
++name: CI
++
++on:
++  push:
++    branches: [main]
++  pull_request:
++
++jobs:
++  quality:
++    runs-on: ubuntu-latest
++    steps:
++      - name: Checkout
++        uses: actions/checkout@v4
++
++      - name: Setup Node.js
++        uses: actions/setup-node@v4
++        with:
++          node-version: 20
++          cache: npm
++
++      - name: Install dependencies
++        run: npm ci
++
++      - name: Lint
++        run: npm run lint
++
++      - name: Typecheck
++        run: npm run typecheck
++
++      - name: Build
++        run: npm run build
+diff --git a/.github/workflows/deploy.yml b/.github/workflows/deploy.yml
+deleted file mode 100644
+index ac4e29d..0000000
+--- a/.github/workflows/deploy.yml
++++ /dev/null
+@@ -1,78 +0,0 @@
+-name: Deploy to GitHub Pages
+-
+-on:
+-  # Auto-deploy on every merge/push to main.
+-  push:
+-    branches: [main]
+-  # Allow manual runs from the Actions tab.
+-  workflow_dispatch:
+-
+-# Permissions required by the official GitHub Pages deployment actions.
+-permissions:
+-  contents: read
+-  pages: write
+-  id-token: write
+-
+-# Only one deploy at a time; don't cancel an in-progress run.
+-concurrency:
+-  group: pages
+-  cancel-in-progress: false
+-
+-jobs:
+-  build:
+-    runs-on: ubuntu-latest
+-    steps:
+-      - name: Checkout
+-        uses: actions/checkout@v4
+-
+-      - name: Configure GitHub Pages
+-        id: pages
+-        uses: actions/configure-pages@v5
+-
+-      - name: Resolve base path
+-        id: bp
+-        # Next.js basePath must be "" or "/segment" (no trailing slash, never just "/").
+-        # configure-pages gives "/repo" for project sites and "/" for user/org sites.
+-        run: |
+-          bp="${{ steps.pages.outputs.base_path }}"
+-          bp="${bp%/}"
+-          echo "value=$bp" >> "$GITHUB_OUTPUT"
+-
+-      - name: Setup Node.js
+-        uses: actions/setup-node@v4
+-        with:
+-          node-version: 20
+-          cache: npm
+-
+-      - name: Install dependencies
+-        run: npm ci
+-
+-      - name: Cache Next.js build
+-        uses: actions/cache@v4
+-        with:
+-          path: .next/cache
+-          key: nextjs-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx') }}
+-          restore-keys: |
+-            nextjs-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+-
+-      - name: Build static site
+-        env:
+-          NEXT_PUBLIC_BASE_PATH: ${{ steps.bp.outputs.value }}
+-          GITHUB_PAGES_BUILD: "true"
+-        run: npm run build
+-
+-      - name: Upload artifact
+-        uses: actions/upload-pages-artifact@v3
+-        with:
+-          path: ./out
+-
+-  deploy:
+-    needs: build
+-    runs-on: ubuntu-latest
+-    environment:
+-      name: github-pages
+-      url: ${{ steps.deployment.outputs.page_url }}
+-    steps:
+-      - name: Deploy to GitHub Pages
+-        id: deployment
+-        uses: actions/deploy-pages@v4
+diff --git a/app/[locale]/about/page.tsx b/app/[locale]/about/page.tsx
+index 2bf4864..79217e9 100644
+--- a/app/[locale]/about/page.tsx
++++ b/app/[locale]/about/page.tsx
+@@ -7,7 +7,7 @@ export default async function About({
+   params: Promise<{ locale: string }>;
+ }) {
+   const { locale } = await params;
+-  // Enable static rendering (required for `output: export`).
++  // Opt this route into static rendering (SSG) for the given locale.
+   setRequestLocale(locale);
+   return (
+     <>
+diff --git a/app/[locale]/contact/page.tsx b/app/[locale]/contact/page.tsx
+index 088c030..de2ab31 100644
+--- a/app/[locale]/contact/page.tsx
++++ b/app/[locale]/contact/page.tsx
+@@ -12,7 +12,7 @@ export default async function ContactPage({
+   params: Promise<{ locale: string }>;
+ }) {
+   const { locale } = await params;
+-  // Enable static rendering (required for `output: export`).
++  // Opt this route into static rendering (SSG) for the given locale.
+   setRequestLocale(locale);
+ 
+   const t = await getTranslations("Contact");
+diff --git a/app/[locale]/layout.tsx b/app/[locale]/layout.tsx
+index 2fc466c..1adccd8 100644
+--- a/app/[locale]/layout.tsx
++++ b/app/[locale]/layout.tsx
+@@ -63,7 +63,7 @@ export default async function RootLayout({
+   if (!hasLocale(routing.locales, locale)) {
+     notFound();
+   }
+-  // Enable static rendering (required for `output: export`); tells next-intl
++  // Opt into static rendering (SSG) for this locale; tells next-intl
+   // the active locale without reading request headers.
+   setRequestLocale(locale);
+   const dir = locale === "fa" ? "rtl" : "ltr";
+diff --git a/app/[locale]/page.tsx b/app/[locale]/page.tsx
+index f5406da..bdaf858 100644
+--- a/app/[locale]/page.tsx
++++ b/app/[locale]/page.tsx
+@@ -18,7 +18,7 @@ export default async function Home({
+   params: Promise<{ locale: string }>;
+ }) {
+   const { locale } = await params;
+-  // Enable static rendering (required for `output: export`).
++  // Opt this route into static rendering (SSG) for the given locale.
+   setRequestLocale(locale);
+ 
+   const [services, projects, testimonials] = await Promise.all([
+diff --git a/app/[locale]/services/page.tsx b/app/[locale]/services/page.tsx
+index 627b610..6657a37 100644
+--- a/app/[locale]/services/page.tsx
++++ b/app/[locale]/services/page.tsx
+@@ -8,7 +8,7 @@ export default async function ServicesPage({
+   params: Promise<{ locale: string }>;
+ }) {
+   const { locale } = await params;
+-  // Enable static rendering (required for `output: export`).
++  // Opt this route into static rendering (SSG) for the given locale.
+   setRequestLocale(locale);
+ 
+   const services = await getServices(locale as Locale);
+diff --git a/next.config.ts b/next.config.ts
+index 51b4932..e885f59 100644
+--- a/next.config.ts
++++ b/next.config.ts
+@@ -1,30 +1,15 @@
+ import type { NextConfig } from "next";
+ import createNextIntlPlugin from "next-intl/plugin";
+-const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
+ 
+-// When deploying to a GitHub Pages *project* site the app is served from
+-// https://<user>.github.io/<repo>/, so it needs a base path. The CI workflow
+-// sets NEXT_PUBLIC_BASE_PATH to "/<repo>". For local builds / user or org
+-// pages it stays empty and the site is served from the root.
+-const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
++const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
+ 
+ const nextConfig: NextConfig = {
+-  // Produce a fully static site in ./out that GitHub Pages can serve.
+-  // Only applied in the GitHub Pages CI build (see .github/workflows) —
+-  // static export can't run API routes or middleware, so local dev and
+-  // any server-based deploy (e.g. Vercel, tracked in issue #18) must skip it.
+-  ...(process.env.GITHUB_PAGES_BUILD === "true" ? { output: "export" as const } : {}),
+-  // Emit /en/index.html instead of /en.html so sub-path routing works on Pages.
+-  trailingSlash: true,
+   images: {
+-    // GitHub Pages has no Image Optimization server.
+-    unoptimized: true,
++    // Local SVGs live in /public; allow the optimizer to serve them safely.
+     dangerouslyAllowSVG: true,
+     contentDispositionType: "attachment",
+     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+   },
+-  basePath: basePath || undefined,
+-  assetPrefix: basePath || undefined,
+ };
+ 
+-export default withNextIntl(nextConfig);
+\ No newline at end of file
++export default withNextIntl(nextConfig);
+diff --git a/package.json b/package.json
+index bd88ab3..959179a 100644
+--- a/package.json
++++ b/package.json
+@@ -5,9 +5,9 @@
+   "scripts": {
+     "dev": "next dev",
+     "build": "next build",
+-    "postbuild": "node scripts/gh-pages-postbuild.mjs",
+     "start": "next start",
+     "lint": "eslint .",
++    "typecheck": "tsc --noEmit",
+     "format": "prettier --write ."
+   },
+   "dependencies": {
+diff --git a/scripts/gh-pages-postbuild.mjs b/scripts/gh-pages-postbuild.mjs
+deleted file mode 100644
+index 89bcb41..0000000
+--- a/scripts/gh-pages-postbuild.mjs
++++ /dev/null
+@@ -1,42 +0,0 @@
+-// Runs after `next build` (see the "build" script in package.json).
+-// Static export doesn't emit a root "/" page (the app only has /[locale]),
+-// and there's no middleware on GitHub Pages to redirect. So we:
+-//   1. write out/index.html that redirects "/" -> "/<basePath>/<defaultLocale>/"
+-//   2. add .nojekyll so GitHub Pages doesn't strip the _next/ folder.
+-import { writeFile } from "node:fs/promises";
+-import { join } from "node:path";
+-
+-// This shim only makes sense for the static-export build that targets GitHub
+-// Pages (which sets GITHUB_PAGES_BUILD=true and produces an ./out directory).
+-// A normal `next build` produces .next/ (no ./out), so running this
+-// unconditionally as an npm `postbuild` step crashes with ENOENT. Bail out
+-// early unless we're actually in the Pages build.
+-if (process.env.GITHUB_PAGES_BUILD !== "true") {
+-  console.log("postbuild: not a GitHub Pages build — skipping static shim.");
+-  process.exit(0);
+-}
+-
+-const OUT_DIR = "out";
+-const DEFAULT_LOCALE = "en"; // keep in sync with i18n/routing.ts
+-const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+-const target = `${basePath}/${DEFAULT_LOCALE}/`;
+-
+-const redirectHtml = `<!doctype html>
+-<html lang="${DEFAULT_LOCALE}">
+-  <head>
+-    <meta charset="utf-8" />
+-    <meta http-equiv="refresh" content="0; url=${target}" />
+-    <link rel="canonical" href="${target}" />
+-    <script>location.replace(${JSON.stringify(target)} + location.search + location.hash);</script>
+-    <title>MACAN</title>
+-  </head>
+-  <body>
+-    Redirecting to <a href="${target}">${target}</a>…
+-  </body>
+-</html>
+-`;
+-
+-await writeFile(join(OUT_DIR, "index.html"), redirectHtml, "utf8");
+-await writeFile(join(OUT_DIR, ".nojekyll"), "", "utf8");
+-
+-console.log(`postbuild: wrote out/index.html -> ${target} and out/.nojekyll`);
+-- 
+2.43.0
+
