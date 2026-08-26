@@ -5,6 +5,12 @@ import { ServicesTeaserGrid } from "@/components/home/ServicesTeaserGrid";
 import FeaturedProjectsCarousel from "@/components/featured-projects-carousel";
 import { TestimonialsGrid } from "@/components/home/TestimonialsGrid";
 import { ContactSection } from "@/components/sections/ContactSection";
+import {
+  getServices,
+  getTestimonials,
+  getFeaturedProjects,
+  type Locale,
+} from "@/lib/content";
 
 export default async function Home({
   params,
@@ -14,13 +20,20 @@ export default async function Home({
   const { locale } = await params;
   // Enable static rendering (required for `output: export`).
   setRequestLocale(locale);
+
+  const [services, projects, testimonials] = await Promise.all([
+    getServices(locale as Locale),
+    getFeaturedProjects(locale as Locale),
+    getTestimonials(locale as Locale),
+  ]);
+
   return (
     <>
       <Hero />
       <StatsSection />
-      <ServicesTeaserGrid />
-      <FeaturedProjectsCarousel />
-      <TestimonialsGrid />
+      <ServicesTeaserGrid services={services} />
+      <FeaturedProjectsCarousel projects={projects} />
+      <TestimonialsGrid testimonials={testimonials} />
       <ContactSection />
     </>
   );

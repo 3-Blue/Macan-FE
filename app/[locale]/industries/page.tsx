@@ -1,6 +1,4 @@
-"use client";
-
-import { useTranslations } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
@@ -10,10 +8,19 @@ import { Grid } from "@/components/ui/Grid";
 import { Heading } from "@/components/ui/Heading";
 import { Section } from "@/components/ui/Section";
 import { Link } from "@/i18n/navigation";
-import { industriesData } from "@/lib/industries-data";
+import { getIndustries, type Locale } from "@/lib/content";
 
-export default function IndustriesPage() {
-  const t = useTranslations("IndustriesPage");
+export default async function IndustriesPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const t = await getTranslations("IndustriesPage");
+  // Already filtered to published and sorted by the content layer.
+  const industries = await getIndustries(locale as Locale);
 
   return (
     <Section>
@@ -24,27 +31,24 @@ export default function IndustriesPage() {
         <Heading level={1}>{t("heading")}</Heading>
 
         <Grid cols={4}>
-          {industriesData
-            .filter((industry) => industry.published)
-            .sort((a, b) => a.order - b.order)
-            .map((industry) => (
-              <Card key={industry.slug} sx={{ height: "100%" }}>
-                <CardActionArea
-                  component={Link}
-                  href={`/industries/${industry.slug}`}
-                  sx={{ height: "100%", alignItems: "flex-start" }}
-                >
-                  <CardContent>
-                    <Typography variant="h6" component="h3" gutterBottom>
-                      {industry.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {industry.summary}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            ))}
+          {industries.map((industry) => (
+            <Card key={industry.slug} sx={{ height: "100%" }}>
+              <CardActionArea
+                component={Link}
+                href={`/industries/${industry.slug}`}
+                sx={{ height: "100%", alignItems: "flex-start" }}
+              >
+                <CardContent>
+                  <Typography variant="h6" component="h3" gutterBottom>
+                    {industry.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {industry.summary}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          ))}
         </Grid>
       </Container>
     </Section>

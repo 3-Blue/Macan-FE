@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -21,20 +21,23 @@ function setCookie(name: string, value: string) {
   document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${CONSENT_COOKIE_MAX_AGE}; SameSite=Lax`;
 }
 
+// No live subscription is needed: a choice triggers a full reload, so the next
+// render reads the fresh cookie snapshot. On the server we report "consent
+// present" so the banner is not rendered during SSR (no hydration flash);
+// the client then reads the real cookie.
+const emptySubscribe = () => () => {};
+
 export function CookieConsentBanner() {
   const t = useTranslations("CookieConsent");
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const existing = getCookie(CONSENT_COOKIE_NAME);
-    if (!existing) {
-      setVisible(true);
-    }
-  }, []);
+  const hasConsent = useSyncExternalStore(
+    emptySubscribe,
+    () => getCookie(CONSENT_COOKIE_NAME) !== null,
+    () => true,
+  );
+  const visible = !hasConsent;
 
   const handleChoice = (choice: "accepted" | "declined") => {
     setCookie(CONSENT_COOKIE_NAME, choice);
-    setVisible(false);
     // Reload so the server-rendered layout picks up the new cookie value
     // and can decide whether to inject analytics scripts.
     window.location.reload();

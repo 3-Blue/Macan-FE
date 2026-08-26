@@ -10,20 +10,18 @@ import { Grid } from "@/components/ui/Grid";
 import { Heading } from "@/components/ui/Heading";
 import { Section } from "@/components/ui/Section";
 import { Link } from "@/i18n/navigation";
-import { servicesTeaserData } from "@/components/home/services-data";
+import type { Service } from "@/lib/content";
 
-// Full services listing page (issue #22). Reuses servicesTeaserData -- the
-// same placeholder set consumed by the homepage's ServicesTeaserGrid.
+// Full services listing page. Content (services) is passed in, resolved for the
+// active locale, by the page.
 //
 // NOTE: the four categories here (Engineering / Construction / Supply /
-// Project Management) come from issue #23 and may not reflect the actual
-// business (export-import / trade / customs). Flagged for review in a
-// follow-up issue -- do not treat these as final without checking that
-// issue first.
+// Project Management) may not reflect the actual business (export-import /
+// trade / customs). Reconcile the brand story before launch.
 //
-// Cards link to /services/[slug], which will 404 until #23 lands. This is
-// the same accepted pattern already in use on the homepage teaser.
-export function ServicesListing() {
+// Cards link to /services/[slug], which will 404 until service detail pages
+// exist. This matches the homepage teaser behaviour.
+export function ServicesListing({ services }: { services: Service[] }) {
   const t = useTranslations("ServicesPage");
 
   return (
@@ -38,7 +36,7 @@ export function ServicesListing() {
         </Typography>
 
         <Grid cols={4}>
-          {servicesTeaserData.map((service) => (
+          {services.map((service) => (
             <Card key={service.slug} sx={{ height: "100%" }}>
               <CardActionArea
                 component={Link}

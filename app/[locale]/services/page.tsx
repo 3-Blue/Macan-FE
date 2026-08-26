@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { ServicesListing } from "@/components/sections/ServicesListing";
+import { getServices, type Locale } from "@/lib/content";
 
 export default async function ServicesPage({
   params,
@@ -10,5 +11,7 @@ export default async function ServicesPage({
   // Enable static rendering (required for `output: export`).
   setRequestLocale(locale);
 
-  return <ServicesListing />;
+  const services = await getServices(locale as Locale);
+
+  return <ServicesListing services={services} />;
 }
