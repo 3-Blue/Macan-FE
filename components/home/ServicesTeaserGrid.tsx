@@ -4,6 +4,7 @@ import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import { useTranslations } from "next-intl";
 
 import { Container } from "@/components/ui/Container";
 import { Grid } from "@/components/ui/Grid";
@@ -16,10 +17,11 @@ import { servicesTeaserData } from "@/components/home/services-data";
 // yet (issue #22/#23 are still in the backlog), so these routes will 404
 // until that work lands. Content is placeholder; see services-data.ts.
 export function ServicesTeaserGrid() {
+  const t = useTranslations("Home");
   return (
     <Section>
       <Container>
-        <Heading level={2}>What We Do</Heading>
+        <Heading level={2}>{t("servicesTeaserHeading")}</Heading>
 
         <Grid cols={4}>
           {servicesTeaserData.map((service) => (

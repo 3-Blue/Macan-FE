@@ -17,6 +17,10 @@
     "terms": "Terms & Conditions",
     "rights": "All rights reserved."
   },
+  "Home": {
+    "servicesTeaserHeading": "What We Do",
+    "testimonialsHeading": "What Our Clients Say"
+  },
   "HomePage": {
     "title": "Welcome",
     "description": "This is the homepage."
