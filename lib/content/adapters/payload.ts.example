@@ -1,0 +1,156 @@
+// lib/content/adapters/payload.ts  (rename from .example after installing Payload)
+//
+// Implements the same ContentSource interface as the local adapter, so
+// switching backends is a one-line change in lib/content/provider.ts:
+//
+//   if (process.env.CONTENT_SOURCE === "payload") return payloadContentSource;
+//
+// Uses Payload's Local API (no HTTP hop). Because the collections declare
+// `localized: true` fields and the config enables localization with fallback,
+// `find({ locale })` returns fields already resolved to plain strings — which
+// is exactly what the view models expect.
+
+import { getPayload } from "payload";
+import config from "@payload-config";
+import type {
+  ContentSource,
+  FeaturedProject,
+  Industry,
+  Locale,
+  Service,
+  Testimonial,
+} from "@/lib/content/types";
+
+async function client() {
+  return getPayload({ config });
+}
+
+export const payloadContentSource: ContentSource = {
+  async getServices(locale: Locale): Promise<Service[]> {
+    const payload = await client();
+    const { docs } = await payload.find({
+      collection: "services",
+      locale,
+      fallbackLocale: "en",
+      sort: "order",
+      limit: 100,
+      where: { _status: { equals: "published" } },
+    });
+    return docs.map((d) => ({
+      slug: d.slug as string,
+      title: d.title as string,
+      description: d.description as string,
+    }));
+  },
+
+  async getTestimonials(locale: Locale): Promise<Testimonial[]> {
+    const payload = await client();
+    const { docs } = await payload.find({
+      collection: "testimonials",
+      locale,
+      fallbackLocale: "en",
+      sort: "order",
+      limit: 100,
+      where: { _status: { equals: "published" } },
+    });
+    return docs.map((d) => ({
+      id: String(d.id),
+      quote: d.quote as string,
+      name: d.name as string,
+      role: (d.role as string) ?? "",
+      initials: d.initials as string,
+    }));
+  },
+
+  async getFeaturedProjects(locale: Locale): Promise<FeaturedProject[]> {
+    const payload = await client();
+    const { docs } = await payload.find({
+      collection: "projects",
+      locale,
+      fallbackLocale: "en",
+      sort: "order",
+      limit: 100,
+      where: {
+        _status: { equals: "published" },
+        featured: { equals: true },
+      },
+    });
+    return docs.map((d) => ({
+      id: String(d.id),
+      title: d.title as string,
+      client: (d.client as string) ?? "",
+      sector: (d.sector as string) ?? "",
+      location: (d.location as string) ?? "",
+      outcome: (d.outcome as string) ?? "",
+      status: d.status as FeaturedProject["status"],
+      imageUrl:
+        d.image && typeof d.image === "object" ? (d.image.url ?? undefined) : undefined,
+      // href intentionally omitted until project detail routes exist.
+    }));
+  },
+
+  async getIndustries(locale: Locale): Promise<Industry[]> {
+    const payload = await client();
+    const { docs } = await payload.find({
+      collection: "industries",
+      locale,
+      fallbackLocale: "en",
+      sort: "order",
+      limit: 100,
+      where: { _status: { equals: "published" } },
+    });
+    return docs.map(mapIndustry);
+  },
+
+  async getIndustry(slug: string, locale: Locale): Promise<Industry | null> {
+    const payload = await client();
+    const { docs } = await payload.find({
+      collection: "industries",
+      locale,
+      fallbackLocale: "en",
+      limit: 1,
+      where: {
+        slug: { equals: slug },
+        _status: { equals: "published" },
+      },
+    });
+    return docs[0] ? mapIndustry(docs[0]) : null;
+  },
+
+  async getPublishedIndustrySlugs(): Promise<string[]> {
+    const payload = await client();
+    const { docs } = await payload.find({
+      collection: "industries",
+      limit: 500,
+      where: { _status: { equals: "published" } },
+      // Only need slugs; keep the payload small.
+      select: { slug: true },
+    });
+    return docs.map((d) => d.slug as string);
+  },
+};
+
+// Map a Payload industry doc into the app's Industry view model.
+function mapIndustry(d: Record<string, unknown>): Industry {
+  const toStringArray = (v: unknown): string[] =>
+    Array.isArray(v)
+      ? v.map((row) => (row as { item?: string }).item ?? "").filter(Boolean)
+      : [];
+
+  return {
+    id: String(d.id),
+    slug: d.slug as string,
+    name: d.name as string,
+    summary: d.summary as string,
+    icon: (d.icon as string) ?? "",
+    description: d.description as string,
+    challenges: toStringArray(d.challenges),
+    solutions: toStringArray(d.solutions),
+    relatedServiceSlugs: [],
+    relatedProjectSlugs: Array.isArray(d.relatedProjects)
+      ? d.relatedProjects.map((p) => (typeof p === "object" ? String((p as { id: unknown }).id) : String(p)))
+      : [],
+    order: (d.order as number) ?? 0,
+    published: true,
+  };
+}
