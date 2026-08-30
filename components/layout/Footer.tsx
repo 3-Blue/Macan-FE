@@ -17,10 +17,11 @@ const FOOTER_ITEMS = [
   { key: "terms", href: "/terms", ns: "Footer" },
 ] as const;
 
+const currentYear = new Date().getFullYear();
+
 export function Footer() {
   const tNav = useTranslations("Nav");
   const tFooter = useTranslations("Footer");
-  const year = new Date().getFullYear();
 
   return (
     <Box component="footer" sx={{ borderTop: "1px solid", borderColor: "divider" }}>
@@ -67,7 +68,7 @@ export function Footer() {
 
       <Box sx={{ borderTop: "1px solid", borderColor: "divider", px: { xs: 2, sm: 3, lg: 4 }, py: 3 }}>
         <Typography variant="body2" sx={{ color: "text.disabled" }}>
-          © {year} Macan. {tFooter("rights")}
+          © {currentYear} Macan. {tFooter("rights")}
         </Typography>
       </Box>
     </Box>
