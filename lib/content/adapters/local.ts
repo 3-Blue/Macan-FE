@@ -2,6 +2,7 @@ import type {
   ContentSource,
   FeaturedProject,
   Industry,
+  LeadershipMember,
   Locale,
   Service,
   Testimonial,
@@ -10,6 +11,7 @@ import { resolve } from "@/lib/content/types";
 import { services as serviceRecords } from "@/lib/content/data/services";
 import { testimonials as testimonialRecords } from "@/lib/content/data/testimonials";
 import { featuredProjects as projectRecords } from "@/lib/content/data/projects";
+import { leadership as leadershipRecords } from "@/lib/content/data/leadership";
 import { industriesData } from "@/lib/industries-data";
 
 /**
@@ -68,5 +70,18 @@ export const localContentSource: ContentSource = {
     return industriesData
       .filter((industry) => industry.published)
       .map((industry) => industry.slug);
+  },
+
+  async getLeadership(locale: Locale): Promise<LeadershipMember[]> {
+    return leadershipRecords
+      .filter((l) => l.published)
+      .sort((a, b) => a.order - b.order)
+      .map((l) => ({
+        id: l.id,
+        name: l.name,
+        role: resolve(l.role, locale),
+        bio: resolve(l.bio, locale),
+        photo: l.photo,
+      }));
   },
 };

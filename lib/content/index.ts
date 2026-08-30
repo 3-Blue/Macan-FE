@@ -16,6 +16,7 @@ export type {
   FeaturedProject,
   Industry,
   ProjectStatus,
+  LeadershipMember,
 } from "@/lib/content/types";
 
 export function getServices(locale: Locale) {
@@ -40,4 +41,8 @@ export function getIndustry(slug: string, locale: Locale) {
 
 export function getPublishedIndustrySlugs() {
   return getContentSource().getPublishedIndustrySlugs();
+}
+
+export function getLeadership(locale: Locale) {
+  return getContentSource().getLeadership(locale);
 }
