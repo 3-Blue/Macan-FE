@@ -107,7 +107,8 @@
   "IndustryDetailPage": {
     "challengesHeading": "Çətinliklər",
     "solutionsHeading": "MACAN necə kömək edir",
-    "relatedProjectsHeading": "Əlaqəli layihələr"
+    "relatedProjectsHeading": "Əlaqəli layihələr",
+    "relatedServicesHeading": "Əlaqəli xidmətlər"
   },
     "ProjectDetailPage": {
     "featuredBadge": "Nümunə Layihə",

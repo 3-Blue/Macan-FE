@@ -107,7 +107,8 @@
   "IndustryDetailPage": {
     "challengesHeading": "چالش‌ها",
     "solutionsHeading": "راهکارهای ماکان",
-    "relatedProjectsHeading": "پروژه‌های مرتبط"
+    "relatedProjectsHeading": "پروژه‌های مرتبط",
+    "relatedServicesHeading": "خدمات مرتبط"
   },
     "ProjectDetailPage": {
     "featuredBadge": "مطالعه موردی",
