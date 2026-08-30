@@ -64,7 +64,7 @@ export default async function IndustryDetailPage({
 
         <Box sx={{ mt: 6 }}>
           <Heading level={2}>{t("challengesHeading")}</Heading>
-          <Box component="ul" sx={{ mt: 2, pl: 3 }}>
+          <Box component="ul" sx={{ mt: 2, pis: 3 }}>
             {industry.challenges.map((challenge) => (
               <Typography key={challenge} component="li" variant="body1" sx={{ mb: 1 }}>
                 {challenge}
@@ -75,7 +75,7 @@ export default async function IndustryDetailPage({
 
         <Box sx={{ mt: 6 }}>
           <Heading level={2}>{t("solutionsHeading")}</Heading>
-          <Box component="ul" sx={{ mt: 2, pl: 3 }}>
+          <Box component="ul" sx={{ mt: 2, pis: 3 }}>
             {industry.solutions.map((solution) => (
               <Typography key={solution} component="li" variant="body1" sx={{ mb: 1 }}>
                 {solution}
