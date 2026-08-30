@@ -115,10 +115,14 @@
       "messageTooShort": "Message must be at least 10 characters"
     }
   },
-  "IndustryDetailPage": {
+    "IndustryDetailPage": {
     "challengesHeading": "Challenges",
     "solutionsHeading": "How MACAN helps",
     "relatedProjectsHeading": "Related projects"
+  },
+  "ServiceDetailPage": {
+    "relatedProjectsHeading": "Related projects",
+    "relatedIndustriesHeading": "Industries we serve"
   },
     "ProjectDetailPage": {
     "metaClient": "Client",

@@ -5,6 +5,7 @@ import type {
   LeadershipMember,
   Locale,
   Service,
+  ServiceDetail,
   Testimonial,
 } from "@/lib/content/types";
 import { resolve } from "@/lib/content/types";
@@ -13,6 +14,7 @@ import { testimonials as testimonialRecords } from "@/lib/content/data/testimoni
 import { featuredProjects as projectRecords } from "@/lib/content/data/projects";
 import { leadership as leadershipRecords } from "@/lib/content/data/leadership";
 import { industriesData } from "@/lib/industries-data";
+import { servicesData } from "@/lib/services-data";
 
 /**
  * Local content adapter — resolves the in-repo, localized data modules into
@@ -70,6 +72,18 @@ export const localContentSource: ContentSource = {
     return industriesData
       .filter((industry) => industry.published)
       .map((industry) => industry.slug);
+  },
+
+    // Service detail content is not yet localized (single-language source
+  // data), same as industries — drop-in swap once it moves into the CMS.
+  async getService(slug: string): Promise<ServiceDetail | null> {
+    return servicesData.find((s) => s.slug === slug && s.published) ?? null;
+  },
+
+  async getPublishedServiceSlugs(): Promise<string[]> {
+    return servicesData
+      .filter((service) => service.published)
+      .map((service) => service.slug);
   },
 
   async getLeadership(locale: Locale): Promise<LeadershipMember[]> {

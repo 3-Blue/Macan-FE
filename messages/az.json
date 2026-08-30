@@ -104,10 +104,14 @@
       "messageTooShort": "Mesaj ən azı 10 simvol olmalıdır"
     }
   },
-  "IndustryDetailPage": {
+    "IndustryDetailPage": {
     "challengesHeading": "Çətinliklər",
     "solutionsHeading": "MACAN necə kömək edir",
     "relatedProjectsHeading": "Əlaqəli layihələr"
+  },
+  "ServiceDetailPage": {
+    "relatedProjectsHeading": "Əlaqəli layihələr",
+    "relatedIndustriesHeading": "Xidmət etdiyimiz sənayelər"
   },
     "ProjectDetailPage": {
     "metaClient": "Müştəri",

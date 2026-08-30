@@ -104,10 +104,14 @@
       "messageTooShort": "Mesaj en az 10 karakter olmalıdır"
     }
   },
-  "IndustryDetailPage": {
+    "IndustryDetailPage": {
     "challengesHeading": "Zorluklar",
     "solutionsHeading": "MACAN nasıl yardımcı olur",
     "relatedProjectsHeading": "İlgili projeler"
+  },
+  "ServiceDetailPage": {
+    "relatedProjectsHeading": "İlgili projeler",
+    "relatedIndustriesHeading": "Hizmet verdiğimiz sektörler"
   },
     "ProjectDetailPage": {
     "metaClient": "Müşteri",
