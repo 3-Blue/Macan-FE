@@ -35,20 +35,20 @@ export const PROJECTS_MOCK: Project[] = [
       { label: "Project duration", value: "14 months" },
     ],
     heroImage: {
-      url: "/images/projects/offshore-platform-refit/hero.jpg",
+      url: "/projects/offshore-platform-refit/hero.svg",
       alt: "Offshore platform refit under construction at sunset",
     },
     gallery: [
       {
-        url: "/images/projects/offshore-platform-refit/gallery-1.jpg",
+        url: "/projects/offshore-platform-refit/gallery-1.svg",
         alt: "Topside structural upgrade in progress",
       },
       {
-        url: "/images/projects/offshore-platform-refit/gallery-2.jpg",
+        url: "/projects/offshore-platform-refit/gallery-2.svg",
         alt: "Engineers inspecting new process safety systems",
       },
       {
-        url: "/images/projects/offshore-platform-refit/gallery-3.jpg",
+        url: "/projects/offshore-platform-refit/gallery-3.svg",
         alt: "Completed platform refit, aerial view",
       },
     ],
@@ -77,16 +77,16 @@ export const PROJECTS_MOCK: Project[] = [
       { label: "Status", value: "Ongoing" },
     ],
     heroImage: {
-      url: "/images/projects/combined-cycle-expansion/hero.jpg",
+      url: "/projects/combined-cycle-expansion/hero.svg",
       alt: "Combined-cycle power plant construction site",
     },
     gallery: [
       {
-        url: "/images/projects/combined-cycle-expansion/gallery-1.jpg",
+        url: "/projects/combined-cycle-expansion/gallery-1.svg",
         alt: "Turbine hall construction",
       },
       {
-        url: "/images/projects/combined-cycle-expansion/gallery-2.jpg",
+        url: "/projects/combined-cycle-expansion/gallery-2.svg",
         alt: "Cooling tower installation",
       },
     ],
@@ -115,16 +115,16 @@ export const PROJECTS_MOCK: Project[] = [
       { label: "Completion", value: "On schedule" },
     ],
     heroImage: {
-      url: "/images/projects/highway-interchange-upgrade/hero.jpg",
+      url: "/projects/highway-interchange-upgrade/hero.svg",
       alt: "Highway interchange under construction",
     },
     gallery: [
       {
-        url: "/images/projects/highway-interchange-upgrade/gallery-1.jpg",
+        url: "/projects/highway-interchange-upgrade/gallery-1.svg",
         alt: "New interchange ramp construction",
       },
       {
-        url: "/images/projects/highway-interchange-upgrade/gallery-2.jpg",
+        url: "/projects/highway-interchange-upgrade/gallery-2.svg",
         alt: "Completed interchange, aerial view",
       },
     ],
@@ -153,16 +153,16 @@ export const PROJECTS_MOCK: Project[] = [
       { label: "Installation time", value: "Reduced via modular design" },
     ],
     heroImage: {
-      url: "/images/projects/modular-skid-supply/hero.jpg",
+      url: "/projects/modular-skid-supply/hero.svg",
       alt: "Modular processing skid ready for shipment",
     },
     gallery: [
       {
-        url: "/images/projects/modular-skid-supply/gallery-1.jpg",
+        url: "/projects/modular-skid-supply/gallery-1.svg",
         alt: "Fabrication yard with processing skids",
       },
       {
-        url: "/images/projects/modular-skid-supply/gallery-2.jpg",
+        url: "/projects/modular-skid-supply/gallery-2.svg",
         alt: "Skid loaded for transport",
       },
     ],
@@ -191,16 +191,16 @@ export const PROJECTS_MOCK: Project[] = [
       { label: "Status", value: "Ongoing" },
     ],
     heroImage: {
-      url: "/images/projects/district-cooling-network/hero.jpg",
+      url: "/projects/district-cooling-network/hero.svg",
       alt: "District cooling plant exterior",
     },
     gallery: [
       {
-        url: "/images/projects/district-cooling-network/gallery-1.jpg",
+        url: "/projects/district-cooling-network/gallery-1.svg",
         alt: "District cooling network piping installation",
       },
       {
-        url: "/images/projects/district-cooling-network/gallery-2.jpg",
+        url: "/projects/district-cooling-network/gallery-2.svg",
         alt: "Central cooling plant control room",
       },
     ],

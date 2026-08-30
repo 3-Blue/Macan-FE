@@ -124,7 +124,8 @@
     "relatedProjectsHeading": "Related projects",
     "relatedIndustriesHeading": "Industries we serve"
   },
-    "ProjectDetailPage": {
+  "ProjectDetailPage": {
+    "featuredBadge": "Case Study",
     "metaClient": "Client",
     "metaLocation": "Location",
     "metaYear": "Year",
