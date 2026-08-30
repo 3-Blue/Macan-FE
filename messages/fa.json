@@ -81,6 +81,24 @@
     "solutionsHeading": "راهکارهای ماکان",
     "relatedProjectsHeading": "پروژه‌های مرتبط"
   },
+    "ProjectDetailPage": {
+    "metaClient": "کارفرما",
+    "metaLocation": "موقعیت",
+    "metaYear": "سال",
+    "metaStatus": "وضعیت",
+    "statusCompleted": "تکمیل‌شده",
+    "statusOngoing": "در حال اجرا",
+    "scopeHeading": "محدوده کار",
+    "outcomesHeading": "نتایج قابل اندازه‌گیری",
+    "galleryHeading": "گالری تصاویر"
+  },
+  "ProjectGallery": {
+    "openImage": "باز کردن تصویر: {alt}",
+    "lightboxLabel": "گالری تصاویر",
+    "closeLightbox": "بستن گالری",
+    "previousImage": "تصویر قبلی",
+    "nextImage": "تصویر بعدی"
+  },
   "PartnersSection": {
     "eyebrow": "مورد اعتماد",
     "heading": "شرکا و مشتریان ما",

@@ -81,6 +81,24 @@
     "solutionsHeading": "MACAN necə kömək edir",
     "relatedProjectsHeading": "Əlaqəli layihələr"
   },
+    "ProjectDetailPage": {
+    "metaClient": "Müştəri",
+    "metaLocation": "Yer",
+    "metaYear": "İl",
+    "metaStatus": "Status",
+    "statusCompleted": "Tamamlanıb",
+    "statusOngoing": "Davam edir",
+    "scopeHeading": "İşin əhatəsi",
+    "outcomesHeading": "Ölçülə bilən nəticələr",
+    "galleryHeading": "Qalereya"
+  },
+  "ProjectGallery": {
+    "openImage": "Şəkli aç: {alt}",
+    "lightboxLabel": "Şəkil qalereyası",
+    "closeLightbox": "Qalereyanı bağla",
+    "previousImage": "Əvvəlki şəkil",
+    "nextImage": "Növbəti şəkil"
+  },
   "PartnersSection": {
     "eyebrow": "Etibar edənlər",
     "heading": "Tərəfdaşlarımız və müştərilərimiz",

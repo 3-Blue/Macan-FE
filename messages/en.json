@@ -92,6 +92,24 @@
     "solutionsHeading": "How MACAN helps",
     "relatedProjectsHeading": "Related projects"
   },
+    "ProjectDetailPage": {
+    "metaClient": "Client",
+    "metaLocation": "Location",
+    "metaYear": "Year",
+    "metaStatus": "Status",
+    "statusCompleted": "Completed",
+    "statusOngoing": "Ongoing",
+    "scopeHeading": "Scope of work",
+    "outcomesHeading": "Measurable outcomes",
+    "galleryHeading": "Gallery"
+  },
+  "ProjectGallery": {
+    "openImage": "Open image: {alt}",
+    "lightboxLabel": "Image gallery",
+    "closeLightbox": "Close gallery",
+    "previousImage": "Previous image",
+    "nextImage": "Next image"
+  },
   "PartnersSection": {
     "eyebrow": "Trusted by",
     "heading": "Our partners & clients",
