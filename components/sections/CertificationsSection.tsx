@@ -53,6 +53,7 @@ export function CertificationsSection() {
                   src={BADGE_FILES[i % BADGE_FILES.length]}
                   alt={item.name}
                   fill
+                  sizes="96px"
                   style={{ objectFit: "contain" }}
                 />
               </Box>

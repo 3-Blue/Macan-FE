@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
 // Brand colors from design mockups (see PR #52 for the Tailwind-token equivalents)
 const brand = {
@@ -45,4 +45,4 @@ const theme = createTheme({
   },
 });
 
-export default theme;
+export default responsiveFontSizes(theme);

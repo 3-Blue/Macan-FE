@@ -18,10 +18,6 @@ const vazirmatn = localFont({
   src: "../../fonts/Vazirmatn[wght].ttf",
   variable: "--font-vazirmatn",
 });
-const geistMono = localFont({
-  src: "../../fonts/GeistMono[wght].ttf",
-  variable: "--font-geist-mono",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -71,7 +67,7 @@ export default async function RootLayout({
     <html
       lang={locale}
       dir={dir}
-      className={`${vazirmatn.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${vazirmatn.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <a

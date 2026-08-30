@@ -42,7 +42,13 @@ function MissionVisionBlock({
           flexShrink: 0,
         }}
       >
-        <Image src={imageSrc} alt={imageAlt} fill style={{ objectFit: "cover" }} />
+        <Image
+          src={imageSrc}
+          alt={imageAlt}
+          fill
+          sizes="(min-width: 900px) 50vw, 100vw"
+          style={{ objectFit: "cover" }}
+        />
       </Box>
       <Box sx={{ width: { xs: "100%", md: "50%" } }}>
         <Heading level={2}>{title}</Heading>
