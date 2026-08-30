@@ -110,6 +110,7 @@
     "relatedProjectsHeading": "İlgili projeler"
   },
     "ProjectDetailPage": {
+    "featuredBadge": "Vaka Analizi",
     "metaClient": "Müşteri",
     "metaLocation": "Konum",
     "metaYear": "Yıl",
