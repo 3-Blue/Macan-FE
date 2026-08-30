@@ -62,6 +62,17 @@ export interface FeaturedProject {
   href?: string;
 }
 
+export interface LeadershipMember {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  photo: {
+    url: string;
+    alt: string;
+  };
+}
+
 // Industry is already a plain, string-based model in lib/types; re-export it so
 // callers have a single import site for content types.
 export type { Industry };
@@ -78,4 +89,5 @@ export interface ContentSource {
   getIndustry(slug: string, locale: Locale): Promise<Industry | null>;
   /** Slugs of published industries, for generateStaticParams. */
   getPublishedIndustrySlugs(): Promise<string[]>;
+  getLeadership(locale: Locale): Promise<LeadershipMember[]>;
 }
