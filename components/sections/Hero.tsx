@@ -26,6 +26,7 @@ export function Hero() {
         alt=""
         fill
         priority
+        sizes="100vw"
         style={{ objectFit: "cover", objectPosition: "center" }}
       />
       {/* Overlay for text legibility over the background image */}
@@ -39,7 +40,7 @@ export function Hero() {
       />
       <Container sx={{ position: "relative", zIndex: 1 }}>
         <Box sx={{ maxWidth: 640 }}>
-          <Heading level={1} className="hero-headline">
+          <Heading level={1}>
             <Box component="span" sx={{ color: "background.default" }}>
               {t("headline")}
             </Box>
