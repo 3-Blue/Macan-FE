@@ -110,6 +110,7 @@
     "relatedProjectsHeading": "Əlaqəli layihələr"
   },
     "ProjectDetailPage": {
+    "featuredBadge": "Nümunə Layihə",
     "metaClient": "Müştəri",
     "metaLocation": "Yer",
     "metaYear": "İl",

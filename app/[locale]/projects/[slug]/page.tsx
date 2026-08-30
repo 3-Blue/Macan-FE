@@ -38,6 +38,27 @@ export default async function ProjectDetailPage({
   return (
     <Section>
       <Container>
+                {project.featured && (
+          <Box
+            component="span"
+            sx={{
+              display: "block",
+              width: "fit-content",
+              mb: 1.5,
+              px: 1.5,
+              py: 0.5,
+              fontSize: "0.75rem",
+              fontWeight: 700,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              borderRadius: 999,
+              bgcolor: "secondary.main",
+              color: "secondary.contrastText",
+            }}
+          >
+            {t("featuredBadge")}
+          </Box>
+        )}
         <Typography
           variant="overline"
           sx={{ color: "secondary.main", letterSpacing: "0.18em" }}
@@ -86,13 +107,18 @@ export default async function ProjectDetailPage({
 
         {project.heroImage && (
           <Box
-            sx={{
+                        sx={{
               position: "relative",
               mt: 5,
               width: "100%",
               aspectRatio: "16 / 9",
               borderRadius: 2,
               overflow: "hidden",
+              ...(project.featured && {
+                border: "3px solid",
+                borderColor: "secondary.main",
+                boxShadow: 4,
+              }),
             }}
           >
             <Image

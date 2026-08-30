@@ -120,7 +120,8 @@
     "solutionsHeading": "How MACAN helps",
     "relatedProjectsHeading": "Related projects"
   },
-    "ProjectDetailPage": {
+  "ProjectDetailPage": {
+    "featuredBadge": "Case Study",
     "metaClient": "Client",
     "metaLocation": "Location",
     "metaYear": "Year",

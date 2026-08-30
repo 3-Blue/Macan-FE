@@ -110,6 +110,7 @@
     "relatedProjectsHeading": "پروژه‌های مرتبط"
   },
     "ProjectDetailPage": {
+    "featuredBadge": "مطالعه موردی",
     "metaClient": "کارفرما",
     "metaLocation": "موقعیت",
     "metaYear": "سال",
