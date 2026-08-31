@@ -104,10 +104,14 @@
       "messageTooShort": "پیام باید حداقل 10 کاراکتر باشد"
     }
   },
-  "IndustryDetailPage": {
+    "IndustryDetailPage": {
     "challengesHeading": "چالش‌ها",
     "solutionsHeading": "راهکارهای ماکان",
     "relatedProjectsHeading": "پروژه‌های مرتبط"
+  },
+  "ServiceDetailPage": {
+    "relatedProjectsHeading": "پروژه‌های مرتبط",
+    "relatedIndustriesHeading": "صنایعی که خدمت می‌دهیم"
   },
     "ProjectDetailPage": {
     "featuredBadge": "مطالعه موردی",

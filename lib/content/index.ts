@@ -12,6 +12,7 @@ export type {
   Locale,
   Localized,
   Service,
+  ServiceDetail,
   Testimonial,
   FeaturedProject,
   Industry,
@@ -41,6 +42,14 @@ export function getIndustry(slug: string, locale: Locale) {
 
 export function getPublishedIndustrySlugs() {
   return getContentSource().getPublishedIndustrySlugs();
+}
+
+export function getService(slug: string, locale: Locale) {
+  return getContentSource().getService(slug, locale);
+}
+
+export function getPublishedServiceSlugs() {
+  return getContentSource().getPublishedServiceSlugs();
 }
 
 export function getLeadership(locale: Locale) {
