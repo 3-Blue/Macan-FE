@@ -107,7 +107,8 @@
     "IndustryDetailPage": {
     "challengesHeading": "Zorluklar",
     "solutionsHeading": "MACAN nasıl yardımcı olur",
-    "relatedProjectsHeading": "İlgili projeler"
+    "relatedProjectsHeading": "İlgili projeler",
+    "relatedServicesHeading": "İlgili hizmetler"
   },
   "ServiceDetailPage": {
     "relatedProjectsHeading": "İlgili projeler",

@@ -10,6 +10,7 @@ import { routing } from "@/i18n/routing";
 import {
   getIndustry,
   getPublishedIndustrySlugs,
+  getServices,
   type Locale,
 } from "@/lib/content";
 
@@ -38,7 +39,7 @@ export default async function IndustryDetailPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
-  const industry = await getIndustry(slug, locale as Locale);
+    const industry = await getIndustry(slug, locale as Locale);
 
   if (!industry) {
     notFound();
@@ -49,6 +50,11 @@ export default async function IndustryDetailPage({
   const relatedProjects = industry.relatedProjectSlugs
     .map((id) => ({ id, title: PROJECT_TITLES[id] }))
     .filter((project): project is { id: string; title: string } => Boolean(project.title));
+
+  const allServices = await getServices(locale as Locale);
+  const relatedServices = allServices.filter((service) =>
+    industry.relatedServiceSlugs.includes(service.slug)
+  );
 
   return (
     <Section>
@@ -84,12 +90,23 @@ export default async function IndustryDetailPage({
           </Box>
         </Box>
 
-        {relatedProjects.length > 0 && (
+                {relatedProjects.length > 0 && (
           <Box sx={{ mt: 6 }}>
             <Heading level={2}>{t("relatedProjectsHeading")}</Heading>
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, mt: 2 }}>
               {relatedProjects.map((project) => (
                 <Chip key={project.id} label={project.title} variant="outlined" />
+              ))}
+            </Box>
+          </Box>
+        )}
+
+        {relatedServices.length > 0 && (
+          <Box sx={{ mt: 6 }}>
+            <Heading level={2}>{t("relatedServicesHeading")}</Heading>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, mt: 2 }}>
+              {relatedServices.map((service) => (
+                <Chip key={service.slug} label={service.title} variant="outlined" />
               ))}
             </Box>
           </Box>

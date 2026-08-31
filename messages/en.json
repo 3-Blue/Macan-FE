@@ -118,7 +118,8 @@
     "IndustryDetailPage": {
     "challengesHeading": "Challenges",
     "solutionsHeading": "How MACAN helps",
-    "relatedProjectsHeading": "Related projects"
+    "relatedProjectsHeading": "Related projects",
+    "relatedServicesHeading": "Related services"
   },
   "ServiceDetailPage": {
     "relatedProjectsHeading": "Related projects",
