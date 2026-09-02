@@ -114,6 +114,16 @@
     "relatedProjectsHeading": "پروژه‌های مرتبط",
     "relatedIndustriesHeading": "صنایعی که خدمت می‌دهیم"
   },
+  "ServiceCTA": {
+    "heading": "به خدمات {service} ما علاقه‌مند هستید؟",
+    "body": "درباره پروژه خود به ما بگویید تا تیم ما با مراحل بعدی با شما تماس بگیرد.",
+    "cta": "تماس با ما"
+  },
+    "ServiceCTA": {
+    "heading": "به خدمات {service} ما علاقه‌مند هستید؟",
+    "body": "درباره پروژه خود به ما بگویید تا تیم ما با مراحل بعدی با شما تماس بگیرد.",
+    "cta": "تماس با ما"
+  },
     "ProjectDetailPage": {
     "featuredBadge": "مطالعه موردی",
     "metaClient": "کارفرما",

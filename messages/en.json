@@ -121,9 +121,19 @@
     "relatedProjectsHeading": "Related projects",
     "relatedServicesHeading": "Related services"
   },
-  "ServiceDetailPage": {
+    "ServiceDetailPage": {
     "relatedProjectsHeading": "Related projects",
     "relatedIndustriesHeading": "Industries we serve"
+  },
+  "ServiceCTA": {
+    "heading": "Interested in our {service} services?",
+    "body": "Tell us about your project and our team will get back to you with next steps.",
+    "cta": "Get in touch"
+  },
+  "ServiceCTA": {
+    "heading": "Interested in our {service} services?",
+    "body": "Tell us about your project and our team will get back to you with next steps.",
+    "cta": "Get in touch"
   },
   "ProjectDetailPage": {
     "featuredBadge": "Case Study",
