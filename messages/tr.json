@@ -114,6 +114,16 @@
     "relatedProjectsHeading": "İlgili projeler",
     "relatedIndustriesHeading": "Hizmet verdiğimiz sektörler"
   },
+  "ServiceCTA": {
+    "heading": "{service} hizmetlerimizle mi ilgileniyorsunuz?",
+    "body": "Projeniz hakkında bize bilgi verin, ekibimiz bir sonraki adımlarla sizinle iletişime geçecek.",
+    "cta": "Bizimle iletişime geçin"
+  },
+    "ServiceCTA": {
+    "heading": "{service} hizmetlerimizle mi ilgileniyorsunuz?",
+    "body": "Projeniz hakkında bize bilgi verin, ekibimiz bir sonraki adımlarla sizinle iletişime geçecek.",
+    "cta": "Bizimle iletişime geçin"
+  },
     "ProjectDetailPage": {
     "featuredBadge": "Vaka Analizi",
     "metaClient": "Müşteri",

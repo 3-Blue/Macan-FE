@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { Section } from "@/components/ui/Section";
+import { ServiceCTA } from "@/components/sections/ServiceCTA";
 import { routing } from "@/i18n/routing";
 import {
   getService,
@@ -98,6 +99,7 @@ export default async function ServiceDetailPage({
           </Box>
         )}
       </Container>
+      <ServiceCTA serviceName={service.title} />
     </Section>
   );
 }

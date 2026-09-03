@@ -114,6 +114,16 @@
     "relatedProjectsHeading": "Əlaqəli layihələr",
     "relatedIndustriesHeading": "Xidmət etdiyimiz sənayelər"
   },
+  "ServiceCTA": {
+    "heading": "{service} xidmətlərimizlə maraqlanırsınız?",
+    "body": "Layihəniz haqqında bizə məlumat verin, komandamız növbəti addımlarla sizinlə əlaqə saxlayacaq.",
+    "cta": "Bizimlə əlaqə saxlayın"
+  },
+    "ServiceCTA": {
+    "heading": "{service} xidmətlərimizlə maraqlanırsınız?",
+    "body": "Layihəniz haqqında bizə məlumat verin, komandamız növbəti addımlarla sizinlə əlaqə saxlayacaq.",
+    "cta": "Bizimlə əlaqə saxlayın"
+  },
     "ProjectDetailPage": {
     "featuredBadge": "Nümunə Layihə",
     "metaClient": "Müştəri",
