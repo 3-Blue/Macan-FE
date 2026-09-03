@@ -182,6 +182,12 @@
     "intro": "Xidmətlərimiz vahid, bağlı bir tədarik zənciri təşkil edir — qlobal bazarlardan material və avadanlıq təchizatı və idxalından, mühəndislik, tikinti icrası və tam layihə təhvilinə qədər. İxrac-idxal tərəfdaşı olaraq, beynəlxalq təchizatı sahədəki icra ilə birləşdiririk ki, hər mərhələ vahid, kəsintisiz bir əməliyyat kimi irəliləsin.",
     "learnMore": "Daha ətraflı"
   },
+    "ProjectsPage": {
+  "eyebrow": "İşlərimiz",
+  "heading": "Həyata keçirdiyimiz layihələr",
+  "intro": "Müxtəlif sektorlarda mühəndislik, tikinti, təchizat və layihə idarəetməsi işlərindən seçmələr.",
+  "viewProject": "Layihəyə bax"
+  },
   "CookieConsent": {
     "ariaLabel": "Kuki razılığı",
     "message": "Təcrübənizi yaxşılaşdırmaq və sayt trafikini təhlil etmək üçün kukilərdən istifadə edirik. Vacib olmayan kukiləri qəbul və ya rədd edə bilərsiniz.",
