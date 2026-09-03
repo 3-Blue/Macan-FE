@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { Section } from "@/components/ui/Section";
+import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import {
   getIndustry,
@@ -27,7 +28,7 @@ const PROJECT_TITLES: Record<string, string> = {
 export async function generateStaticParams() {
   const slugs = await getPublishedIndustrySlugs();
   return routing.locales.flatMap((locale) =>
-    slugs.map((slug) => ({ locale, slug }))
+    slugs.map((slug) => ({ locale, slug })),
   );
 }
 
@@ -39,7 +40,7 @@ export default async function IndustryDetailPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
-    const industry = await getIndustry(slug, locale as Locale);
+  const industry = await getIndustry(slug, locale as Locale);
 
   if (!industry) {
     notFound();
@@ -49,17 +50,22 @@ export default async function IndustryDetailPage({
 
   const relatedProjects = industry.relatedProjectSlugs
     .map((id) => ({ id, title: PROJECT_TITLES[id] }))
-    .filter((project): project is { id: string; title: string } => Boolean(project.title));
+    .filter((project): project is { id: string; title: string } =>
+      Boolean(project.title),
+    );
 
   const allServices = await getServices(locale as Locale);
   const relatedServices = allServices.filter((service) =>
-    industry.relatedServiceSlugs.includes(service.slug)
+    industry.relatedServiceSlugs.includes(service.slug),
   );
 
   return (
     <Section>
       <Container>
-        <Typography variant="overline" sx={{ color: "secondary.main", letterSpacing: "0.18em" }}>
+        <Typography
+          variant="overline"
+          sx={{ color: "secondary.main", letterSpacing: "0.18em" }}
+        >
           {industry.summary}
         </Typography>
         <Heading level={1}>{industry.name}</Heading>
@@ -72,7 +78,12 @@ export default async function IndustryDetailPage({
           <Heading level={2}>{t("challengesHeading")}</Heading>
           <Box component="ul" sx={{ mt: 2, pis: 3 }}>
             {industry.challenges.map((challenge) => (
-              <Typography key={challenge} component="li" variant="body1" sx={{ mb: 1 }}>
+              <Typography
+                key={challenge}
+                component="li"
+                variant="body1"
+                sx={{ mb: 1 }}
+              >
                 {challenge}
               </Typography>
             ))}
@@ -83,19 +94,28 @@ export default async function IndustryDetailPage({
           <Heading level={2}>{t("solutionsHeading")}</Heading>
           <Box component="ul" sx={{ mt: 2, pis: 3 }}>
             {industry.solutions.map((solution) => (
-              <Typography key={solution} component="li" variant="body1" sx={{ mb: 1 }}>
+              <Typography
+                key={solution}
+                component="li"
+                variant="body1"
+                sx={{ mb: 1 }}
+              >
                 {solution}
               </Typography>
             ))}
           </Box>
         </Box>
 
-                {relatedProjects.length > 0 && (
+        {relatedProjects.length > 0 && (
           <Box sx={{ mt: 6 }}>
             <Heading level={2}>{t("relatedProjectsHeading")}</Heading>
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, mt: 2 }}>
               {relatedProjects.map((project) => (
-                <Chip key={project.id} label={project.title} variant="outlined" />
+                <Chip
+                  key={project.id}
+                  label={project.title}
+                  variant="outlined"
+                />
               ))}
             </Box>
           </Box>
@@ -106,7 +126,9 @@ export default async function IndustryDetailPage({
             <Heading level={2}>{t("relatedServicesHeading")}</Heading>
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, mt: 2 }}>
               {relatedServices.map((service) => (
-                <Chip key={service.slug} label={service.title} variant="outlined" />
+                <Link key={service.slug} href={`/services/${service.slug}`}>
+                  <Chip label={service.title} variant="outlined" clickable />
+                </Link>
               ))}
             </Box>
           </Box>
