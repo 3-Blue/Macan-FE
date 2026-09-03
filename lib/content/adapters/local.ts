@@ -13,7 +13,7 @@ import { services as serviceRecords } from "@/lib/content/data/services";
 import { testimonials as testimonialRecords } from "@/lib/content/data/testimonials";
 import { featuredProjects as projectRecords } from "@/lib/content/data/projects";
 import { leadership as leadershipRecords } from "@/lib/content/data/leadership";
-import { industriesData } from "@/lib/industries-data";
+import { industriesData, type IndustryRecord } from "@/lib/industries-data";
 import { servicesData } from "@/lib/services-data";
 
 /**
@@ -22,6 +22,24 @@ import { servicesData } from "@/lib/services-data";
  * Payload adapter (added with the CMS) implements the same ContentSource
  * interface and is selected via env in lib/content/provider.ts.
  */
+function resolveIndustry(record: IndustryRecord, locale: Locale): Industry {
+  return {
+    id: record.id,
+    slug: record.slug,
+    name: resolve(record.name, locale),
+    summary: resolve(record.summary, locale),
+    icon: record.icon,
+    heroImage: record.heroImage,
+    description: resolve(record.description, locale),
+    challenges: resolve(record.challenges, locale),
+    solutions: resolve(record.solutions, locale),
+    relatedServiceSlugs: record.relatedServiceSlugs,
+    relatedProjectSlugs: record.relatedProjectSlugs,
+    order: record.order,
+    published: record.published,
+  };
+}
+
 export const localContentSource: ContentSource = {
   async getServices(locale: Locale): Promise<Service[]> {
     return serviceRecords.map((s) => ({
@@ -55,17 +73,16 @@ export const localContentSource: ContentSource = {
     }));
   },
 
-  // Industries are not yet localized (single-language source data). The
-  // ContentSource interface still takes a locale, so this becomes a drop-in
-  // swap once industry content moves into the CMS.
-  async getIndustries(): Promise<Industry[]> {
+    async getIndustries(locale: Locale): Promise<Industry[]> {
     return industriesData
       .filter((industry) => industry.published)
-      .sort((a, b) => a.order - b.order);
+      .sort((a, b) => a.order - b.order)
+      .map((industry) => resolveIndustry(industry, locale));
   },
 
-  async getIndustry(slug: string): Promise<Industry | null> {
-    return industriesData.find((i) => i.slug === slug && i.published) ?? null;
+  async getIndustry(slug: string, locale: Locale): Promise<Industry | null> {
+    const record = industriesData.find((i) => i.slug === slug && i.published);
+    return record ? resolveIndustry(record, locale) : null;
   },
 
   async getPublishedIndustrySlugs(): Promise<string[]> {
