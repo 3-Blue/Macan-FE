@@ -13,6 +13,7 @@ import { PageTransition } from "@/components/motion/PageTransition";
 import "../globals.css";
 import { CookieConsentBanner } from "@/components/legal/CookieConsentBanner";
 import { Analytics } from "@/components/legal/Analytics";
+import { organizationJsonLd } from "@/lib/seo";
 
 const vazirmatn = localFont({
   src: "../../fonts/Vazirmatn[wght].ttf",
@@ -27,21 +28,6 @@ export const metadata: Metadata = {
   },
   description:
     "MACAN provides engineering, construction, supply, and project management solutions.",
-  openGraph: {
-    title: "MACAN",
-    description:
-      "MACAN provides engineering, construction, supply, and project management solutions.",
-    url: siteUrl,
-    siteName: "MACAN",
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "MACAN",
-    description:
-      "MACAN provides engineering, construction, supply, and project management solutions.",
-  },
 };
 
 export function generateStaticParams() {
@@ -77,6 +63,12 @@ export default async function RootLayout({
           Skip to main content
         </a>
         <Analytics />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd()),
+          }}
+        />
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeRegistry>
             <NextIntlClientProvider>

@@ -9,6 +9,8 @@ import { Section } from "@/components/ui/Section";
 import { ProjectGallery } from "@/components/project-gallery";
 import { routing } from "@/i18n/routing";
 import { PROJECTS_MOCK, getProjectBySlug } from "@/lib/projects-mock-data";
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -18,7 +20,22 @@ export function generateStaticParams() {
     }))
   );
 }
-
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const project = getProjectBySlug(slug);
+  if (!project) return {};
+  return buildMetadata({
+    locale: locale as "en" | "fa" | "az" | "tr",
+    path: `/projects/${slug}`,
+    title: project.title,
+    description: project.scope,
+    image: project.heroImage?.url,
+  });
+}
 export default async function ProjectDetailPage({
   params,
 }: {
