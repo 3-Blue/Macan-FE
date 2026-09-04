@@ -8,6 +8,8 @@ import { Heading } from "@/components/ui/Heading";
 import { Section } from "@/components/ui/Section";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import {
   getIndustry,
   getPublishedIndustrySlugs,
@@ -30,6 +32,22 @@ export async function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
     slugs.map((slug) => ({ locale, slug })),
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const industry = await getIndustry(slug, locale as Locale);
+  if (!industry) return {};
+  return buildMetadata({
+    locale: locale as "en" | "fa" | "az" | "tr",
+    path: `/industries/${slug}`,
+    title: industry.name,
+    description: industry.description,
+  });
 }
 
 export default async function IndustryDetailPage({

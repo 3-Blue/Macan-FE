@@ -8,11 +8,31 @@ import { Heading } from "@/components/ui/Heading";
 import { Section } from "@/components/ui/Section";
 import { ServiceCTA } from "@/components/sections/ServiceCTA";
 import { routing } from "@/i18n/routing";
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import {
   getService,
   getPublishedServiceSlugs,
   type Locale,
 } from "@/lib/content";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const service = await getService(slug, locale as Locale);
+  if (!service) return {};
+  return buildMetadata({
+    locale: locale as "en" | "fa" | "az" | "tr",
+    path: `/services/${slug}`,
+    title: service.title,
+    description:
+      service.summary ??
+      `Learn more about MACAN's ${service.title} service.`,
+  });
+}
 
 // TODO(#28): once PR #66 (lib/projects-data.ts) merges, replace this
 // local title map with a real PROJECTS import + lookup by id. Matches the

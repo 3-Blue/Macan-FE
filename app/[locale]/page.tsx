@@ -5,12 +5,43 @@ import { ServicesTeaserGrid } from "@/components/home/ServicesTeaserGrid";
 import FeaturedProjectsCarousel from "@/components/featured-projects-carousel";
 import { TestimonialsGrid } from "@/components/home/TestimonialsGrid";
 import { ContactSection } from "@/components/sections/ContactSection";
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import {
   getServices,
   getTestimonials,
   getFeaturedProjects,
   type Locale,
 } from "@/lib/content";
+
+const HOME_META = {
+  en: {
+    title: "MACAN | Engineering, Construction, Supply & PM Solutions",
+    description:
+      "MACAN delivers engineering, construction, supply, and project management solutions across oil & gas, power, and infrastructure sectors.",
+  },
+  fa: {
+    // Best-effort draft — flag for native-speaker review.
+    title: "ماکان | راهکارهای مهندسی، ساخت، تأمین و مدیریت پروژه",
+    description:
+      "ماکان راهکارهای مهندسی، ساخت، تأمین و مدیریت پروژه را در بخش‌های نفت و گاز، برق و زیرساخت ارائه می‌دهد.",
+  },
+} as const;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const copy = locale === "fa" ? HOME_META.fa : HOME_META.en;
+  return buildMetadata({
+    locale: locale as "en" | "fa" | "az" | "tr",
+    path: "",
+    title: copy.title,
+    description: copy.description,
+  });
+}
 
 export default async function Home({
   params,
