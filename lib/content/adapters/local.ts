@@ -1,5 +1,6 @@
 import type {
   ContentSource,
+  Client,
   FeaturedProject,
   Industry,
   LeadershipMember,
@@ -15,6 +16,7 @@ import { featuredProjects as projectRecords } from "@/lib/content/data/projects"
 import { leadership as leadershipRecords } from "@/lib/content/data/leadership";
 import { industriesData, type IndustryRecord } from "@/lib/industries-data";
 import { servicesData } from "@/lib/services-data";
+import { clientRecords, type ClientRecord } from "@/lib/content/data/clients";
 
 /**
  * Local content adapter — resolves the in-repo, localized data modules into
@@ -37,6 +39,16 @@ function resolveIndustry(record: IndustryRecord, locale: Locale): Industry {
     relatedProjectSlugs: record.relatedProjectSlugs,
     order: record.order,
     published: record.published,
+  };
+}
+
+function resolveClient(record: ClientRecord, locale: Locale): Client {
+  return {
+    id: record.id,
+    name: resolve(record.name, locale),
+    logoUrl: record.logoUrl,
+    link: record.link,
+    category: resolve(record.category, locale),
   };
 }
 
@@ -114,5 +126,11 @@ export const localContentSource: ContentSource = {
         bio: resolve(l.bio, locale),
         photo: l.photo,
       }));
+  },
+    async getClients(locale: Locale): Promise<Client[]> {
+    return clientRecords
+      .filter((c) => c.published)
+      .sort((a, b) => a.order - b.order)
+      .map((c) => resolveClient(c, locale));
   },
 };
