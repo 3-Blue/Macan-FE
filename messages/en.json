@@ -187,7 +187,11 @@
     "retry": "Try again",
     "cta": "Back to homepage"
   },
-    "ServicesPage": {
+  "ClientsSection": {
+  "eyebrow": "Trusted By",
+  "heading": "Our Clients & Partners"
+},
+  "ServicesPage": {
   "eyebrow": "What we do",
   "heading": "Our solution ecosystem",
   "intro": "Our services form one connected supply chain — from sourcing and importing materials and equipment across global markets, to engineering, construction execution, and full project delivery. As an import-export partner, we bridge international supply with on-the-ground execution, so every phase moves as one seamless operation.",
