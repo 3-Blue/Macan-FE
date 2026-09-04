@@ -1,6 +1,6 @@
 import type { Industry } from "@/lib/types/industry";
 import type { Service as ServiceDetailModel } from "@/lib/types/service";
-
+import type { ClientPartner } from "@/lib/types/client-partner";
 /**
  * Content layer — types.
  *
@@ -77,6 +77,7 @@ export interface LeadershipMember {
 // Industry is already a plain, string-based model in lib/types; re-export it so
 // callers have a single import site for content types.
 export type { Industry };
+export type { ClientPartner };
 
 // Same pattern for the service detail model (#23). Named `ServiceDetail` to
 // avoid clashing with the thin `Service` view model above, which powers the
@@ -99,4 +100,12 @@ export interface ContentSource {
   /** Slugs of published services, for generateStaticParams. */
   getPublishedServiceSlugs(): Promise<string[]>;
   getLeadership(locale: Locale): Promise<LeadershipMember[]>;
+  getClients(locale: Locale): Promise<ClientPartner[]>;
 }
+
+// (added alongside the existing Industry/ServiceDetailModel imports)
+
+
+// (added alongside the existing `export type { Industry };`)
+
+// inside ContentSource:
