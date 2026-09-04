@@ -7,6 +7,7 @@ import type {
   Service,
   ServiceDetail,
   Testimonial,
+  Post,
 } from "@/lib/content/types";
 import { resolve } from "@/lib/content/types";
 import { services as serviceRecords } from "@/lib/content/data/services";
@@ -15,6 +16,7 @@ import { featuredProjects as projectRecords } from "@/lib/content/data/projects"
 import { leadership as leadershipRecords } from "@/lib/content/data/leadership";
 import { industriesData, type IndustryRecord } from "@/lib/industries-data";
 import { servicesData } from "@/lib/services-data";
+import { postsData, type PostRecord } from "@/lib/posts-data";
 
 /**
  * Local content adapter — resolves the in-repo, localized data modules into
@@ -39,7 +41,18 @@ function resolveIndustry(record: IndustryRecord, locale: Locale): Industry {
     published: record.published,
   };
 }
-
+function resolvePost(record: PostRecord, locale: Locale): Post {
+  return {
+    id: record.id,
+    slug: record.slug,
+    title: resolve(record.title, locale),
+    cover: record.cover,
+    body: resolve(record.body, locale),
+    author: record.author,
+    tags: record.tags,
+    date: record.date,
+  };
+}
 export const localContentSource: ContentSource = {
   async getServices(locale: Locale): Promise<Service[]> {
     return serviceRecords.map((s) => ({
@@ -114,5 +127,20 @@ export const localContentSource: ContentSource = {
         bio: resolve(l.bio, locale),
         photo: l.photo,
       }));
+  },
+    async getPosts(locale: Locale): Promise<Post[]> {
+    return postsData
+      .filter((post) => post.published)
+      .sort((a, b) => (a.date < b.date ? 1 : -1))
+      .map((post) => resolvePost(post, locale));
+  },
+
+  async getPost(slug: string, locale: Locale): Promise<Post | null> {
+    const record = postsData.find((p) => p.slug === slug && p.published);
+    return record ? resolvePost(record, locale) : null;
+  },
+
+  async getPublishedPostSlugs(): Promise<string[]> {
+    return postsData.filter((p) => p.published).map((p) => p.slug);
   },
 };
