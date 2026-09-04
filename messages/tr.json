@@ -176,6 +176,10 @@
     "retry": "Tekrar dene",
     "cta": "Ana sayfaya dön"
   },
+  "ClientsSection": {
+  "eyebrow": "Trusted By",
+  "heading": "Our Clients & Partners"
+},
   "ServicesPage": {
     "eyebrow": "Ne yapıyoruz",
     "heading": "Çözüm ekosistemimiz",

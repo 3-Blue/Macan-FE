@@ -1,8 +1,11 @@
 import { setRequestLocale } from "next-intl/server";
 import { AboutMissionVision } from "@/components/sections/AboutMissionVision";
 import { CertificationsSection } from "@/components/sections/CertificationsSection";
+import { ClientsSection } from "@/components/sections/ClientsSection";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
+import type { Locale } from "@/lib/content";
+
 const ABOUT_META = {
   en: {
     title: "About MACAN",
@@ -43,6 +46,7 @@ export default async function About({
     <>
       <AboutMissionVision />
       <CertificationsSection />
+      <ClientsSection locale={locale as Locale} />
     </>
   );
 }
