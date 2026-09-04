@@ -130,11 +130,6 @@
     "body": "Tell us about your project and our team will get back to you with next steps.",
     "cta": "Get in touch"
   },
-  "ServiceCTA": {
-    "heading": "Interested in our {service} services?",
-    "body": "Tell us about your project and our team will get back to you with next steps.",
-    "cta": "Get in touch"
-  },
   "ProjectDetailPage": {
     "featuredBadge": "Case Study",
     "metaClient": "Client",
@@ -197,7 +192,13 @@
   "eyebrow": "Our work",
   "heading": "Projects we've delivered",
   "intro": "A selection of engineering, construction, supply, and project-management work across the sectors we serve.",
-  "viewProject": "View project"
+  "viewProject": "View project",
+  "filterSector": "Sector",
+  "filterService": "Service",
+  "filterYear": "Year",
+  "filterLocation": "Location",
+  "filterAll": "All",
+  "noResults": "No projects match the selected filters."
 },
   "CookieConsent": {
       "ariaLabel": "Cookie consent",

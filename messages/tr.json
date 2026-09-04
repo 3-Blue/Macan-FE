@@ -182,11 +182,17 @@
     "intro": "Hizmetlerimiz tek bir bağlantılı tedarik zinciri oluşturur — küresel pazarlardan malzeme ve ekipman tedariki ve ithalatından, mühendislik, inşaat uygulaması ve eksiksiz proje teslimine kadar. İhracat-ithalat ortağı olarak, uluslararası tedariki sahadaki uygulamayla birleştiriyoruz, böylece her aşama tek ve kesintisiz bir operasyon gibi ilerliyor.",
     "learnMore": "Daha fazla bilgi"
   },
-    "ProjectsPage": {
+  "ProjectsPage": {
   "eyebrow": "Çalışmalarımız",
   "heading": "Tamamladığımız projeler",
   "intro": "Farklı sektörlerde mühendislik, inşaat, tedarik ve proje yönetimi çalışmalarımızdan seçmeler.",
-  "viewProject": "Projeyi görüntüle"
+  "viewProject": "Projeyi görüntüle",
+  "filterSector": "Sektör",
+  "filterService": "Hizmet",
+  "filterYear": "Yıl",
+  "filterLocation": "Konum",
+  "filterAll": "Tümü",
+  "noResults": "Seçilen filtrelerle eşleşen proje yok."
   },
   "CookieConsent": {
     "ariaLabel": "Çerez onayı",
