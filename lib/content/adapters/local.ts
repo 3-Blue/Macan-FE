@@ -1,5 +1,6 @@
 import type {
   ContentSource,
+  Client,
   FeaturedProject,
   Industry,
   LeadershipMember,
@@ -17,6 +18,7 @@ import { leadership as leadershipRecords } from "@/lib/content/data/leadership";
 import { industriesData, type IndustryRecord } from "@/lib/industries-data";
 import { servicesData } from "@/lib/services-data";
 import { postsData, type PostRecord } from "@/lib/posts-data";
+import { clientRecords, type ClientRecord } from "@/lib/content/data/clients";
 
 /**
  * Local content adapter — resolves the in-repo, localized data modules into
@@ -41,6 +43,7 @@ function resolveIndustry(record: IndustryRecord, locale: Locale): Industry {
     published: record.published,
   };
 }
+
 function resolvePost(record: PostRecord, locale: Locale): Post {
   return {
     id: record.id,
@@ -53,6 +56,17 @@ function resolvePost(record: PostRecord, locale: Locale): Post {
     date: record.date,
   };
 }
+
+function resolveClient(record: ClientRecord, locale: Locale): Client {
+  return {
+    id: record.id,
+    name: resolve(record.name, locale),
+    logoUrl: record.logoUrl,
+    link: record.link,
+    category: resolve(record.category, locale),
+  };
+}
+
 export const localContentSource: ContentSource = {
   async getServices(locale: Locale): Promise<Service[]> {
     return serviceRecords.map((s) => ({
@@ -86,7 +100,7 @@ export const localContentSource: ContentSource = {
     }));
   },
 
-    async getIndustries(locale: Locale): Promise<Industry[]> {
+  async getIndustries(locale: Locale): Promise<Industry[]> {
     return industriesData
       .filter((industry) => industry.published)
       .sort((a, b) => a.order - b.order)
@@ -104,7 +118,7 @@ export const localContentSource: ContentSource = {
       .map((industry) => industry.slug);
   },
 
-    // Service detail content is not yet localized (single-language source
+  // Service detail content is not yet localized (single-language source
   // data), same as industries — drop-in swap once it moves into the CMS.
   async getService(slug: string): Promise<ServiceDetail | null> {
     return servicesData.find((s) => s.slug === slug && s.published) ?? null;
@@ -128,7 +142,8 @@ export const localContentSource: ContentSource = {
         photo: l.photo,
       }));
   },
-    async getPosts(locale: Locale): Promise<Post[]> {
+
+  async getPosts(locale: Locale): Promise<Post[]> {
     return postsData
       .filter((post) => post.published)
       .sort((a, b) => (a.date < b.date ? 1 : -1))
@@ -142,5 +157,12 @@ export const localContentSource: ContentSource = {
 
   async getPublishedPostSlugs(): Promise<string[]> {
     return postsData.filter((p) => p.published).map((p) => p.slug);
+  },
+
+  async getClients(locale: Locale): Promise<Client[]> {
+    return clientRecords
+      .filter((c) => c.published)
+      .sort((a, b) => a.order - b.order)
+      .map((c) => resolveClient(c, locale));
   },
 };
