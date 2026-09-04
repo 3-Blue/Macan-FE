@@ -1,4 +1,5 @@
 import type {
+  ClientPartner,
   ContentSource,
   FeaturedProject,
   Industry,
@@ -15,6 +16,7 @@ import { featuredProjects as projectRecords } from "@/lib/content/data/projects"
 import { leadership as leadershipRecords } from "@/lib/content/data/leadership";
 import { industriesData, type IndustryRecord } from "@/lib/industries-data";
 import { servicesData } from "@/lib/services-data";
+import { clientsData, type ClientPartnerRecord } from "@/lib/clients-data";
 
 /**
  * Local content adapter — resolves the in-repo, localized data modules into
@@ -39,7 +41,17 @@ function resolveIndustry(record: IndustryRecord, locale: Locale): Industry {
     published: record.published,
   };
 }
-
+function resolveClient(record: ClientPartnerRecord, locale: Locale): ClientPartner {
+  return {
+    id: record.id,
+    name: record.name,
+    logo: record.logo,
+    link: record.link,
+    category: resolve(record.category, locale),
+    order: record.order,
+    published: record.published,
+  };
+}
 export const localContentSource: ContentSource = {
   async getServices(locale: Locale): Promise<Service[]> {
     return serviceRecords.map((s) => ({
@@ -103,7 +115,7 @@ export const localContentSource: ContentSource = {
       .map((service) => service.slug);
   },
 
-  async getLeadership(locale: Locale): Promise<LeadershipMember[]> {
+    async getLeadership(locale: Locale): Promise<LeadershipMember[]> {
     return leadershipRecords
       .filter((l) => l.published)
       .sort((a, b) => a.order - b.order)
@@ -114,5 +126,12 @@ export const localContentSource: ContentSource = {
         bio: resolve(l.bio, locale),
         photo: l.photo,
       }));
+  },
+
+  async getClients(locale: Locale): Promise<ClientPartner[]> {
+    return clientsData
+      .filter((c) => c.published)
+      .sort((a, b) => a.order - b.order)
+      .map((c) => resolveClient(c, locale));
   },
 };
