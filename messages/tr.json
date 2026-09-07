@@ -194,6 +194,14 @@
   "filterAll": "Tümü",
   "noResults": "Seçilen filtrelerle eşleşen proje yok."
   },
+  "NewsPage": {
+  "eyebrow": "Haberlerimiz",
+  "heading": "Son haberler ve gelişmeler",
+  "intro": "Macan'ın son başarılarını, ortaklıklarını ve gelişmelerini takip edin.",
+  "readMore": "Devamını oku",
+  "allCategories": "Tümü",
+  "noPosts": "Bu kategoride haber bulunamadı."
+},
   "CookieConsent": {
     "ariaLabel": "Çerez onayı",
     "message": "Deneyiminizi geliştirmek ve site trafiğini analiz etmek için çerezler kullanıyoruz. Zorunlu olmayan çerezleri kabul edebilir veya reddedebilirsiniz.",

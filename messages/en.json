@@ -200,6 +200,14 @@
   "filterAll": "All",
   "noResults": "No projects match the selected filters."
 },
+"NewsPage": {
+  "eyebrow": "Our news",
+  "heading": "Latest news and updates",
+  "intro": "Stay up to date with Macan's latest achievements, partnerships, and company news.",
+  "readMore": "Read more",
+  "allCategories": "All",
+  "noPosts": "No posts found in this category."
+},
   "CookieConsent": {
       "ariaLabel": "Cookie consent",
       "message": "We use cookies to improve your experience and analyze site traffic. You can accept or decline non-essential cookies.",
