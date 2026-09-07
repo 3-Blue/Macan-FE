@@ -4,6 +4,14 @@ import type { Locale } from "@/lib/content/types";
  * Raw, localized client/partner record — the CMS-agnostic source shape.
  * Resolved into the plain `Client` view model by adapters (see local.ts).
  */
+/**
+ * Raw, localized client/partner record — the CMS-agnostic source shape.
+ * Resolved into the plain `Client` view model by adapters (see local.ts).
+ *
+ * NOTE: names, categories, and logos below are placeholders pending real
+ * assets/copy from MACAN marketing/leadership (tracked in issue #34).
+ * Placeholder logo PNGs added so the About page doesn't 404 in the meantime.
+ */
 export interface ClientRecord {
   id: string;
   name: { en: string } & Partial<Record<Locale, string>>;
