@@ -198,6 +198,14 @@
   "filterAll": "Hamısı",
   "noResults": "Seçilmiş filtrlərə uyğun layihə tapılmadı."
   },
+  "NewsPage": {
+  "eyebrow": "Xəbərlərimiz",
+  "heading": "Son xəbərlər və yeniliklər",
+  "intro": "Macan-ın son nailiyyətləri, tərəfdaşlıqları və yeniliklərindən xəbərdar olun.",
+  "readMore": "Ətraflı oxu",
+  "allCategories": "Hamısı",
+  "noPosts": "Bu kateqoriyada xəbər tapılmadı."
+},
   "CookieConsent": {
     "ariaLabel": "Kuki razılığı",
     "message": "Təcrübənizi yaxşılaşdırmaq və sayt trafikini təhlil etmək üçün kukilərdən istifadə edirik. Vacib olmayan kukiləri qəbul və ya rədd edə bilərsiniz.",
