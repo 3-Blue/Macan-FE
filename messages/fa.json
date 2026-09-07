@@ -176,6 +176,10 @@
     "retry": "تلاش مجدد",
     "cta": "بازگشت به صفحه اصلی"
   },
+  "ClientsSection": {
+  "eyebrow": "مورد اعتماد",
+  "heading": "مشتریان و شرکای ما"
+},
   "ServicesPage": {
     "eyebrow": "کارهای ما",
     "heading": "اکوسیستم راهکارهای ما",

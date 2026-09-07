@@ -19,6 +19,7 @@ export type {
   ProjectStatus,
   LeadershipMember,
   Post,
+  Client,
 } from "@/lib/content/types";
 
 export function getServices(locale: Locale) {
@@ -56,6 +57,7 @@ export function getPublishedServiceSlugs() {
 export function getLeadership(locale: Locale) {
   return getContentSource().getLeadership(locale);
 }
+
 export function getPosts(locale: Locale) {
   return getContentSource().getPosts(locale);
 }
@@ -66,4 +68,8 @@ export function getPost(slug: string, locale: Locale) {
 
 export function getPublishedPostSlugs() {
   return getContentSource().getPublishedPostSlugs();
+}
+
+export function getClients(locale: Locale) {
+  return getContentSource().getClients(locale);
 }
