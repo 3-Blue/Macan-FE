@@ -206,6 +206,11 @@
   "allCategories": "Tümü",
   "noPosts": "Bu kategoride haber bulunamadı."
 },
+  "PostDetailPage": {
+  "backToNews": "← Haberlere dön",
+  "byAuthor": "Yazar: {author}",
+  "relatedPostsHeading": "İlgili haberler"
+},
   "CookieConsent": {
     "ariaLabel": "Çerez onayı",
     "message": "Deneyiminizi geliştirmek ve site trafiğini analiz etmek için çerezler kullanıyoruz. Zorunlu olmayan çerezleri kabul edebilir veya reddedebilirsiniz.",

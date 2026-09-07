@@ -206,6 +206,11 @@
   "allCategories": "Hamısı",
   "noPosts": "Bu kateqoriyada xəbər tapılmadı."
 },
+  "PostDetailPage": {
+  "backToNews": "← Xəbərlərə qayıt",
+  "byAuthor": "Müəllif: {author}",
+  "relatedPostsHeading": "Əlaqəli xəbərlər"
+},
   "CookieConsent": {
     "ariaLabel": "Kuki razılığı",
     "message": "Təcrübənizi yaxşılaşdırmaq və sayt trafikini təhlil etmək üçün kukilərdən istifadə edirik. Vacib olmayan kukiləri qəbul və ya rədd edə bilərsiniz.",
