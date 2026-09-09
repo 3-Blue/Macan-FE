@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
-import { getPublishedIndustrySlugs } from "@/lib/content";
+import { getPublishedIndustrySlugs, getPublishedPostSlugs } from "@/lib/content";
 import { PROJECTS_MOCK } from "@/lib/projects-mock-data";
 import { siteUrl } from "@/lib/site";
 
@@ -13,6 +13,7 @@ const STATIC_PATHS = [
   "/services",
   "/industries",
   "/projects",
+  "/news",
   "/contact",
   "/privacy",
   "/terms",
@@ -21,12 +22,13 @@ const STATIC_PATHS = [
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const industrySlugs = await getPublishedIndustrySlugs();
   const projectSlugs = PROJECTS_MOCK.map((project) => project.slug);
+  const postSlugs = await getPublishedPostSlugs();
   const paths = [
     ...STATIC_PATHS,
     ...industrySlugs.map((slug) => `/industries/${slug}`),
     ...projectSlugs.map((slug) => `/projects/${slug}`),
+    ...postSlugs.map((slug) => `/news/${slug}`),
   ];
-
   const now = new Date();
 
   return paths.map((path) => {

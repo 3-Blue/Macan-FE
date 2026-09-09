@@ -11,7 +11,8 @@ import { Section } from "@/components/ui/Section";
 import { RelatedPosts } from "@/components/news/RelatedPosts";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, articleJsonLd } from "@/lib/seo";
+import { siteUrl } from "@/lib/site";
 import {
   getPost,
   getPosts,
@@ -70,6 +71,9 @@ export async function generateMetadata({
     title: post.title,
     description: excerpt(post.body),
     image: post.cover.url,
+    type: "article",
+    publishedTime: new Date(post.date).toISOString(),
+    author: post.author,
   });
 }
 
@@ -93,8 +97,27 @@ export default async function PostDetailPage({
   const allPosts = await getPosts(locale as Locale);
   const relatedPosts = findRelatedPosts(post, allPosts);
 
+    const articleUrl = `${siteUrl}/${locale}/news/${slug}`;
+
   return (
     <Section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            articleJsonLd({
+            title: post.title,
+            description: excerpt(post.body),
+            url: articleUrl,
+            image: post.cover.url.startsWith("http")
+            ? post.cover.url
+            : `${siteUrl}${post.cover.url}`,
+            author: post.author,
+            datePublished: post.date,
+            }),
+          ),
+        }}
+      />
       <Container>
         <Typography variant="body2" sx={{ mb: 3 }}>
           <Link href="/news">{t("backToNews")}</Link>
