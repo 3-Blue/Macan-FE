@@ -212,6 +212,11 @@
   "allCategories": "All",
   "noPosts": "No posts found in this category."
 },
+  "PostDetailPage": {
+  "backToNews": "← Back to news",
+  "byAuthor": "By {author}",
+  "relatedPostsHeading": "Related posts"
+},
   "CookieConsent": {
       "ariaLabel": "Cookie consent",
       "message": "We use cookies to improve your experience and analyze site traffic. You can accept or decline non-essential cookies.",
