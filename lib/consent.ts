@@ -3,8 +3,9 @@
  *
  * Consent lives in a first-party cookie and is read entirely on the client, so
  * pages stay statically renderable (no cookies() in the server layout). The
- * banner and the analytics loader both subscribe here, so accepting/declining
- * updates the UI immediately — no page reload.
+ * banner subscribes here so accepting/declining updates the UI immediately —
+ * no page reload. (Analytics no longer gates on this — Plausible is
+ * cookieless — but other legal-disclosure UI may still depend on it.)
  */
 
 export const CONSENT_COOKIE_NAME = "cookie-consent";
