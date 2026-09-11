@@ -53,6 +53,7 @@ function resolvePost(record: PostRecord, locale: Locale): Post {
     body: resolve(record.body, locale),
     author: record.author,
     tags: record.tags,
+    category: resolve(record.category, locale),
     date: record.date,
   };
 }

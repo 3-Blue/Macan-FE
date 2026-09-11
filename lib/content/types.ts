@@ -85,6 +85,7 @@ export interface Post {
   body: string;
   author: string;
   tags: string[];
+  category: string;
   date: string;
 }
 
