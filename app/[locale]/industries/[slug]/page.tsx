@@ -10,22 +10,13 @@ import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
+import { PROJECTS_MOCK } from "@/lib/projects-mock-data";
 import {
   getIndustry,
   getPublishedIndustrySlugs,
   getServices,
   type Locale,
 } from "@/lib/content";
-
-// TODO(#28): once PR #66 (lib/projects-data.ts) merges, replace this
-// local title map with a real PROJECTS import + lookup by id.
-const PROJECT_TITLES: Record<string, string> = {
-  p1: "Offshore Platform Refit",
-  p2: "Combined-Cycle Plant Expansion",
-  p3: "Highway Interchange Upgrade",
-  p4: "Modular Processing Skid Supply",
-  p5: "District Cooling Network",
-};
 
 export async function generateStaticParams() {
   const slugs = await getPublishedIndustrySlugs();
@@ -67,9 +58,9 @@ export default async function IndustryDetailPage({
   const t = await getTranslations("IndustryDetailPage");
 
   const relatedProjects = industry.relatedProjectSlugs
-    .map((id) => ({ id, title: PROJECT_TITLES[id] }))
-    .filter((project): project is { id: string; title: string } =>
-      Boolean(project.title),
+    .map((id) => PROJECTS_MOCK.find((project) => project.id === id))
+    .filter((project): project is (typeof PROJECTS_MOCK)[number] =>
+      Boolean(project),
     );
 
   const allServices = await getServices(locale as Locale);
@@ -129,11 +120,9 @@ export default async function IndustryDetailPage({
             <Heading level={2}>{t("relatedProjectsHeading")}</Heading>
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, mt: 2 }}>
               {relatedProjects.map((project) => (
-                <Chip
-                  key={project.id}
-                  label={project.title}
-                  variant="outlined"
-                />
+                <Link key={project.id} href={`/projects/${project.slug}`}>
+                  <Chip label={project.title} variant="outlined" clickable />
+                </Link>
               ))}
             </Box>
           </Box>
