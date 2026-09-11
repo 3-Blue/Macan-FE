@@ -7,9 +7,11 @@ import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { Section } from "@/components/ui/Section";
 import { ServiceCTA } from "@/components/sections/ServiceCTA";
+import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
+import { PROJECTS_MOCK } from "@/lib/projects-mock-data";
 import {
   getService,
   getPublishedServiceSlugs,
@@ -34,19 +36,8 @@ export async function generateMetadata({
   });
 }
 
-// TODO(#28): once PR #66 (lib/projects-data.ts) merges, replace this
-// local title map with a real PROJECTS import + lookup by id. Matches the
-// same pattern/TODO used in the industry detail page.
-const PROJECT_TITLES: Record<string, string> = {
-  p1: "Offshore Platform Refit",
-  p2: "Combined-Cycle Plant Expansion",
-  p3: "Highway Interchange Upgrade",
-  p4: "Modular Processing Skid Supply",
-  p5: "District Cooling Network",
-};
-
-// TODO(#24): once cross-linking lands, replace this local title map with a
-// real industries lookup (e.g. via getIndustries()) instead of hardcoding.
+// TODO(#24): once industries cross-linking gets a real lookup, replace this
+// local title map with getIndustries() instead of hardcoding.
 const INDUSTRY_TITLES: Record<string, string> = {
   "oil-and-gas": "Oil & Gas",
   power: "Power",
@@ -78,8 +69,8 @@ export default async function ServiceDetailPage({
   const t = await getTranslations("ServiceDetailPage");
 
   const relatedProjects = service.relatedProjectSlugs
-    .map((id) => ({ id, title: PROJECT_TITLES[id] }))
-    .filter((project): project is { id: string; title: string } => Boolean(project.title));
+    .map((id) => PROJECTS_MOCK.find((project) => project.id === id))
+    .filter((project): project is (typeof PROJECTS_MOCK)[number] => Boolean(project));
 
   const relatedIndustries = service.relatedIndustrySlugs
     .map((slug) => ({ slug, title: INDUSTRY_TITLES[slug] }))
@@ -113,7 +104,9 @@ export default async function ServiceDetailPage({
             <Heading level={2}>{t("relatedProjectsHeading")}</Heading>
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, mt: 2 }}>
               {relatedProjects.map((project) => (
-                <Chip key={project.id} label={project.title} variant="outlined" />
+                <Link key={project.id} href={`/projects/${project.slug}`}>
+                  <Chip label={project.title} variant="outlined" clickable />
+                </Link>
               ))}
             </Box>
           </Box>
