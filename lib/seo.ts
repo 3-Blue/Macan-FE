@@ -19,6 +19,12 @@ interface BuildMetadataParams {
   description: string;
   /** Optional OG image path, defaults to sitewide default if omitted */
   image?: string;
+  /** OG type. Defaults to "website"; use "article" for post detail pages. */
+  type?: "website" | "article";
+  /** ISO 8601 date string. Required when type is "article". */
+  publishedTime?: string;
+  /** Author display name. Only used when type is "article". */
+  author?: string;
 }
 
 /**
@@ -31,6 +37,9 @@ export function buildMetadata({
   title,
   description,
   image,
+  type,
+  publishedTime,
+  author,
 }: BuildMetadataParams): Metadata {
   const canonicalUrl = `${siteUrl}/${locale}${path}`;
 
@@ -46,14 +55,23 @@ export function buildMetadata({
     alternates: {
       canonical: canonicalUrl,
       languages,
+      types: {
+        "application/rss+xml": `${siteUrl}/rss.xml`,
+      },
     },
-    openGraph: {
+      openGraph: {
       title,
       description,
       url: canonicalUrl,
       siteName: "MACAN",
       locale: OG_LOCALE_MAP[locale],
-      type: "website",
+      ...(type === "article"
+        ? {
+            type: "article" as const,
+            ...(publishedTime ? { publishedTime } : {}),
+            ...(author ? { authors: [author] } : {}),
+          }
+        : { type: "website" as const }),
       ...(image ? { images: [{ url: image }] } : {}),
     },
     twitter: {
@@ -74,5 +92,43 @@ export function organizationJsonLd() {
     url: siteUrl,
     description:
       "MACAN provides engineering, construction, supply, and project management solutions.",
+  };
+}
+
+interface ArticleJsonLdParams {
+  title: string;
+  description: string;
+  url: string;
+  image?: string;
+  author: string;
+  datePublished: string;
+}
+
+/** Article JSON-LD for a single post detail page. */
+export function articleJsonLd({
+  title,
+  description,
+  url,
+  image,
+  author,
+  datePublished,
+}: ArticleJsonLdParams) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description,
+    url,
+    ...(image ? { image: [image] } : {}),
+    author: {
+      "@type": "Person",
+      name: author,
+    },
+    datePublished: new Date(datePublished).toISOString(),
+    publisher: {
+      "@type": "Organization",
+      name: "MACAN",
+      url: siteUrl,
+    },
   };
 }
