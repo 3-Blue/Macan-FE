@@ -5,6 +5,10 @@ import type { Localized } from "@/lib/content/types";
  * record with Localized<T> on the translatable fields, resolved into a
  * plain view model by the local adapter. author/tags are not localized —
  * revisit if per-locale tags are needed later.
+ *
+ * `category` (#38) is the true single-select filter facet for the news
+ * listing page — distinct from `tags`, which remain free-form and
+ * multi-valued for future use (e.g. related-posts matching).
  */
 export interface PostRecord {
   id: string;
@@ -17,6 +21,7 @@ export interface PostRecord {
   body: Localized<string>;
   author: string;
   tags: string[];
+  category: Localized<string>;
   /** ISO 8601 date string, e.g. "2026-08-15" */
   date: string;
   published: boolean;
@@ -40,6 +45,10 @@ export const postsData: PostRecord[] = [
     },
     author: "Macan Communications Team",
     tags: ["award", "company-news"],
+    category: {
+      en: "Company News",
+      fa: "اخبار شرکت",
+    },
     date: "2026-08-15",
     published: true,
   },
@@ -60,6 +69,10 @@ export const postsData: PostRecord[] = [
     },
     author: "Macan Communications Team",
     tags: ["partnership", "oil-and-gas"],
+    category: {
+      en: "Partnerships",
+      fa: "همکاری‌ها",
+    },
     date: "2026-07-02",
     published: true,
   },
