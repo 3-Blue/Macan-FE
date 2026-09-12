@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
+import { saveSubmission } from "@/lib/submissions-db";
 
 const contactSchema = z.object({
   name: z.string().min(1).max(200),
@@ -76,7 +77,15 @@ export async function POST(request: NextRequest) {
   if (company) {
     return NextResponse.json({ success: true });
   }
-
+  // Persist first, independent of whether the email send succeeds — a
+  // durable record matters more than a duplicate row on rare retries.
+  try {
+    saveSubmission({ name, email, subject, message, ip });
+  } catch (err) {
+    console.error("Failed to save submission to DB:", err);
+    // Don't fail the request over storage — the email path below is the
+    // primary notification channel; storage is a backup, not a hard gate.
+  }
   const apiKey = process.env.RESEND_API_KEY;
   const toAddress = process.env.CONTACT_EMAIL_TO;
   const fromAddress = process.env.CONTACT_EMAIL_FROM;

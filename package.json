@@ -1,6 +1,7 @@
 {
   "name": "macan-fe",
   "version": "0.1.0",
+  "packageManager": "npm@11.19.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -17,6 +18,7 @@
     "@mui/icons-material": "9.2.0",
     "@mui/material": "9.2.0",
     "@mui/material-nextjs": "9.1.1",
+    "better-sqlite3": "11.10.0",
     "framer-motion": "12.42.2",
     "next": "16.2.9",
     "next-intl": "4.13.2",
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/better-sqlite3": "9.6.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
