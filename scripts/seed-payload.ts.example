@@ -1,0 +1,223 @@
+// scripts/seed-payload.ts  (rename from .example after installing Payload —
+// see docs/CMS-PAYLOAD.md for the install steps this depends on)
+//
+// One-time migration script: reads the existing in-repo data modules and
+// creates matching documents in Payload via the Local API. Run once, after
+// Payload + Postgres are installed and payload.config.ts is active:
+//
+//   npx tsx scripts/seed-payload.ts
+//
+// Safe to re-run against an empty database only — it does not check for
+// existing documents, so running it twice will create duplicates. Add a
+// `where` existence check per collection if you need idempotency.
+//
+// Pattern for localized fields: Payload's Local API resolves a field for
+// whichever `locale` you pass at create-time. To seed all four locales for
+// one field, create the document once with the `en` (default) values, then
+// call `payload.update` once per additional locale with just that locale's
+// overrides. Fields with no translation yet are simply skipped — Payload's
+// `localization.fallback: true` (already set in payload.config.ts.example)
+// means they read back as `en` automatically, matching how `Localized<T>`
+// + `resolve()` already behaves in the local adapter today.
+
+import { getPayload } from "payload";
+import config from "@payload-config";
+
+import { industriesData } from "@/lib/industries-data";
+import { services as thinServices } from "@/lib/content/data/services";
+import { testimonials } from "@/lib/content/data/testimonials";
+import { featuredProjects } from "@/lib/content/data/projects";
+import type { Locale } from "@/lib/content/types";
+
+const ADDITIONAL_LOCALES: Locale[] = ["fa", "az", "tr"];
+
+async function seedIndustries(payload: Awaited<ReturnType<typeof getPayload>>) {
+  for (const industry of industriesData) {
+    const created = await payload.create({
+      collection: "industries",
+      locale: "en",
+      data: {
+        slug: industry.slug,
+        name: industry.name.en,
+        summary: industry.summary.en,
+        icon: industry.icon,
+        description: industry.description.en,
+        challenges: industry.challenges.en.map((item) => ({ item })),
+        solutions: industry.solutions.en.map((item) => ({ item })),
+        order: industry.order,
+        // relatedProjects: left empty — Payload relationships need the
+        // target Projects docs to exist first. Wire this up after both
+        // collections are seeded, matching industry.relatedProjectSlugs.
+      },
+    });
+
+    for (const locale of ADDITIONAL_LOCALES) {
+      const hasTranslation =
+        industry.name[locale] || industry.summary[locale] || industry.description[locale];
+      if (!hasTranslation) continue; // nothing authored yet for this locale — let fallback handle it
+
+      await payload.update({
+        collection: "industries",
+        id: created.id,
+        locale,
+        data: {
+          name: industry.name[locale] ?? industry.name.en,
+          summary: industry.summary[locale] ?? industry.summary.en,
+          description: industry.description[locale] ?? industry.description.en,
+          challenges: (industry.challenges[locale] ?? industry.challenges.en).map((item) => ({
+            item,
+          })),
+          solutions: (industry.solutions[locale] ?? industry.solutions.en).map((item) => ({
+            item,
+          })),
+        },
+      });
+    }
+  }
+  console.log(`Seeded ${industriesData.length} industries.`);
+}
+
+async function seedServices(payload: Awaited<ReturnType<typeof getPayload>>) {
+  // NOTE: this seeds the THIN service model (slug/title/description) from
+  // lib/content/data/services.ts, which is what the scaffolded Services
+  // collection (payload/collections/Services.ts.example) currently supports.
+  //
+  // It does NOT seed lib/services-data.ts (the richer service-detail model
+  // with summary/body/icon/gallery/relatedProjectSlugs/relatedIndustrySlugs
+  // used by the /services/[slug] detail page) — the Services collection
+  // schema doesn't have those fields yet. Extending the collection schema
+  // to cover the detail page is separate scope; track it alongside the
+  // Payload-install issue before relying on this for the detail page.
+  for (const service of thinServices) {
+    const created = await payload.create({
+      collection: "services",
+      locale: "en",
+      data: {
+        slug: service.slug,
+        title: service.title.en,
+        description: service.description.en,
+      },
+    });
+
+    for (const locale of ADDITIONAL_LOCALES) {
+      if (!service.title[locale] && !service.description[locale]) continue;
+      await payload.update({
+        collection: "services",
+        id: created.id,
+        locale,
+        data: {
+          title: service.title[locale] ?? service.title.en,
+          description: service.description[locale] ?? service.description.en,
+        },
+      });
+    }
+  }
+  console.log(`Seeded ${thinServices.length} services (thin/listing model only).`);
+}
+
+async function seedTestimonials(payload: Awaited<ReturnType<typeof getPayload>>) {
+  for (const testimonial of testimonials) {
+    const created = await payload.create({
+      collection: "testimonials",
+      locale: "en",
+      data: {
+        quote: testimonial.quote.en,
+        name: testimonial.name,
+        role: testimonial.role.en,
+        initials: testimonial.initials,
+      },
+    });
+
+    for (const locale of ADDITIONAL_LOCALES) {
+      if (!testimonial.quote[locale] && !testimonial.role[locale]) continue;
+      await payload.update({
+        collection: "testimonials",
+        id: created.id,
+        locale,
+        data: {
+          quote: testimonial.quote[locale] ?? testimonial.quote.en,
+          role: testimonial.role[locale] ?? testimonial.role.en,
+        },
+      });
+    }
+  }
+  console.log(`Seeded ${testimonials.length} testimonials.`);
+}
+
+async function seedFeaturedProjects(payload: Awaited<ReturnType<typeof getPayload>>) {
+  // NOTE: this seeds lib/content/data/projects.ts (the home-page carousel
+  // model: title/client/sector/location/outcome/status), which matches the
+  // scaffolded Projects collection fields.
+  //
+  // It does NOT seed lib/projects-mock-data.ts (PROJECTS_MOCK — the richer
+  // model behind /projects and /projects/[slug], with gallery, an outcomes
+  // array, scope, service, and year). The Projects collection schema
+  // doesn't have those fields yet. Extending it is separate scope, needed
+  // before Payload can back the projects listing/detail pages.
+  for (const project of featuredProjects) {
+    const created = await payload.create({
+      collection: "projects",
+      locale: "en",
+      data: {
+        title: project.title.en,
+        client: project.client.en,
+        sector: project.sector.en,
+        location: project.location.en,
+        outcome: project.outcome.en,
+        status: project.status,
+        featured: true,
+        order: 0,
+      },
+    });
+
+    for (const locale of ADDITIONAL_LOCALES) {
+      const hasTranslation =
+        project.title[locale] || project.client[locale] || project.sector[locale];
+      if (!hasTranslation) continue;
+
+      await payload.update({
+        collection: "projects",
+        id: created.id,
+        locale,
+        data: {
+          title: project.title[locale] ?? project.title.en,
+          client: project.client[locale] ?? project.client.en,
+          sector: project.sector[locale] ?? project.sector.en,
+          location: project.location[locale] ?? project.location.en,
+          outcome: project.outcome[locale] ?? project.outcome.en,
+        },
+      });
+    }
+  }
+  console.log(`Seeded ${featuredProjects.length} featured projects.`);
+}
+
+// --- Not yet seedable: no matching Payload collection exists ---
+//
+// These three content types are live on the site (via the local adapter)
+// but have no scaffolded collection under payload/collections/ yet. Adding
+// them is schema work, not data-mapping work, so it belongs with the
+// Payload-install issue, not this migration script. Once a collection
+// exists for each, a seedX() function following the pattern above can be
+// added here in a small follow-up PR:
+//
+//   - Posts / news  (source: lib/posts-data.ts — Closes #37, PR #107)
+//   - Clients / partners (source: lib/content/data/clients.ts — Closes #34, PR #108)
+//   - Leadership / team bios (source: lib/content/data/leadership.ts)
+
+async function main() {
+  const payload = await getPayload({ config });
+
+  await seedIndustries(payload);
+  await seedServices(payload);
+  await seedTestimonials(payload);
+  await seedFeaturedProjects(payload);
+
+  console.log("Seed complete.");
+  process.exit(0);
+}
+
+main().catch((error) => {
+  console.error("Seed failed:", error);
+  process.exit(1);
+});
