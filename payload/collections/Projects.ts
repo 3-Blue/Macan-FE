@@ -3,7 +3,7 @@ import type { CollectionConfig } from "payload";
 
 export const Projects: CollectionConfig = {
   slug: "projects",
-  admin: { useAsTitle: "title", defaultColumns: ["title", "sector", "status", "order"] },
+  admin: { useAsTitle: "title", defaultColumns: ["title", "sector", "stage", "order"] },
   access: { read: () => true },
   versions: { drafts: true },
   fields: [
@@ -13,7 +13,7 @@ export const Projects: CollectionConfig = {
     { name: "location", type: "text", localized: true },
     { name: "outcome", type: "text", localized: true },
     {
-      name: "status",
+      name: "stage",
       type: "select",
       required: true,
       defaultValue: "completed",
