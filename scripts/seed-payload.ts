@@ -17,6 +17,9 @@
 // Services.relatedProjects/relatedIndustries) are wired in a second pass
 // at the end, once every collection's docs exist and their IDs are known.
 
+import { loadEnvConfig } from "@next/env";
+loadEnvConfig(process.cwd());
+
 import fs from "fs";
 import path from "path";
 import { getPayload } from "payload";
@@ -257,6 +260,7 @@ async function seedServices(payload: Payload, mediaCache: Map<string, string>) {
         data: {
           title: thin.title[locale] ?? thin.title.en,
           summary: thin.description[locale] ?? thin.description.en,
+          body: detail?.body ?? "",
         },
       });
     }
