@@ -20,7 +20,7 @@
 import fs from "fs";
 import path from "path";
 import { getPayload } from "payload";
-import config from "../payload.config.ts";
+import config from "../payload.config";
 
 import { industriesData } from "@/lib/industries-data";
 import { services as thinServices } from "@/lib/content/data/services";
