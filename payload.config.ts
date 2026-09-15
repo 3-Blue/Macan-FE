@@ -1,4 +1,4 @@
-// payload.config.ts  (rename from .example after installing Payload)
+// payload.config.ts
 //
 // Requires (see docs/CMS-PAYLOAD.md):
 //   payload  @payloadcms/next  @payloadcms/db-postgres
@@ -19,6 +19,9 @@ import { Services } from "./payload/collections/Services";
 import { Testimonials } from "./payload/collections/Testimonials";
 import { Projects } from "./payload/collections/Projects";
 import { Industries } from "./payload/collections/Industries";
+import { Leadership } from "./payload/collections/Leadership";
+import { Posts } from "./payload/collections/Posts";
+import { Clients } from "./payload/collections/Clients";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -28,10 +31,17 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname) },
   },
   editor: lexicalEditor(),
-  collections: [Users, Media, Services, Testimonials, Projects, Industries],
-  // Payload localization mirrors the site's next-intl locales. `find({ locale })`
-  // then returns fields already resolved to the requested locale (with fallback),
-  // which maps 1:1 onto the ContentSource return types.
+  collections: [
+    Users,
+    Media,
+    Services,
+    Testimonials,
+    Projects,
+    Industries,
+    Leadership,
+    Posts,
+    Clients,
+  ],
   localization: {
     locales: ["en", "fa", "az", "tr"],
     defaultLocale: "en",

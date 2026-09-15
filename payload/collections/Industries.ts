@@ -31,6 +31,12 @@ export const Industries: CollectionConfig = {
       relationTo: "projects",
       hasMany: true,
     },
+    {
+      name: "relatedServices",
+      type: "relationship",
+      relationTo: "services",
+      hasMany: true,
+    },
     { name: "order", type: "number", defaultValue: 0 },
   ],
 };
