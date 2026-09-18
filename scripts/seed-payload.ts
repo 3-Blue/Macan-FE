@@ -40,6 +40,14 @@ type Payload = Awaited<ReturnType<typeof getPayload>>;
 const ADDITIONAL_LOCALES: Locale[] = ["fa", "az", "tr"];
 
 /**
+ * Collections use `versions: { drafts: true }`, which adds a hidden `_status`
+ * field that defaults to "draft". The `draft: false` option does NOT change
+ * it, so every seeded document must set `_status: "published"` in its data,
+ * on creates and updates alike.
+ */
+const PUBLISHED = { _status: "published" as const };
+
+/**
  * Uploads a file from /public into the Media collection, caching by path so
  * the same placeholder image isn't uploaded multiple times. Skips (with a
  * warning) rather than throwing if the file doesn't exist on disk, so one
@@ -75,8 +83,8 @@ async function seedTestimonials(payload: Payload) {
     const created = await payload.create({
       collection: "testimonials",
       locale: "en",
-      draft: false,
       data: {
+        ...PUBLISHED,
         quote: t.quote.en,
         name: t.name,
         role: t.role.en,
@@ -90,8 +98,8 @@ async function seedTestimonials(payload: Payload) {
         collection: "testimonials",
         id: created.id,
         locale,
-        draft: false,
         data: {
+          ...PUBLISHED,
           quote: t.quote[locale] ?? t.quote.en,
           role: t.role[locale] ?? t.role.en,
         },
@@ -109,8 +117,8 @@ async function seedProjects(payload: Payload): Promise<Record<string, string>> {
     const created = await payload.create({
       collection: "projects",
       locale: "en",
-      draft: false,
       data: {
+        ...PUBLISHED,
         title: project.title.en,
         client: project.client.en,
         sector: project.sector.en,
@@ -131,8 +139,8 @@ async function seedProjects(payload: Payload): Promise<Record<string, string>> {
         collection: "projects",
         id: created.id,
         locale,
-        draft: false,
         data: {
+          ...PUBLISHED,
           title: project.title[locale] ?? project.title.en,
           client: project.client[locale] ?? project.client.en,
           sector: project.sector[locale] ?? project.sector.en,
@@ -159,8 +167,8 @@ async function seedIndustries(payload: Payload) {
     const created = await payload.create({
       collection: "industries",
       locale: "en",
-      draft: false,
       data: {
+        ...PUBLISHED,
         slug: industry.slug,
         name: industry.name.en,
         summary: industry.summary.en,
@@ -185,8 +193,8 @@ async function seedIndustries(payload: Payload) {
         collection: "industries",
         id: created.id,
         locale,
-        draft: false,
         data: {
+          ...PUBLISHED,
           name: industry.name[locale] ?? industry.name.en,
           summary: industry.summary[locale] ?? industry.summary.en,
           description: industry.description[locale] ?? industry.description.en,
@@ -232,8 +240,8 @@ async function seedServices(payload: Payload, mediaCache: Map<string, string>) {
     const created = await payload.create({
       collection: "services",
       locale: "en",
-      draft: false,
       data: {
+        ...PUBLISHED,
         slug: thin.slug,
         title: thin.title.en,
         summary: thin.description.en,
@@ -256,8 +264,8 @@ async function seedServices(payload: Payload, mediaCache: Map<string, string>) {
         collection: "services",
         id: created.id,
         locale,
-        draft: false,
         data: {
+          ...PUBLISHED,
           title: thin.title[locale] ?? thin.title.en,
           summary: thin.description[locale] ?? thin.description.en,
           body: detail?.body ?? "",
@@ -281,8 +289,8 @@ async function seedLeadership(payload: Payload, mediaCache: Map<string, string>)
     const created = await payload.create({
       collection: "leadership",
       locale: "en",
-      draft: false,
       data: {
+        ...PUBLISHED,
         name: leader.name,
         role: leader.role.en,
         bio: leader.bio.en,
@@ -297,8 +305,8 @@ async function seedLeadership(payload: Payload, mediaCache: Map<string, string>)
         collection: "leadership",
         id: created.id,
         locale,
-        draft: false,
         data: {
+          ...PUBLISHED,
           role: leader.role[locale] ?? leader.role.en,
           bio: leader.bio[locale] ?? leader.bio.en,
         },
@@ -320,8 +328,8 @@ async function seedPosts(payload: Payload, mediaCache: Map<string, string>) {
     const created = await payload.create({
       collection: "posts",
       locale: "en",
-      draft: false,
       data: {
+        ...PUBLISHED,
         slug: post.slug,
         title: post.title.en,
         cover: coverId,
@@ -340,8 +348,8 @@ async function seedPosts(payload: Payload, mediaCache: Map<string, string>) {
         collection: "posts",
         id: created.id,
         locale,
-        draft: false,
         data: {
+          ...PUBLISHED,
           title: post.title[locale] ?? post.title.en,
           body: post.body[locale] ?? post.body.en,
           category: post.category[locale] ?? post.category.en,
@@ -357,8 +365,8 @@ async function seedClients(payload: Payload) {
     const created = await payload.create({
       collection: "clients",
       locale: "en",
-      draft: false,
       data: {
+        ...PUBLISHED,
         name: c.name.en,
         logoUrl: c.logoUrl,
         link: c.link,
@@ -373,8 +381,7 @@ async function seedClients(payload: Payload) {
         collection: "clients",
         id: created.id,
         locale,
-        draft: false,
-        data: { category: c.category[locale] },
+        data: { ...PUBLISHED, category: c.category[locale] },
       });
     }
   }
@@ -399,8 +406,8 @@ async function wireRelationships(
       collection: "industries",
       id,
       locale: "en",
-      draft: false,
       data: {
+        ...PUBLISHED,
         relatedProjects: rel.projects.map((pid) => projectIdMap[pid]).filter(Boolean),
         relatedServices: rel.services.map((sslug) => services.slugMap[sslug]).filter(Boolean),
       },
@@ -413,8 +420,8 @@ async function wireRelationships(
       collection: "services",
       id,
       locale: "en",
-      draft: false,
       data: {
+        ...PUBLISHED,
         relatedProjects: rel.projects.map((pid) => projectIdMap[pid]).filter(Boolean),
         relatedIndustries: rel.industries.map((islug) => industries.slugMap[islug]).filter(Boolean),
       },
