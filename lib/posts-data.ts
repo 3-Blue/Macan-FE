@@ -36,7 +36,7 @@ export const postsData: PostRecord[] = [
       fa: "ماکان برنده جایزه تعالی صنعتی شد",
     },
     cover: {
-      url: "/images/posts/award-2026.jpg",
+      url: "/images/posts/award-2026.svg",
       alt: "Macan leadership team accepting the Industrial Excellence Award",
     },
     body: {
@@ -60,7 +60,7 @@ export const postsData: PostRecord[] = [
       fa: "همکاری جدید در حوزه نفت و گاز اعلام شد",
     },
     cover: {
-      url: "/images/posts/oil-gas-partnership.jpg",
+      url: "/images/posts/oil-gas-partnership.svg",
       alt: "Handshake between Macan representatives and partner company executives",
     },
     body: {
