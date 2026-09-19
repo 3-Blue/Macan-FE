@@ -197,7 +197,11 @@
   "filterYear": "Yıl",
   "filterLocation": "Konum",
   "filterAll": "Tümü",
-  "noResults": "Seçilen filtrelerle eşleşen proje yok."
+  "noResults": "Seçilen filtrelerle eşleşen proje yok.",
+  "noMapLocations": "Seçilen projelerin hiçbirinin henüz harita konumu yok.",
+  "viewToggleLabel": "Proje görünümü",
+  "viewList": "Liste",
+  "viewMap": "Harita"
   },
   "NewsPage": {
   "eyebrow": "Haberlerimiz",

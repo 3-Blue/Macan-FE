@@ -203,7 +203,11 @@
   "filterYear": "Year",
   "filterLocation": "Location",
   "filterAll": "All",
-  "noResults": "No projects match the selected filters."
+  "noResults": "No projects match the selected filters.",
+  "noMapLocations": "None of the selected projects have a map location yet.",
+  "viewToggleLabel": "Projects view",
+  "viewList": "List",
+  "viewMap": "Map"
 },
 "NewsPage": {
   "eyebrow": "Our news",

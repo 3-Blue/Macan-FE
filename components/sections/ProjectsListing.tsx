@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
@@ -10,6 +11,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { type SelectChangeEvent } from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Grid } from "@/components/ui/Grid";
@@ -19,6 +22,11 @@ import { Link } from "@/i18n/navigation";
 import type { Project } from "@/lib/types/project";
 
 const ALL = "all";
+// Leaflet needs the browser, so the map is loaded client-side only (#33).
+const ProjectsMap = dynamic(
+  () => import("./ProjectsMap").then((mod) => mod.ProjectsMap),
+  { ssr: false },
+);
 
 // Full projects listing page. Content (projects) is passed in by the page.
 //
@@ -30,6 +38,7 @@ export function ProjectsListing({ projects }: { projects: Project[] }) {
   const [service, setService] = useState(ALL);
   const [year, setYear] = useState(ALL);
   const [location, setLocation] = useState(ALL);
+  const [view, setView] = useState<"list" | "map">("list");
 
   const sectors = useMemo(
     () => Array.from(new Set(projects.map((p) => p.sector))).sort(),
@@ -61,6 +70,9 @@ export function ProjectsListing({ projects }: { projects: Project[] }) {
   const handleChange =
     (setter: (value: string) => void) => (event: SelectChangeEvent) => {
       setter(event.target.value);
+    };
+  const handleViewChange = (_: unknown, next: "list" | "map" | null) => {
+    if (next) setView(next);
     };
 
   return (
@@ -146,12 +158,26 @@ export function ProjectsListing({ projects }: { projects: Project[] }) {
               ))}
             </Select>
           </FormControl>
-        </Stack>
+                </Stack>
+
+        <ToggleButtonGroup
+          exclusive
+          size="small"
+          value={view}
+          onChange={handleViewChange}
+          aria-label={t("viewToggleLabel")}
+          sx={{ mb: 3 }}
+        >
+          <ToggleButton value="list">{t("viewList")}</ToggleButton>
+          <ToggleButton value="map">{t("viewMap")}</ToggleButton>
+        </ToggleButtonGroup>
 
         {filteredProjects.length === 0 ? (
           <Typography variant="body1" color="text.secondary">
             {t("noResults")}
           </Typography>
+        ) : view === "map" ? (
+          <ProjectsMap projects={filteredProjects} />
         ) : (
           <Grid cols={4}>
             {filteredProjects.map((project) => (

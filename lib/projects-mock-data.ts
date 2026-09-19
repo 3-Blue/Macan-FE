@@ -25,6 +25,7 @@ export const PROJECTS_MOCK: Project[] = [
     sector: "Oil & Gas",
     service: "Engineering",
     location: "Caspian Sea",
+    coordinates: { lat: 37.6, lng: 51.0 }, // PLACEHOLDER: approximate
     year: 2023,
     outcome: "42% faster commissioning",
     scope:
@@ -67,6 +68,7 @@ export const PROJECTS_MOCK: Project[] = [
     sector: "Power",
     service: "Construction",
     location: "Aran Plain",
+    coordinates: { lat: 34.06, lng: 51.48 }, // PLACEHOLDER: approximate
     year: 2024,
     outcome: "+180MW capacity added",
     scope:
@@ -105,6 +107,7 @@ export const PROJECTS_MOCK: Project[] = [
     sector: "Infrastructure",
     service: "Construction",
     location: "Tabriz Corridor",
+    coordinates: { lat: 38.08, lng: 46.29 }, // PLACEHOLDER: approximate
     year: 2022,
     outcome: "Zero lost-time incidents",
     scope:
@@ -143,6 +146,7 @@ export const PROJECTS_MOCK: Project[] = [
     sector: "Supply",
     service: "Supply & Fabrication",
     location: "Bandar Complex",
+    coordinates: { lat: 27.18, lng: 56.27 }, // PLACEHOLDER: approximate
     year: 2023,
     outcome: "6 skids, 11-month cycle",
     scope:
@@ -181,6 +185,7 @@ export const PROJECTS_MOCK: Project[] = [
     sector: "Infrastructure",
     service: "Project Management",
     location: "Coastal District",
+    coordinates: { lat: 36.65, lng: 51.42 }, // PLACEHOLDER: approximate
     year: 2024,
     outcome: "30% energy reduction",
     scope:
