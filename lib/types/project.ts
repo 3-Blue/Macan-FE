@@ -46,6 +46,12 @@ export interface Project {
   /** Project location, e.g. "Gulf of Mexico" */
   location: string;
 
+  /** Optional map position; projects without it are left off the map view (#33) */
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
+
   /** Year the project was completed or started */
   year: number;
 

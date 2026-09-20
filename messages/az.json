@@ -197,7 +197,11 @@
   "filterYear": "İl",
   "filterLocation": "Yer",
   "filterAll": "Hamısı",
-  "noResults": "Seçilmiş filtrlərə uyğun layihə tapılmadı."
+  "noResults": "Seçilmiş filtrlərə uyğun layihə tapılmadı.",
+  "noMapLocations": "Seçilmiş layihələrin heç birinin hələ xəritədə yeri müəyyən edilməyib.",
+  "viewToggleLabel": "Layihələrin görünüşü",
+  "viewList": "Siyahı",
+  "viewMap": "Xəritə"
   },
   "NewsPage": {
   "eyebrow": "Xəbərlərimiz",
