@@ -5,6 +5,7 @@ import type {
   Industry,
   LeadershipMember,
   Locale,
+  Project,
   Service,
   ServiceDetail,
   Testimonial,
@@ -13,7 +14,7 @@ import type {
 import { resolve } from "@/lib/content/types";
 import { services as serviceRecords } from "@/lib/content/data/services";
 import { testimonials as testimonialRecords } from "@/lib/content/data/testimonials";
-import { featuredProjects as projectRecords } from "@/lib/content/data/projects";
+import { projectRecords } from "@/lib/content/data/projects";
 import { leadership as leadershipRecords } from "@/lib/content/data/leadership";
 import { industriesData, type IndustryRecord } from "@/lib/industries-data";
 import { servicesData } from "@/lib/services-data";
@@ -87,18 +88,41 @@ export const localContentSource: ContentSource = {
     }));
   },
 
-  async getFeaturedProjects(locale: Locale): Promise<FeaturedProject[]> {
-    return projectRecords.map((p) => ({
-      id: p.id,
-      title: resolve(p.title, locale),
-      client: resolve(p.client, locale),
-      sector: resolve(p.sector, locale),
-      location: resolve(p.location, locale),
-      outcome: resolve(p.outcome, locale),
-      status: p.status,
-      imageUrl: p.imageUrl,
-      href: p.href,
-    }));
+  // Projects are authored in English only for now (plain strings, not
+  // Localized), so `locale` is currently ignored — same pattern as
+  // getService below. Translate in the CMS or wrap the records in Localized
+  // to make this locale-aware without touching any page.
+  async getFeaturedProjects(): Promise<FeaturedProject[]> {
+    return projectRecords
+      .filter((p) => p.featured && p.published)
+      .sort((a, b) => a.order - b.order)
+      .map((p) => ({
+        id: p.id,
+        title: p.title,
+        client: p.client,
+        sector: p.sector,
+        location: p.location,
+        outcome: p.outcome,
+        status: p.status,
+        imageUrl: p.heroImage?.url,
+        href: `/projects/${p.slug}`,
+      }));
+  },
+
+  async getProjects(): Promise<Project[]> {
+    return projectRecords
+      .filter((p) => p.published)
+      .sort((a, b) => a.order - b.order);
+  },
+
+  async getProject(slug: string): Promise<Project | null> {
+    return (
+      projectRecords.find((p) => p.slug === slug && p.published) ?? null
+    );
+  },
+
+  async getPublishedProjectSlugs(): Promise<string[]> {
+    return projectRecords.filter((p) => p.published).map((p) => p.slug);
   },
 
   async getIndustries(locale: Locale): Promise<Industry[]> {

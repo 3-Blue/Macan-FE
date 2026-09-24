@@ -1,18 +1,10 @@
 // lib/types/project.ts
 
 /**
- * Project content model.
- * NOTE: This is a CMS-agnostic type definition, created ahead of the
- * Headless CMS setup (see issue #17, still in Draft as PR #63).
- * Once #17 merges, this shape should be mirrored as an actual
- * Payload/Sanity collection schema.
- *
- * Field names (title, client, sector, location, status) intentionally
- * match ProjectItem in lib/projects-data.ts (#30, PR #66) so listing-card
- * data can map cleanly into this richer detail-page shape once #66 merges.
- *
- * Related: #30 (projects listing), #31 (project detail page),
- * #32 (featured/case-study treatment), #33 (map view)
+ * Project content model — the CMS-agnostic shape every project surface reads
+ * (home carousel, listing, map, detail page, sitemap) via the content layer.
+ * The Payload `projects` collection mirrors these fields; the local adapter
+ * resolves lib/content/data/projects.ts into this shape.
  */
 
 export type ProjectStatus = "completed" | "ongoing";

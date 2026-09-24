@@ -17,6 +17,7 @@ import type {
   FeaturedProject,
   Industry,
   Locale,
+  Project,
   Service,
   ServiceDetail,
   Testimonial,
@@ -40,11 +41,14 @@ function mapImage(m: MediaLike): { url: string; alt: string } | undefined {
 
 /**
  * Resolves a relationship value (populated doc or bare id) to its slug when
- * the related collection has one, otherwise falls back to the doc id.
+ * the related collection exposes one, otherwise falls back to the doc id.
  *
- * NOTE: the `projects` collection has no `slug` field yet, so any relation
- * to Projects resolves to a Payload document ID, not a slug — a pre-existing
- * gap from Phase A. Tracked as a follow-up, not fixed here.
+ * NOTE: related-PROJECT links still need reconciling before the Payload path
+ * goes live. The projects collection now has a slug, so a populated project
+ * relation resolves to that slug — but the service/industry detail pages look
+ * related projects up by `Project.id`. The local path is unaffected (its ids
+ * match either way); standardise on a single key once Postgres is connected.
+ * Tracked as a follow-up, not fixed here.
  */
 function relSlugOrId(v: unknown): string {
   if (v && typeof v === "object") {
@@ -69,6 +73,59 @@ function toTagArray(v: unknown): string[] {
   return Array.isArray(v)
     ? v.map((row) => (row as { tag?: string }).tag ?? "").filter(Boolean)
     : [];
+}
+
+function toOutcomeArray(v: unknown): { label: string; value: string }[] {
+  return Array.isArray(v)
+    ? v
+        .map((row) => {
+          const r = row as { label?: string; value?: string };
+          return { label: r.label ?? "", value: r.value ?? "" };
+        })
+        .filter((o) => o.label || o.value)
+    : [];
+}
+
+function toCoordinates(
+  v: unknown,
+): { lat: number; lng: number } | undefined {
+  if (v && typeof v === "object") {
+    const c = v as { lat?: unknown; lng?: unknown };
+    if (typeof c.lat === "number" && typeof c.lng === "number") {
+      return { lat: c.lat, lng: c.lng };
+    }
+  }
+  return undefined;
+}
+
+// Map a Payload project doc into the app's rich Project view model.
+function mapProject(d: Record<string, unknown>): Project {
+  return {
+    id: String(d.id),
+    slug: d.slug as string,
+    title: d.title as string,
+    client: (d.client as string) ?? "",
+    sector: (d.sector as string) ?? "",
+    service: (d.service as string) ?? "",
+    location: (d.location as string) ?? "",
+    coordinates: toCoordinates(d.coordinates),
+    year: (d.year as number) ?? 0,
+    outcome: (d.outcome as string) ?? "",
+    scope: (d.scope as string) ?? "",
+    outcomes: toOutcomeArray(d.outcomes),
+    heroImage: mapImage(d.heroImage as MediaLike),
+    gallery: Array.isArray(d.gallery)
+      ? (d.gallery as MediaLike[])
+          .map(mapImage)
+          .filter((g): g is { url: string; alt: string } => Boolean(g))
+      : [],
+    relatedServiceSlugs: relSlugOrIdArray(d.relatedServices),
+    relatedIndustrySlugs: relSlugOrIdArray(d.relatedIndustries),
+    status: d.stage as Project["status"],
+    featured: Boolean(d.featured),
+    order: (d.order as number) ?? 0,
+    published: true,
+  };
 }
 
 // Map a Payload industry doc into the app's Industry view model.
@@ -206,9 +263,48 @@ export const payloadContentSource: ContentSource = {
       location: (d.location as string) ?? "",
       outcome: (d.outcome as string) ?? "",
       status: d.stage as FeaturedProject["status"],
-      imageUrl:
-        d.image && typeof d.image === "object" ? ((d.image as { url?: string }).url ?? undefined) : undefined,
+      imageUrl: mapImage(d.heroImage as MediaLike)?.url,
+      href: `/projects/${d.slug as string}`,
     }));
+  },
+
+  async getProjects(locale: Locale): Promise<Project[]> {
+    const payload = await client();
+    const { docs } = await payload.find({
+      collection: "projects",
+      locale,
+      fallbackLocale: "en",
+      sort: "order",
+      limit: 100,
+      where: { _status: { equals: "published" } },
+    });
+    return docs.map(mapProject);
+  },
+
+  async getProject(slug: string, locale: Locale): Promise<Project | null> {
+    const payload = await client();
+    const { docs } = await payload.find({
+      collection: "projects",
+      locale,
+      fallbackLocale: "en",
+      limit: 1,
+      where: {
+        slug: { equals: slug },
+        _status: { equals: "published" },
+      },
+    });
+    return docs[0] ? mapProject(docs[0]) : null;
+  },
+
+  async getPublishedProjectSlugs(): Promise<string[]> {
+    const payload = await client();
+    const { docs } = await payload.find({
+      collection: "projects",
+      limit: 500,
+      where: { _status: { equals: "published" } },
+      select: { slug: true },
+    });
+    return docs.map((d) => d.slug as string);
   },
 
   async getIndustries(locale: Locale): Promise<Industry[]> {

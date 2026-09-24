@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { ProjectsListing } from "@/components/sections/ProjectsListing";
-import { PROJECTS_MOCK } from "@/lib/projects-mock-data";
+import { getProjects, type Locale } from "@/lib/content";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
 
@@ -40,9 +40,8 @@ export default async function ProjectsPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const projects = PROJECTS_MOCK.filter((project) => project.published).sort(
-    (a, b) => a.order - b.order
-  );
+  // The content adapter already returns only published projects, sorted by order.
+  const projects = await getProjects(locale as Locale);
 
   return <ProjectsListing projects={projects} />;
 }

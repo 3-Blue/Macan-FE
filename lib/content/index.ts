@@ -15,6 +15,8 @@ export type {
   ServiceDetail,
   Testimonial,
   FeaturedProject,
+  Project,
+  ProjectOutcome,
   Industry,
   ProjectStatus,
   LeadershipMember,
@@ -32,6 +34,18 @@ export function getTestimonials(locale: Locale) {
 
 export function getFeaturedProjects(locale: Locale) {
   return getContentSource().getFeaturedProjects(locale);
+}
+
+export function getProjects(locale: Locale) {
+  return getContentSource().getProjects(locale);
+}
+
+export function getProject(slug: string, locale: Locale) {
+  return getContentSource().getProject(slug, locale);
+}
+
+export function getPublishedProjectSlugs() {
+  return getContentSource().getPublishedProjectSlugs();
 }
 
 export function getIndustries(locale: Locale) {

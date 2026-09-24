@@ -10,9 +10,9 @@ import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
-import { PROJECTS_MOCK } from "@/lib/projects-mock-data";
 import {
   getIndustry,
+  getProjects,
   getPublishedIndustrySlugs,
   getServices,
   type Locale,
@@ -57,9 +57,10 @@ export default async function IndustryDetailPage({
 
   const t = await getTranslations("IndustryDetailPage");
 
+  const allProjects = await getProjects(locale as Locale);
   const relatedProjects = industry.relatedProjectSlugs
-    .map((id) => PROJECTS_MOCK.find((project) => project.id === id))
-    .filter((project): project is (typeof PROJECTS_MOCK)[number] =>
+    .map((id) => allProjects.find((project) => project.id === id))
+    .filter((project): project is (typeof allProjects)[number] =>
       Boolean(project),
     );
 

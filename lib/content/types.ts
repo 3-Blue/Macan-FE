@@ -1,5 +1,6 @@
 import type { Industry } from "@/lib/types/industry";
 import type { Service as ServiceDetailModel } from "@/lib/types/service";
+import type { Project, ProjectOutcome } from "@/lib/types/project";
 
 /**
  * Content layer — types.
@@ -106,6 +107,10 @@ export type { Industry };
 // services listing page only.
 export type ServiceDetail = ServiceDetailModel;
 
+// Rich project model (detail page, listing, map). Re-exported so callers have
+// a single import site for content types.
+export type { Project, ProjectOutcome };
+
 /* ------------------------------------------------------------------ */
 /* Adapter contract                                                    */
 /* ------------------------------------------------------------------ */
@@ -114,6 +119,10 @@ export interface ContentSource {
   getServices(locale: Locale): Promise<Service[]>;
   getTestimonials(locale: Locale): Promise<Testimonial[]>;
   getFeaturedProjects(locale: Locale): Promise<FeaturedProject[]>;
+  getProjects(locale: Locale): Promise<Project[]>;
+  getProject(slug: string, locale: Locale): Promise<Project | null>;
+  /** Slugs of published projects, for generateStaticParams. */
+  getPublishedProjectSlugs(): Promise<string[]>;
   getIndustries(locale: Locale): Promise<Industry[]>;
   getIndustry(slug: string, locale: Locale): Promise<Industry | null>;
   getPosts(locale: Locale): Promise<Post[]>;

@@ -11,9 +11,9 @@ import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
-import { PROJECTS_MOCK } from "@/lib/projects-mock-data";
 import {
   getService,
+  getProjects,
   getPublishedServiceSlugs,
   type Locale,
 } from "@/lib/content";
@@ -68,9 +68,10 @@ export default async function ServiceDetailPage({
 
   const t = await getTranslations("ServiceDetailPage");
 
+  const allProjects = await getProjects(locale as Locale);
   const relatedProjects = service.relatedProjectSlugs
-    .map((id) => PROJECTS_MOCK.find((project) => project.id === id))
-    .filter((project): project is (typeof PROJECTS_MOCK)[number] => Boolean(project));
+    .map((id) => allProjects.find((project) => project.id === id))
+    .filter((project): project is (typeof allProjects)[number] => Boolean(project));
 
   const relatedIndustries = service.relatedIndustrySlugs
     .map((slug) => ({ slug, title: INDUSTRY_TITLES[slug] }))

@@ -1,7 +1,10 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
-import { getPublishedIndustrySlugs, getPublishedPostSlugs } from "@/lib/content";
-import { PROJECTS_MOCK } from "@/lib/projects-mock-data";
+import {
+  getPublishedIndustrySlugs,
+  getPublishedPostSlugs,
+  getPublishedProjectSlugs,
+} from "@/lib/content";
 import { siteUrl } from "@/lib/site";
 
 export const dynamic = "force-static";
@@ -21,7 +24,7 @@ const STATIC_PATHS = [
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const industrySlugs = await getPublishedIndustrySlugs();
-  const projectSlugs = PROJECTS_MOCK.map((project) => project.slug);
+  const projectSlugs = await getPublishedProjectSlugs();
   const postSlugs = await getPublishedPostSlugs();
   const paths = [
     ...STATIC_PATHS,

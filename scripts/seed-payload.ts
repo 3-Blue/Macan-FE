@@ -14,7 +14,8 @@
 // /public image referenced by leadership photos and post covers.
 //
 // Relationship fields (Industries.relatedProjects/relatedServices,
-// Services.relatedProjects/relatedIndustries) are wired in a second pass
+// Services.relatedProjects/relatedIndustries,
+// Projects.relatedServices/relatedIndustries) are wired in a second pass
 // at the end, once every collection's docs exist and their IDs are known.
 
 import { loadEnvConfig } from "@next/env";
@@ -29,7 +30,7 @@ import { industriesData } from "@/lib/industries-data";
 import { services as thinServices } from "@/lib/content/data/services";
 import { servicesData } from "@/lib/services-data";
 import { testimonials } from "@/lib/content/data/testimonials";
-import { featuredProjects } from "@/lib/content/data/projects";
+import { projectRecords } from "@/lib/content/data/projects";
 import { leadership } from "@/lib/content/data/leadership";
 import { postsData } from "@/lib/posts-data";
 import { clientRecords } from "@/lib/content/data/clients";
@@ -109,49 +110,76 @@ async function seedTestimonials(payload: Payload) {
   console.log(`Seeded ${testimonials.length} testimonials.`);
 }
 
-/** Returns a map of local record id ("p1", "p2"...) -> Payload doc id. */
-async function seedProjects(payload: Payload): Promise<Record<string, string>> {
+/**
+ * Seeds Projects WITHOUT relationship fields (targets may not exist yet).
+ * Project records are authored in English only (plain strings, not
+ * Localized), so there is no per-locale update pass — unlike the other
+ * collections. Returns local id ("p1", "p2"...) -> Payload id, plus the raw
+ * related service/industry slugs to wire in the final pass.
+ */
+async function seedProjects(
+  payload: Payload,
+  mediaCache: Map<string, string>,
+): Promise<{
+  idMap: Record<string, string>;
+  relations: Record<string, { services: string[]; industries: string[] }>;
+}> {
   const idMap: Record<string, string> = {};
+  const relations: Record<
+    string,
+    { services: string[]; industries: string[] }
+  > = {};
 
-  for (const project of featuredProjects) {
+  for (const project of projectRecords) {
+    const heroImageId = await createMediaFromPublic(
+      payload,
+      project.heroImage?.url,
+      project.heroImage?.alt ?? project.title,
+      mediaCache,
+    );
+
+    const galleryIds: string[] = [];
+    for (const image of project.gallery) {
+      const id = await createMediaFromPublic(
+        payload,
+        image.url,
+        image.alt,
+        mediaCache,
+      );
+      if (id) galleryIds.push(id);
+    }
+
     const created = await payload.create({
       collection: "projects",
       locale: "en",
       data: {
         ...PUBLISHED,
-        title: project.title.en,
-        client: project.client.en,
-        sector: project.sector.en,
-        location: project.location.en,
-        outcome: project.outcome.en,
+        slug: project.slug,
+        title: project.title,
+        client: project.client,
+        sector: project.sector,
+        service: project.service,
+        location: project.location,
+        outcome: project.outcome,
+        scope: project.scope,
+        year: project.year,
+        coordinates: project.coordinates,
+        outcomes: project.outcomes,
+        heroImage: heroImageId,
+        gallery: galleryIds,
         stage: project.status, // field renamed status -> stage in Phase A
-        featured: true,
-        order: 0,
+        featured: project.featured,
+        order: project.order,
       },
     });
     idMap[project.id] = created.id as string;
-
-    for (const locale of ADDITIONAL_LOCALES) {
-      const hasTranslation =
-        project.title[locale] || project.client[locale] || project.sector[locale];
-      if (!hasTranslation) continue;
-      await payload.update({
-        collection: "projects",
-        id: created.id,
-        locale,
-        data: {
-          ...PUBLISHED,
-          title: project.title[locale] ?? project.title.en,
-          client: project.client[locale] ?? project.client.en,
-          sector: project.sector[locale] ?? project.sector.en,
-          location: project.location[locale] ?? project.location.en,
-          outcome: project.outcome[locale] ?? project.outcome.en,
-        },
-      });
-    }
+    relations[project.id] = {
+      services: project.relatedServiceSlugs,
+      industries: project.relatedIndustrySlugs,
+    };
   }
-  console.log(`Seeded ${featuredProjects.length} projects.`);
-  return idMap;
+  console.log(`Seeded ${projectRecords.length} projects.`);
+  return { idMap, relations };
 }
 
 /**
@@ -389,17 +417,19 @@ async function seedClients(payload: Payload) {
 }
 
 /**
- * Second pass: wires the cross-collection relationship fields now that
- * every doc exists and its id is known. Relations to Projects resolve to
- * Payload doc IDs (not slugs) since the Projects collection has no slug
- * field — a pre-existing gap flagged in Phase B, not introduced here.
+ * Second pass: wires the cross-collection relationship fields now that every
+ * doc exists and its id is known. Payload relationship fields always store
+ * the target's Payload doc id, so id/slug maps are used to translate the
+ * local slug- and id-based references into Payload ids.
  */
 async function wireRelationships(
   payload: Payload,
   industries: { slugMap: Record<string, string>; relations: Record<string, { projects: string[]; services: string[] }> },
   services: { slugMap: Record<string, string>; relations: Record<string, { projects: string[]; industries: string[] }> },
-  projectIdMap: Record<string, string>,
+  projects: { idMap: Record<string, string>; relations: Record<string, { services: string[]; industries: string[] }> },
 ) {
+  const projectIdMap = projects.idMap;
+
   for (const [slug, id] of Object.entries(industries.slugMap)) {
     const rel = industries.relations[slug];
     await payload.update({
@@ -427,6 +457,20 @@ async function wireRelationships(
       },
     });
   }
+
+  for (const [localId, payloadId] of Object.entries(projects.idMap)) {
+    const rel = projects.relations[localId];
+    await payload.update({
+      collection: "projects",
+      id: payloadId,
+      locale: "en",
+      data: {
+        ...PUBLISHED,
+        relatedServices: rel.services.map((sslug) => services.slugMap[sslug]).filter(Boolean),
+        relatedIndustries: rel.industries.map((islug) => industries.slugMap[islug]).filter(Boolean),
+      },
+    });
+  }
   console.log("Wired industry <-> service <-> project relationships.");
 }
 
@@ -435,13 +479,13 @@ async function main() {
   const mediaCache = new Map<string, string>();
 
   await seedTestimonials(payload);
-  const projectIdMap = await seedProjects(payload);
+  const projects = await seedProjects(payload, mediaCache);
   const industries = await seedIndustries(payload);
   const services = await seedServices(payload, mediaCache);
   await seedLeadership(payload, mediaCache);
   await seedPosts(payload, mediaCache);
   await seedClients(payload);
-  await wireRelationships(payload, industries, services, projectIdMap);
+  await wireRelationships(payload, industries, services, projects);
 
   console.log("Seed complete.");
   process.exit(0);

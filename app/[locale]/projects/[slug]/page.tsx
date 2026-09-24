@@ -8,16 +8,14 @@ import { Heading } from "@/components/ui/Heading";
 import { Section } from "@/components/ui/Section";
 import { ProjectGallery } from "@/components/project-gallery";
 import { routing } from "@/i18n/routing";
-import { PROJECTS_MOCK, getProjectBySlug } from "@/lib/projects-mock-data";
+import { getProject, getPublishedProjectSlugs, type Locale } from "@/lib/content";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const slugs = await getPublishedProjectSlugs();
   return routing.locales.flatMap((locale) =>
-    PROJECTS_MOCK.filter((project) => project.published).map((project) => ({
-      locale,
-      slug: project.slug,
-    }))
+    slugs.map((slug) => ({ locale, slug }))
   );
 }
 export async function generateMetadata({
@@ -26,7 +24,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await getProject(slug, locale as Locale);
   if (!project) return {};
   return buildMetadata({
     locale: locale as "en" | "fa" | "az" | "tr",
@@ -44,9 +42,10 @@ export default async function ProjectDetailPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
-  const project = getProjectBySlug(slug);
+  // getProject returns only published projects (null otherwise).
+  const project = await getProject(slug, locale as Locale);
 
-  if (!project || !project.published) {
+  if (!project) {
     notFound();
   }
 
