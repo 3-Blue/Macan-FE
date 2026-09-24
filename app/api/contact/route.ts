@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
   // Persist first, independent of whether the email send succeeds — a
   // durable record matters more than a duplicate row on rare retries.
   try {
-    saveSubmission({ name, email, subject, message, ip });
+    await saveSubmission({ name, email, subject, message, ip });
   } catch (err) {
     console.error("Failed to save submission to DB:", err);
     // Don't fail the request over storage — the email path below is the

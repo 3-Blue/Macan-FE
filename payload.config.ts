@@ -22,6 +22,7 @@ import { Industries } from "./payload/collections/Industries";
 import { Leadership } from "./payload/collections/Leadership";
 import { Posts } from "./payload/collections/Posts";
 import { Clients } from "./payload/collections/Clients";
+import { ContactSubmissions } from "./payload/collections/ContactSubmissions";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -41,6 +42,7 @@ export default buildConfig({
     Leadership,
     Posts,
     Clients,
+    ContactSubmissions,
   ],
   localization: {
     locales: ["en", "fa", "az", "tr"],
