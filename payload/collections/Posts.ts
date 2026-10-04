@@ -1,10 +1,11 @@
 // payload/collections/Posts.ts
 import type { CollectionConfig } from "payload";
+import { publishedOrAuthenticated } from "@/payload/access/published";
 
 export const Posts: CollectionConfig = {
   slug: "posts",
   admin: { useAsTitle: "title", defaultColumns: ["title", "slug", "category", "date"] },
-  access: { read: () => true },
+  access: { read: publishedOrAuthenticated },
   versions: { drafts: true },
   fields: [
     { name: "slug", type: "text", required: true, unique: true, index: true },

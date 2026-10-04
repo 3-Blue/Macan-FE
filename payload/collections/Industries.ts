@@ -1,10 +1,11 @@
 // payload/collections/Industries.ts
 import type { CollectionConfig } from "payload";
+import { publishedOrAuthenticated } from "@/payload/access/published";
 
 export const Industries: CollectionConfig = {
   slug: "industries",
   admin: { useAsTitle: "name", defaultColumns: ["name", "slug", "order"] },
-  access: { read: () => true },
+  access: { read: publishedOrAuthenticated },
   versions: { drafts: true },
   fields: [
     { name: "slug", type: "text", required: true, unique: true, index: true },

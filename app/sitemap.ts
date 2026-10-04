@@ -4,6 +4,7 @@ import {
   getPublishedIndustrySlugs,
   getPublishedPostSlugs,
   getPublishedProjectSlugs,
+  getPublishedServiceSlugs,
 } from "@/lib/content";
 import { siteUrl } from "@/lib/site";
 
@@ -23,11 +24,13 @@ const STATIC_PATHS = [
 ] as const;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const serviceSlugs = await getPublishedServiceSlugs();
   const industrySlugs = await getPublishedIndustrySlugs();
   const projectSlugs = await getPublishedProjectSlugs();
   const postSlugs = await getPublishedPostSlugs();
   const paths = [
     ...STATIC_PATHS,
+    ...serviceSlugs.map((slug) => `/services/${slug}`),
     ...industrySlugs.map((slug) => `/industries/${slug}`),
     ...projectSlugs.map((slug) => `/projects/${slug}`),
     ...postSlugs.map((slug) => `/news/${slug}`),

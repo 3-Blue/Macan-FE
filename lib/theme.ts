@@ -1,4 +1,4 @@
-import { createTheme, responsiveFontSizes } from "@mui/material/styles";
+import { createTheme, responsiveFontSizes, type Theme } from "@mui/material/styles";
 
 // Brand palette. The Tailwind-token equivalents live in app/globals.css
 // (`@theme inline`), so the two styling systems share the same source colors.
@@ -11,39 +11,50 @@ const brand = {
   peach: "#e0b69e", // accent, light
 };
 
-const theme = createTheme({
-  palette: {
-    mode: "light", // dark mode intentionally not supported
-    primary: {
-      main: brand.deepGreen,
-      light: brand.lightGreen,
+/**
+ * Builds the MUI theme for a given text direction. `direction` must match the
+ * active locale (rtl for Farsi, ltr otherwise) and the emotion cache set up in
+ * ThemeRegistry, so MUI's own direction-aware components (spacing, icons,
+ * drawers, etc.) flip consistently with the stylis-rtl-processed CSS.
+ */
+export function createAppTheme(direction: "ltr" | "rtl"): Theme {
+  const theme = createTheme({
+    direction,
+    palette: {
+      mode: "light", // dark mode intentionally not supported
+      primary: {
+        main: brand.deepGreen,
+        light: brand.lightGreen,
+      },
+      secondary: {
+        main: brand.terracotta,
+        light: brand.peach,
+        dark: brand.terracottaDark,
+      },
+      background: {
+        default: brand.cream,
+        paper: brand.cream,
+      },
     },
-    secondary: {
-      main: brand.terracotta,
-      light: brand.peach,
-      dark: brand.terracottaDark,
+    typography: {
+      // Vazirmatn is loaded as a local font in app/[locale]/layout.tsx and
+      // exposed as the `--font-vazirmatn` CSS variable, so this resolves at
+      // runtime. The system-font stack is a fallback for the first paint.
+      fontFamily: [
+        "var(--font-vazirmatn)",
+        "-apple-system",
+        "BlinkMacSystemFont",
+        "Segoe UI",
+        "Roboto",
+        "sans-serif",
+      ].join(","),
     },
-    background: {
-      default: brand.cream,
-      paper: brand.cream,
+    shape: {
+      borderRadius: 8,
     },
-  },
-  typography: {
-    // Vazirmatn is loaded as a local font in app/[locale]/layout.tsx and
-    // exposed as the `--font-vazirmatn` CSS variable, so this resolves at
-    // runtime. The system-font stack is a fallback for the first paint.
-    fontFamily: [
-      "var(--font-vazirmatn)",
-      "-apple-system",
-      "BlinkMacSystemFont",
-      "Segoe UI",
-      "Roboto",
-      "sans-serif",
-    ].join(","),
-  },
-  shape: {
-    borderRadius: 8,
-  },
-});
+  });
 
-export default responsiveFontSizes(theme);
+  return responsiveFontSizes(theme);
+}
+
+export default createAppTheme("ltr");

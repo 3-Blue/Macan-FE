@@ -11,6 +11,22 @@ const OG_LOCALE_MAP: Record<Locale, string> = {
   tr: "tr_TR",
 };
 
+/**
+ * Sitewide default OpenGraph/Twitter preview image (1200x630).
+ * Replace public/images/og-default.png with the real brand artwork before
+ * launch; this placeholder just guarantees shared links have a valid preview.
+ */
+export const DEFAULT_OG_IMAGE = `${siteUrl}/images/og-default.png`;
+
+/**
+ * Serializes data for a <script type="application/ld+json"> tag, escaping `<`
+ * as \u003c so a `</script>` sequence in (CMS-authored) data can't break out of
+ * the tag. Use this instead of a bare JSON.stringify in dangerouslySetInnerHTML.
+ */
+export function jsonLdScript(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
+
 interface BuildMetadataParams {
   locale: Locale;
   /** Path WITHOUT locale prefix, e.g. "" for home, "/industries/oil-and-gas" */
@@ -42,6 +58,7 @@ export function buildMetadata({
   author,
 }: BuildMetadataParams): Metadata {
   const canonicalUrl = `${siteUrl}/${locale}${path}`;
+  const ogImage = image ?? DEFAULT_OG_IMAGE;
 
   const languages = Object.fromEntries(
     routing.locales.map((l) => [l, `${siteUrl}/${l}${path}`]),
@@ -59,7 +76,7 @@ export function buildMetadata({
         "application/rss+xml": `${siteUrl}/rss.xml`,
       },
     },
-      openGraph: {
+    openGraph: {
       title,
       description,
       url: canonicalUrl,
@@ -72,13 +89,13 @@ export function buildMetadata({
             ...(author ? { authors: [author] } : {}),
           }
         : { type: "website" as const }),
-      ...(image ? { images: [{ url: image }] } : {}),
+      images: [{ url: ogImage }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      ...(image ? { images: [image] } : {}),
+      images: [ogImage],
     },
   };
 }
@@ -90,6 +107,7 @@ export function organizationJsonLd() {
     "@type": "Organization",
     name: "MACAN",
     url: siteUrl,
+    logo: DEFAULT_OG_IMAGE,
     description:
       "MACAN provides engineering, construction, supply, and project management solutions.",
   };

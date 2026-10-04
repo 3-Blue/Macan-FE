@@ -1,0 +1,1313 @@
+diff --git a/.npmrc b/.npmrc
+index dec2b9e..ce0516e 100644
+--- a/.npmrc
++++ b/.npmrc
+@@ -2,4 +2,4 @@ save-exact=true
+ engine-strict=true
+ fund=false
+ save-prefix=
+-registry=https://mirror-npm.runflare.com/
++registry=https://registry.npmjs.org/
+diff --git a/README.md b/README.md
+index e215bc4..6c81194 100644
+--- a/README.md
++++ b/README.md
+@@ -1,36 +1,56 @@
+-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
++# Macan FE
+ 
+-## Getting Started
++Multilingual (en / fa / az / tr) corporate website for MACAN, built with the
++Next.js App Router. Farsi (`fa`) renders right-to-left; the other locales are
++left-to-right.
+ 
+-First, run the development server:
++## Stack
++
++- **Next.js 16** (App Router, SSG) + **React 19**
++- **next-intl** for routing and translations (`messages/*.json`)
++- **MUI 9** + **emotion** (RTL via `stylis-plugin-rtl`)
++- **framer-motion** for transitions
++- **Payload 3** (Postgres) as an optional CMS, behind a swappable content adapter
++- **Resend** for contact-form email
++- **Plausible** (cookieless) analytics
++
++## Getting started
+ 
+ ```bash
++npm install
+ npm run dev
+-# or
+-yarn dev
+-# or
+-pnpm dev
+-# or
+-bun dev
+ ```
+ 
+-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+-
+-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
++Open http://localhost:3000 (redirects to the default locale).
+ 
+-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
++### Scripts
+ 
+-## Learn More
++- `npm run dev` — development server
++- `npm run build` / `npm run start` — production build / serve
++- `npm run lint` — ESLint
++- `npm run typecheck` — `tsc --noEmit`
++- `npm run format` — Prettier
+ 
+-To learn more about Next.js, take a look at the following resources:
++## Environment variables
+ 
+-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
++| Variable | Required | Notes |
++| --- | --- | --- |
++| `NEXT_PUBLIC_SITE_URL` | prod | Public origin, no trailing slash. Drives canonical / hreflang / sitemap / RSS / OG URLs. **Build throws if unset in production.** |
++| `CONTENT_SOURCE` | no | `payload` to read content from the CMS; anything else uses the in-repo local adapter (default). |
++| `PAYLOAD_SECRET` | prod | Signs auth tokens / encrypts fields. **App throws at startup if unset in production.** |
++| `DATABASE_URI` | with Payload | Postgres connection string. |
++| `RESEND_API_KEY`, `CONTACT_EMAIL_TO`, `CONTACT_EMAIL_FROM` | contact email | If unset, submissions are still stored; the email notification is skipped. |
++| `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC` | no | Analytics script URL. Leave unset in local dev. |
+ 
+-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
++## Content
+ 
+-## Deploy on Vercel
++All pages read content through `lib/content` (a locale-aware adapter). The
++default `local` adapter serves the data in `lib/content/data`; setting
++`CONTENT_SOURCE=payload` switches to the Payload backend without touching
++components. See `docs/CMS-PAYLOAD.md` and `docs/CMS-EDITOR-GUIDE.md`.
+ 
+-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
++## Deployment
+ 
+-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
++Node hosting (e.g. Vercel) — the app has API routes and is **not** a static
++export. On first Payload deploy, create the initial admin user immediately via
++`/admin/create-first-user`, before the route is publicly reachable.
+diff --git a/app/[locale]/layout.tsx b/app/[locale]/layout.tsx
+index a5a995e..2c6652e 100644
+--- a/app/[locale]/layout.tsx
++++ b/app/[locale]/layout.tsx
+@@ -1,8 +1,7 @@
+ import type { Metadata } from "next";
+ import localFont from "next/font/local";
+-import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
+ import { hasLocale, NextIntlClientProvider } from "next-intl";
+-import { setRequestLocale } from "next-intl/server";
++import { getTranslations, setRequestLocale } from "next-intl/server";
+ import { notFound } from "next/navigation";
+ import ThemeRegistry from "@/components/ThemeRegistry";
+ import { Header } from "@/components/layout/Header";
+@@ -13,7 +12,7 @@ import { PageTransition } from "@/components/motion/PageTransition";
+ import "../globals.css";
+ import { CookieConsentBanner } from "@/components/legal/CookieConsentBanner";
+ import { Analytics } from "@/components/legal/Analytics";
+-import { organizationJsonLd } from "@/lib/seo";
++import { organizationJsonLd, jsonLdScript, DEFAULT_OG_IMAGE } from "@/lib/seo";
+ 
+ const vazirmatn = localFont({
+   src: "../../fonts/Vazirmatn[wght].ttf",
+@@ -28,6 +27,15 @@ export const metadata: Metadata = {
+   },
+   description:
+     "MACAN provides engineering, construction, supply, and project management solutions.",
++  openGraph: {
++    siteName: "MACAN",
++    type: "website",
++    images: [{ url: DEFAULT_OG_IMAGE }],
++  },
++  twitter: {
++    card: "summary_large_image",
++    images: [DEFAULT_OG_IMAGE],
++  },
+ };
+ 
+ export function generateStaticParams() {
+@@ -48,6 +56,7 @@ export default async function RootLayout({
+   // Opt into static rendering (SSG) for this locale; tells next-intl
+   // the active locale without reading request headers.
+   setRequestLocale(locale);
++  const t = await getTranslations("A11y");
+   const dir = locale === "fa" ? "rtl" : "ltr";
+   return (
+     <html
+@@ -58,31 +67,29 @@ export default async function RootLayout({
+       <body className="min-h-full flex flex-col">
+         <a
+           href="#main-content"
+-          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded focus:shadow-lg"
++          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:start-2 focus:z-50 focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded focus:shadow-lg"
+         >
+-          Skip to main content
++          {t("skipToContent")}
+         </a>
+         <Analytics />
+         <script
+           type="application/ld+json"
+-          dangerouslySetInnerHTML={{
+-            __html: JSON.stringify(organizationJsonLd()),
+-          }}
++          // jsonLdScript escapes `<` so a `</script>` in CMS-authored data
++          // can't break out of this tag.
++          dangerouslySetInnerHTML={{ __html: jsonLdScript(organizationJsonLd()) }}
+         />
+-        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+-          <ThemeRegistry>
+-            <NextIntlClientProvider>
+-              <Header />
+-              <PageTransition>
+-                <main id="main-content" className="flex-1">
+-                  {children}
+-                </main>
+-              </PageTransition>
+-              <Footer />
+-              <CookieConsentBanner />
+-            </NextIntlClientProvider>
+-          </ThemeRegistry>
+-        </AppRouterCacheProvider>
++        <ThemeRegistry direction={dir}>
++          <NextIntlClientProvider>
++            <Header />
++            <PageTransition>
++              <main id="main-content" className="flex-1">
++                {children}
++              </main>
++            </PageTransition>
++            <Footer />
++            <CookieConsentBanner />
++          </NextIntlClientProvider>
++        </ThemeRegistry>
+       </body>
+     </html>
+   );
+diff --git a/app/[locale]/news/[slug]/page.tsx b/app/[locale]/news/[slug]/page.tsx
+index 0e44a60..e31d3b6 100644
+--- a/app/[locale]/news/[slug]/page.tsx
++++ b/app/[locale]/news/[slug]/page.tsx
+@@ -11,7 +11,7 @@ import { Section } from "@/components/ui/Section";
+ import { RelatedPosts } from "@/components/news/RelatedPosts";
+ import { Link } from "@/i18n/navigation";
+ import { routing } from "@/i18n/routing";
+-import { buildMetadata, articleJsonLd } from "@/lib/seo";
++import { buildMetadata, articleJsonLd, jsonLdScript } from "@/lib/seo";
+ import { siteUrl } from "@/lib/site";
+ import {
+   getPost,
+@@ -104,16 +104,16 @@ export default async function PostDetailPage({
+       <script
+         type="application/ld+json"
+         dangerouslySetInnerHTML={{
+-          __html: JSON.stringify(
++          __html: jsonLdScript(
+             articleJsonLd({
+-            title: post.title,
+-            description: excerpt(post.body),
+-            url: articleUrl,
+-            image: post.cover.url.startsWith("http")
+-            ? post.cover.url
+-            : `${siteUrl}${post.cover.url}`,
+-            author: post.author,
+-            datePublished: post.date,
++              title: post.title,
++              description: excerpt(post.body),
++              url: articleUrl,
++              image: post.cover.url.startsWith("http")
++                ? post.cover.url
++                : `${siteUrl}${post.cover.url}`,
++              author: post.author,
++              datePublished: post.date,
+             }),
+           ),
+         }}
+diff --git a/app/api/contact/route.ts b/app/api/contact/route.ts
+index b13edb4..d1a712c 100644
+--- a/app/api/contact/route.ts
++++ b/app/api/contact/route.ts
+@@ -77,15 +77,19 @@ export async function POST(request: NextRequest) {
+   if (company) {
+     return NextResponse.json({ success: true });
+   }
+-  // Persist first, independent of whether the email send succeeds — a
+-  // durable record matters more than a duplicate row on rare retries.
++  // Storage is the source of truth: the submission is persisted first, and a
++  // successfully stored submission is treated as a success for the client even
++  // if the (secondary) email notification fails. This avoids the duplicate-row
++  // problem where a client retries after an email-only failure. Email failures
++  // are logged so ops can follow up; the record is never lost.
++  let saved = false;
+   try {
+     await saveSubmission({ name, email, subject, message, ip });
++    saved = true;
+   } catch (err) {
+     console.error("Failed to save submission to DB:", err);
+-    // Don't fail the request over storage — the email path below is the
+-    // primary notification channel; storage is a backup, not a hard gate.
+   }
++
+   const apiKey = process.env.RESEND_API_KEY;
+   const toAddress = process.env.CONTACT_EMAIL_TO;
+   const fromAddress = process.env.CONTACT_EMAIL_FROM;
+@@ -94,6 +98,9 @@ export async function POST(request: NextRequest) {
+     console.error(
+       "Contact API misconfigured: missing RESEND_API_KEY, CONTACT_EMAIL_TO, or CONTACT_EMAIL_FROM."
+     );
++    // The submission is safely stored, so don't make the user retry (which
++    // would create a duplicate). Only error out if storage also failed.
++    if (saved) return NextResponse.json({ success: true });
+     return NextResponse.json(
+       { error: "Server is not configured to send email." },
+       { status: 500 }
+@@ -119,6 +126,7 @@ export async function POST(request: NextRequest) {
+ 
+     if (error) {
+       console.error("Resend error:", error);
++      if (saved) return NextResponse.json({ success: true });
+       return NextResponse.json(
+         { error: "Failed to send email." },
+         { status: 502 }
+@@ -128,6 +136,7 @@ export async function POST(request: NextRequest) {
+     return NextResponse.json({ success: true });
+   } catch (err) {
+     console.error("Unexpected error sending contact email:", err);
++    if (saved) return NextResponse.json({ success: true });
+     return NextResponse.json(
+       { error: "Unexpected server error." },
+       { status: 500 }
+diff --git a/app/sitemap.ts b/app/sitemap.ts
+index 160c237..de956ef 100644
+--- a/app/sitemap.ts
++++ b/app/sitemap.ts
+@@ -4,6 +4,7 @@ import {
+   getPublishedIndustrySlugs,
+   getPublishedPostSlugs,
+   getPublishedProjectSlugs,
++  getPublishedServiceSlugs,
+ } from "@/lib/content";
+ import { siteUrl } from "@/lib/site";
+ 
+@@ -23,11 +24,13 @@ const STATIC_PATHS = [
+ ] as const;
+ 
+ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
++  const serviceSlugs = await getPublishedServiceSlugs();
+   const industrySlugs = await getPublishedIndustrySlugs();
+   const projectSlugs = await getPublishedProjectSlugs();
+   const postSlugs = await getPublishedPostSlugs();
+   const paths = [
+     ...STATIC_PATHS,
++    ...serviceSlugs.map((slug) => `/services/${slug}`),
+     ...industrySlugs.map((slug) => `/industries/${slug}`),
+     ...projectSlugs.map((slug) => `/projects/${slug}`),
+     ...postSlugs.map((slug) => `/news/${slug}`),
+diff --git a/components/ThemeRegistry.tsx b/components/ThemeRegistry.tsx
+index b1cf62c..d88ee69 100644
+--- a/components/ThemeRegistry.tsx
++++ b/components/ThemeRegistry.tsx
+@@ -1,17 +1,45 @@
+ "use client";
+ 
++import { useMemo } from "react";
++import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
+ import { ThemeProvider } from "@mui/material/styles";
+ import CssBaseline from "@mui/material/CssBaseline";
+-import theme from "@/lib/theme";
++import { prefixer } from "stylis";
++import rtlPlugin from "stylis-plugin-rtl";
++import { createAppTheme } from "@/lib/theme";
+ 
++/**
++ * Sets up MUI with a direction-aware theme and emotion cache.
++ *
++ * For RTL (Farsi), the emotion cache runs the stylis RTL plugin so every
++ * MUI/emotion rule is mirrored (margins, padding, positions, carousel arrows,
++ * the progress bar, etc.), and the theme's `direction: "rtl"` flips MUI's own
++ * direction-aware components. The cache key differs per direction so LTR and
++ * RTL stylesheets never collide.
++ */
+ export default function ThemeRegistry({
++  direction = "ltr",
+   children,
+-}: Readonly<{ children: React.ReactNode }>) {
++}: Readonly<{
++  direction?: "ltr" | "rtl";
++  children: React.ReactNode;
++}>) {
++  const theme = useMemo(() => createAppTheme(direction), [direction]);
++  const isRtl = direction === "rtl";
++
+   return (
+-    <ThemeProvider theme={theme}>
+-      {/* Normalizes browser default styles to match the MUI theme baseline */}
+-      <CssBaseline />
+-      {children}
+-    </ThemeProvider>
++    <AppRouterCacheProvider
++      options={{
++        key: isRtl ? "muirtl" : "mui",
++        enableCssLayer: true,
++        stylisPlugins: isRtl ? [prefixer, rtlPlugin] : [],
++      }}
++    >
++      <ThemeProvider theme={theme}>
++        {/* Normalizes browser default styles to match the MUI theme baseline */}
++        <CssBaseline />
++        {children}
++      </ThemeProvider>
++    </AppRouterCacheProvider>
+   );
+ }
+diff --git a/components/featured-projects-carousel.tsx b/components/featured-projects-carousel.tsx
+index ffa29af..d7b0c8b 100644
+--- a/components/featured-projects-carousel.tsx
++++ b/components/featured-projects-carousel.tsx
+@@ -160,8 +160,13 @@ export default function FeaturedProjectsCarousel({
+       if (!track) return;
+       const card = track.querySelector<HTMLElement>("[data-carousel-card]");
+       const cardWidth = card ? card.offsetWidth + 24 : track.clientWidth * 0.8;
++      // In RTL the inline-scroll axis is mirrored, so "next" (direction=1) must
++      // decrease scrollLeft. Negating keeps prev/next logical in both
++      // directions; it's a no-op in LTR.
++      const isRtl = getComputedStyle(track).direction === "rtl";
++      const delta = (isRtl ? -1 : 1) * direction * cardWidth;
+       track.scrollBy({
+-        left: direction * cardWidth,
++        left: delta,
+         behavior: prefersReducedMotion ? "auto" : "smooth",
+       });
+     },
+@@ -199,7 +204,7 @@ export default function FeaturedProjectsCarousel({
+   };
+ 
+   return (
+-    <Section aria-label="Featured projects">
++    <Section aria-label={t("sectionLabel")}>
+       <Container>
+         <Box
+           sx={{
+@@ -245,7 +250,7 @@ export default function FeaturedProjectsCarousel({
+           <Box
+             ref={trackRef}
+             role="region"
+-            aria-label="Project cards, scrollable"
++            aria-label={t("scrollRegionLabel")}
+             tabIndex={0}
+             onKeyDown={handleKeyDown}
+             sx={{
+diff --git a/components/ui/LocaleSwitcher.tsx b/components/ui/LocaleSwitcher.tsx
+index 889129f..7686188 100644
+--- a/components/ui/LocaleSwitcher.tsx
++++ b/components/ui/LocaleSwitcher.tsx
+@@ -1,6 +1,6 @@
+ "use client";
+ 
+-import { useLocale } from "next-intl";
++import { useLocale, useTranslations } from "next-intl";
+ import { useRouter, usePathname } from "@/i18n/navigation";
+ import { routing } from "@/i18n/routing";
+ import Select, { SelectChangeEvent } from "@mui/material/Select";
+@@ -18,6 +18,7 @@ export default function LocaleSwitcher() {
+   const locale = useLocale();
+   const router = useRouter();
+   const pathname = usePathname();
++  const t = useTranslations("A11y");
+ 
+   function handleChange(event: SelectChangeEvent) {
+     const nextLocale = event.target.value;
+@@ -27,7 +28,7 @@ export default function LocaleSwitcher() {
+   return (
+     <FormControl size="small">
+       <Select
+-        aria-label="Select language"
++        aria-label={t("selectLanguage")}
+         value={locale}
+         onChange={handleChange}
+       >
+diff --git a/lib/seo.ts b/lib/seo.ts
+index df9d418..0c8c915 100644
+--- a/lib/seo.ts
++++ b/lib/seo.ts
+@@ -11,6 +11,22 @@ const OG_LOCALE_MAP: Record<Locale, string> = {
+   tr: "tr_TR",
+ };
+ 
++/**
++ * Sitewide default OpenGraph/Twitter preview image (1200x630).
++ * Replace public/images/og-default.png with the real brand artwork before
++ * launch; this placeholder just guarantees shared links have a valid preview.
++ */
++export const DEFAULT_OG_IMAGE = `${siteUrl}/images/og-default.png`;
++
++/**
++ * Serializes data for a <script type="application/ld+json"> tag, escaping `<`
++ * as \u003c so a `</script>` sequence in (CMS-authored) data can't break out of
++ * the tag. Use this instead of a bare JSON.stringify in dangerouslySetInnerHTML.
++ */
++export function jsonLdScript(data: unknown): string {
++  return JSON.stringify(data).replace(/</g, "\\u003c");
++}
++
+ interface BuildMetadataParams {
+   locale: Locale;
+   /** Path WITHOUT locale prefix, e.g. "" for home, "/industries/oil-and-gas" */
+@@ -42,6 +58,7 @@ export function buildMetadata({
+   author,
+ }: BuildMetadataParams): Metadata {
+   const canonicalUrl = `${siteUrl}/${locale}${path}`;
++  const ogImage = image ?? DEFAULT_OG_IMAGE;
+ 
+   const languages = Object.fromEntries(
+     routing.locales.map((l) => [l, `${siteUrl}/${l}${path}`]),
+@@ -59,7 +76,7 @@ export function buildMetadata({
+         "application/rss+xml": `${siteUrl}/rss.xml`,
+       },
+     },
+-      openGraph: {
++    openGraph: {
+       title,
+       description,
+       url: canonicalUrl,
+@@ -72,13 +89,13 @@ export function buildMetadata({
+             ...(author ? { authors: [author] } : {}),
+           }
+         : { type: "website" as const }),
+-      ...(image ? { images: [{ url: image }] } : {}),
++      images: [{ url: ogImage }],
+     },
+     twitter: {
+       card: "summary_large_image",
+       title,
+       description,
+-      ...(image ? { images: [image] } : {}),
++      images: [ogImage],
+     },
+   };
+ }
+@@ -90,6 +107,7 @@ export function organizationJsonLd() {
+     "@type": "Organization",
+     name: "MACAN",
+     url: siteUrl,
++    logo: DEFAULT_OG_IMAGE,
+     description:
+       "MACAN provides engineering, construction, supply, and project management solutions.",
+   };
+@@ -131,4 +149,4 @@ export function articleJsonLd({
+       url: siteUrl,
+     },
+   };
+-}
+\ No newline at end of file
++}
+diff --git a/lib/site.ts b/lib/site.ts
+index fa19416..0a98d1c 100644
+--- a/lib/site.ts
++++ b/lib/site.ts
+@@ -1,7 +1,28 @@
+ /**
+- * Canonical site origin, used for metadata, robots and the sitemap.
++ * Canonical site origin, used for metadata, robots, sitemap, RSS and OG URLs.
+  * Set NEXT_PUBLIC_SITE_URL in the environment (no trailing slash needed).
++ *
++ * In production an incorrect origin silently poisons every canonical, hreflang,
++ * sitemap, RSS and OpenGraph URL, so we fail fast if it's missing rather than
++ * fall back to a placeholder domain. In development we use localhost so local
++ * work isn't blocked.
+  */
+-export const siteUrl = (
+-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.macan-example.com"
+-).replace(/\/+$/, "");
++function resolveSiteUrl(): string {
++  const configured = process.env.NEXT_PUBLIC_SITE_URL;
++  if (configured && configured.trim().length > 0) {
++    return configured.replace(/\/+$/, "");
++  }
++
++  if (process.env.NODE_ENV === "production") {
++    throw new Error(
++      "NEXT_PUBLIC_SITE_URL is not set. It is required in production so " +
++        "canonical, hreflang, sitemap, RSS and OpenGraph URLs are correct. " +
++        "Set it to the public origin (e.g. https://macan.example) with no " +
++        "trailing slash.",
++    );
++  }
++
++  return "http://localhost:3000";
++}
++
++export const siteUrl = resolveSiteUrl();
+diff --git a/lib/theme.ts b/lib/theme.ts
+index 5f7c4b1..07d7eac 100644
+--- a/lib/theme.ts
++++ b/lib/theme.ts
+@@ -1,4 +1,4 @@
+-import { createTheme, responsiveFontSizes } from "@mui/material/styles";
++import { createTheme, responsiveFontSizes, type Theme } from "@mui/material/styles";
+ 
+ // Brand palette. The Tailwind-token equivalents live in app/globals.css
+ // (`@theme inline`), so the two styling systems share the same source colors.
+@@ -11,39 +11,50 @@ const brand = {
+   peach: "#e0b69e", // accent, light
+ };
+ 
+-const theme = createTheme({
+-  palette: {
+-    mode: "light", // dark mode intentionally not supported
+-    primary: {
+-      main: brand.deepGreen,
+-      light: brand.lightGreen,
++/**
++ * Builds the MUI theme for a given text direction. `direction` must match the
++ * active locale (rtl for Farsi, ltr otherwise) and the emotion cache set up in
++ * ThemeRegistry, so MUI's own direction-aware components (spacing, icons,
++ * drawers, etc.) flip consistently with the stylis-rtl-processed CSS.
++ */
++export function createAppTheme(direction: "ltr" | "rtl"): Theme {
++  const theme = createTheme({
++    direction,
++    palette: {
++      mode: "light", // dark mode intentionally not supported
++      primary: {
++        main: brand.deepGreen,
++        light: brand.lightGreen,
++      },
++      secondary: {
++        main: brand.terracotta,
++        light: brand.peach,
++        dark: brand.terracottaDark,
++      },
++      background: {
++        default: brand.cream,
++        paper: brand.cream,
++      },
+     },
+-    secondary: {
+-      main: brand.terracotta,
+-      light: brand.peach,
+-      dark: brand.terracottaDark,
++    typography: {
++      // Vazirmatn is loaded as a local font in app/[locale]/layout.tsx and
++      // exposed as the `--font-vazirmatn` CSS variable, so this resolves at
++      // runtime. The system-font stack is a fallback for the first paint.
++      fontFamily: [
++        "var(--font-vazirmatn)",
++        "-apple-system",
++        "BlinkMacSystemFont",
++        "Segoe UI",
++        "Roboto",
++        "sans-serif",
++      ].join(","),
+     },
+-    background: {
+-      default: brand.cream,
+-      paper: brand.cream,
++    shape: {
++      borderRadius: 8,
+     },
+-  },
+-  typography: {
+-    // Vazirmatn is loaded as a local font in app/[locale]/layout.tsx and
+-    // exposed as the `--font-vazirmatn` CSS variable, so this resolves at
+-    // runtime. The system-font stack is a fallback for the first paint.
+-    fontFamily: [
+-      "var(--font-vazirmatn)",
+-      "-apple-system",
+-      "BlinkMacSystemFont",
+-      "Segoe UI",
+-      "Roboto",
+-      "sans-serif",
+-    ].join(","),
+-  },
+-  shape: {
+-    borderRadius: 8,
+-  },
+-});
++  });
+ 
+-export default responsiveFontSizes(theme);
++  return responsiveFontSizes(theme);
++}
++
++export default createAppTheme("ltr");
+diff --git a/messages/az.json b/messages/az.json
+index b498762..3dd0353 100644
+--- a/messages/az.json
++++ b/messages/az.json
+@@ -1,4 +1,8 @@
+ {
++  "A11y": {
++    "skipToContent": "Əsas məzmuna keç",
++    "selectLanguage": "Dil seçin"
++  },
+   "Leadership": {
+     "eyebrow": "Meet the team",
+     "heading": "Our Leadership",
+@@ -38,7 +42,9 @@
+     "previousProject": "Əvvəlki layihə",
+     "nextProject": "Növbəti layihə",
+     "statusCompleted": "Tamamlanıb",
+-    "statusOngoing": "Davam edir"
++    "statusOngoing": "Davam edir",
++    "sectionLabel": "Seçilmiş layihələr",
++    "scrollRegionLabel": "Layihə kartları, sürüşdürülə bilən"
+   },
+   "Hero": {
+     "headline": "İxrac və idxal üçün etibarlı tərəfdaş.",
+diff --git a/messages/en.json b/messages/en.json
+index ef07901..14aeab5 100644
+--- a/messages/en.json
++++ b/messages/en.json
+@@ -1,4 +1,8 @@
+ {
++  "A11y": {
++    "skipToContent": "Skip to main content",
++    "selectLanguage": "Select language"
++  },
+   "Leadership": {
+     "eyebrow": "Meet the team",
+     "heading": "Our Leadership",
+@@ -38,7 +42,9 @@
+     "previousProject": "Previous project",
+     "nextProject": "Next project",
+     "statusCompleted": "Completed",
+-    "statusOngoing": "Ongoing"
++    "statusOngoing": "Ongoing",
++    "sectionLabel": "Featured projects",
++    "scrollRegionLabel": "Project cards, scrollable"
+   },
+   "Hero": {
+     "headline": "A trusted partner for export and import.",
+diff --git a/messages/fa.json b/messages/fa.json
+index 9a444f1..8935bc2 100644
+--- a/messages/fa.json
++++ b/messages/fa.json
+@@ -1,4 +1,8 @@
+ {
++  "A11y": {
++    "skipToContent": "پرش به محتوای اصلی",
++    "selectLanguage": "انتخاب زبان"
++  },
+   "Leadership": {
+     "eyebrow": "Meet the team",
+     "heading": "Our Leadership",
+@@ -38,7 +42,9 @@
+     "previousProject": "پروژه قبلی",
+     "nextProject": "پروژه بعدی",
+     "statusCompleted": "تکمیل‌شده",
+-    "statusOngoing": "در حال اجرا"
++    "statusOngoing": "در حال اجرا",
++    "sectionLabel": "پروژه‌های منتخب",
++    "scrollRegionLabel": "کارت‌های پروژه، قابل اسکرول"
+   },
+   "Hero": {
+     "headline": "راهکار مطمئن برای صادرات و واردات.",
+diff --git a/messages/tr.json b/messages/tr.json
+index 7cd48ad..d57c126 100644
+--- a/messages/tr.json
++++ b/messages/tr.json
+@@ -1,4 +1,8 @@
+ {
++  "A11y": {
++    "skipToContent": "Ana içeriğe geç",
++    "selectLanguage": "Dil seçin"
++  },
+   "Leadership": {
+     "eyebrow": "Meet the team",
+     "heading": "Our Leadership",
+@@ -38,7 +42,9 @@
+     "previousProject": "Önceki proje",
+     "nextProject": "Sonraki proje",
+     "statusCompleted": "Tamamlandı",
+-    "statusOngoing": "Devam ediyor"
++    "statusOngoing": "Devam ediyor",
++    "sectionLabel": "Öne çıkan projeler",
++    "scrollRegionLabel": "Proje kartları, kaydırılabilir"
+   },
+   "Hero": {
+     "headline": "İhracat ve ithalat için güvenilir bir ortak.",
+diff --git a/next.config.ts b/next.config.ts
+index 5dc774c..82b27c9 100644
+--- a/next.config.ts
++++ b/next.config.ts
+@@ -4,6 +4,30 @@ import { withPayload } from "@payloadcms/next/withPayload";
+ 
+ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
+ 
++// Baseline security headers applied to every route. These are framework-agnostic
++// and safe to enable without per-page tuning.
++//
++// A Content-Security-Policy is intentionally NOT set here: a strict CSP needs a
++// nonce for the inline Plausible init script (components/legal/Analytics.tsx)
++// and for emotion's injected styles, plus allowances for the Payload admin, so
++// it must be added deliberately (ideally via middleware) and tested against
++// /admin before enabling. See the template in the comment below.
++const securityHeaders = [
++  { key: "X-Content-Type-Options", value: "nosniff" },
++  { key: "X-Frame-Options", value: "SAMEORIGIN" },
++  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
++  {
++    key: "Permissions-Policy",
++    value: "camera=(), microphone=(), geolocation=()",
++  },
++  // HSTS. Safe once the site is served over HTTPS only; remove `preload` unless
++  // you intend to submit the domain to the HSTS preload list.
++  {
++    key: "Strict-Transport-Security",
++    value: "max-age=63072000; includeSubDomains",
++  },
++];
++
+ const nextConfig: NextConfig = {
+   images: {
+     // Local SVGs live in /public; allow the optimizer to serve them safely.
+@@ -11,6 +35,9 @@ const nextConfig: NextConfig = {
+     contentDispositionType: "attachment",
+     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+   },
++  async headers() {
++    return [{ source: "/:path*", headers: securityHeaders }];
++  },
+   // Payload injects a webpack config; this avoids the Turbopack warning
+   // noted in docs/CMS-PAYLOAD.md.
+   turbopack: {},
+diff --git a/package.json b/package.json
+index 5e79acd..dbe4fcb 100644
+--- a/package.json
++++ b/package.json
+@@ -25,7 +25,7 @@
+     "framer-motion": "12.42.2",
+     "graphql": "16.14.2",
+     "leaflet": "1.9.4",
+-    "next": "16.2.9",
++    "next": "16.3.8",
+     "next-intl": "4.13.2",
+     "payload": "3.89.0",
+     "react": "19.2.4",
+@@ -33,6 +33,8 @@
+     "react-hook-form": "7.85.0",
+     "react-leaflet": "5.0.0",
+     "resend": "6.19.0",
++    "stylis": "4.2.0",
++    "stylis-plugin-rtl": "2.1.1",
+     "zod": "4.4.3"
+   },
+   "devDependencies": {
+@@ -41,8 +43,9 @@
+     "@types/node": "^20",
+     "@types/react": "^19",
+     "@types/react-dom": "^19",
++    "@types/stylis": "4.2.7",
+     "eslint": "^9",
+-    "eslint-config-next": "16.2.9",
++    "eslint-config-next": "16.3.8",
+     "eslint-config-prettier": "^10.1.8",
+     "patch-package": "8.0.1",
+     "prettier": "^3.9.4",
+diff --git a/payload.config.ts b/payload.config.ts
+index 02aac89..63c5efe 100644
+--- a/payload.config.ts
++++ b/payload.config.ts
+@@ -26,6 +26,33 @@ import { ContactSubmissions } from "./payload/collections/ContactSubmissions";
+ 
+ const dirname = path.dirname(fileURLToPath(import.meta.url));
+ 
++/**
++ * Payload signs auth tokens and encrypts fields with this secret. An empty or
++ * predictable value in production is a security hole (forgeable tokens), so we
++ * fail fast at startup instead of silently falling back to "".
++ *
++ * In development/test we fall back to a clearly-labelled insecure value so
++ * local work isn't blocked; it is never reachable in production because the
++ * branch above throws first.
++ */
++function resolvePayloadSecret(): string {
++  const secret = process.env.PAYLOAD_SECRET;
++  if (secret && secret.length > 0) return secret;
++
++  if (process.env.NODE_ENV === "production") {
++    throw new Error(
++      "PAYLOAD_SECRET is not set. Set a strong, stable secret in the environment " +
++        "before building or starting the server in production.",
++    );
++  }
++
++  console.warn(
++    "[payload] PAYLOAD_SECRET is not set — using an insecure development-only " +
++      "fallback. Do NOT use this in production.",
++  );
++  return "dev-insecure-payload-secret-change-me";
++}
++
+ export default buildConfig({
+   admin: {
+     user: Users.slug,
+@@ -49,7 +76,7 @@ export default buildConfig({
+     defaultLocale: "en",
+     fallback: true,
+   },
+-  secret: process.env.PAYLOAD_SECRET || "",
++  secret: resolvePayloadSecret(),
+   typescript: {
+     outputFile: path.resolve(dirname, "payload-types.ts"),
+   },
+diff --git a/payload/access/published.ts b/payload/access/published.ts
+new file mode 100644
+index 0000000..0c7d76b
+--- /dev/null
++++ b/payload/access/published.ts
+@@ -0,0 +1,14 @@
++import type { Access } from "payload";
++
++/**
++ * Public read access for draft-enabled collections.
++ *
++ * Authenticated users (admins) see everything, including drafts. Anonymous /
++ * public requests — REST (`/api/...`) and GraphQL (`/api/graphql`) — are
++ * constrained to published documents via a query filter, so unpublished drafts
++ * never leak through the public API even though `versions.drafts` is enabled.
++ */
++export const publishedOrAuthenticated: Access = ({ req: { user } }) => {
++  if (user) return true;
++  return { _status: { equals: "published" } };
++};
+diff --git a/payload/collections/Clients.ts b/payload/collections/Clients.ts
+index a4a0b9d..98e875c 100644
+--- a/payload/collections/Clients.ts
++++ b/payload/collections/Clients.ts
+@@ -1,10 +1,11 @@
+ // payload/collections/Clients.ts
+ import type { CollectionConfig } from "payload";
++import { publishedOrAuthenticated } from "@/payload/access/published";
+ 
+ export const Clients: CollectionConfig = {
+   slug: "clients",
+   admin: { useAsTitle: "name", defaultColumns: ["name", "category", "order"] },
+-  access: { read: () => true },
++  access: { read: publishedOrAuthenticated },
+   versions: { drafts: true },
+   fields: [
+     { name: "name", type: "text", required: true },
+diff --git a/payload/collections/Industries.ts b/payload/collections/Industries.ts
+index 7ea4cb5..a3612e5 100644
+--- a/payload/collections/Industries.ts
++++ b/payload/collections/Industries.ts
+@@ -1,10 +1,11 @@
+ // payload/collections/Industries.ts
+ import type { CollectionConfig } from "payload";
++import { publishedOrAuthenticated } from "@/payload/access/published";
+ 
+ export const Industries: CollectionConfig = {
+   slug: "industries",
+   admin: { useAsTitle: "name", defaultColumns: ["name", "slug", "order"] },
+-  access: { read: () => true },
++  access: { read: publishedOrAuthenticated },
+   versions: { drafts: true },
+   fields: [
+     { name: "slug", type: "text", required: true, unique: true, index: true },
+diff --git a/payload/collections/Leadership.ts b/payload/collections/Leadership.ts
+index 869af55..8b95551 100644
+--- a/payload/collections/Leadership.ts
++++ b/payload/collections/Leadership.ts
+@@ -1,10 +1,11 @@
+ // payload/collections/Leadership.ts
+ import type { CollectionConfig } from "payload";
++import { publishedOrAuthenticated } from "@/payload/access/published";
+ 
+ export const Leadership: CollectionConfig = {
+   slug: "leadership",
+   admin: { useAsTitle: "name", defaultColumns: ["name", "role", "order"] },
+-  access: { read: () => true },
++  access: { read: publishedOrAuthenticated },
+   versions: { drafts: true },
+   fields: [
+     { name: "name", type: "text", required: true }, // proper names aren't localized
+diff --git a/payload/collections/Posts.ts b/payload/collections/Posts.ts
+index 9ec56ed..0b7ed91 100644
+--- a/payload/collections/Posts.ts
++++ b/payload/collections/Posts.ts
+@@ -1,10 +1,11 @@
+ // payload/collections/Posts.ts
+ import type { CollectionConfig } from "payload";
++import { publishedOrAuthenticated } from "@/payload/access/published";
+ 
+ export const Posts: CollectionConfig = {
+   slug: "posts",
+   admin: { useAsTitle: "title", defaultColumns: ["title", "slug", "category", "date"] },
+-  access: { read: () => true },
++  access: { read: publishedOrAuthenticated },
+   versions: { drafts: true },
+   fields: [
+     { name: "slug", type: "text", required: true, unique: true, index: true },
+diff --git a/payload/collections/Projects.ts b/payload/collections/Projects.ts
+index 8826a34..4f89d06 100644
+--- a/payload/collections/Projects.ts
++++ b/payload/collections/Projects.ts
+@@ -1,5 +1,6 @@
+ // payload/collections/Projects.ts
+ import type { CollectionConfig } from "payload";
++import { publishedOrAuthenticated } from "@/payload/access/published";
+ 
+ export const Projects: CollectionConfig = {
+   slug: "projects",
+@@ -7,7 +8,7 @@ export const Projects: CollectionConfig = {
+     useAsTitle: "title",
+     defaultColumns: ["title", "slug", "sector", "stage", "featured", "order"],
+   },
+-  access: { read: () => true },
++  access: { read: publishedOrAuthenticated },
+   versions: { drafts: true },
+   fields: [
+     // `slug` powers detail routes, the sitemap and cross-collection links.
+diff --git a/payload/collections/Services.ts b/payload/collections/Services.ts
+index 8519987..7548468 100644
+--- a/payload/collections/Services.ts
++++ b/payload/collections/Services.ts
+@@ -1,10 +1,11 @@
+ // payload/collections/Services.ts
+ import type { CollectionConfig } from "payload";
++import { publishedOrAuthenticated } from "@/payload/access/published";
+ 
+ export const Services: CollectionConfig = {
+   slug: "services",
+   admin: { useAsTitle: "title", defaultColumns: ["title", "slug", "order"] },
+-  access: { read: () => true },
++  access: { read: publishedOrAuthenticated },
+   versions: { drafts: true },
+   fields: [
+     { name: "slug", type: "text", required: true, unique: true, index: true },
+diff --git a/payload/collections/Testimonials.ts b/payload/collections/Testimonials.ts
+index adf88cc..df967ee 100644
+--- a/payload/collections/Testimonials.ts
++++ b/payload/collections/Testimonials.ts
+@@ -1,10 +1,11 @@
+ // payload/collections/Testimonials.ts
+ import type { CollectionConfig } from "payload";
++import { publishedOrAuthenticated } from "@/payload/access/published";
+ 
+ export const Testimonials: CollectionConfig = {
+   slug: "testimonials",
+   admin: { useAsTitle: "name", defaultColumns: ["name", "role", "order"] },
+-  access: { read: () => true },
++  access: { read: publishedOrAuthenticated },
+   versions: { drafts: true },
+   fields: [
+     { name: "quote", type: "textarea", required: true, localized: true },
+diff --git a/public/file.svg b/public/file.svg
+deleted file mode 100644
+index 004145c..0000000
+--- a/public/file.svg
++++ /dev/null
+@@ -1 +0,0 @@
+-<svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 13.5V5.41a1 1 0 0 0-.3-.7L9.8.29A1 1 0 0 0 9.08 0H1.5v13.5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5m-1.5 0v-7H8v-5H3v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1M9.5 5V2.12L12.38 5zM5.13 5h-.62v1.25h2.12V5zm-.62 3h7.12v1.25H4.5zm.62 3h-.62v1.25h7.12V11z" clip-rule="evenodd" fill="#666" fill-rule="evenodd"/></svg>
+\ No newline at end of file
+diff --git a/public/globe.svg b/public/globe.svg
+deleted file mode 100644
+index 567f17b..0000000
+--- a/public/globe.svg
++++ /dev/null
+@@ -1 +0,0 @@
+-<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g clip-path="url(#a)"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.27 14.1a6.5 6.5 0 0 0 3.67-3.45q-1.24.21-2.7.34-.31 1.83-.97 3.1M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.48-1.52a7 7 0 0 1-.96 0H7.5a4 4 0 0 1-.84-1.32q-.38-.89-.63-2.08a40 40 0 0 0 3.92 0q-.25 1.2-.63 2.08a4 4 0 0 1-.84 1.31zm2.94-4.76q1.66-.15 2.95-.43a7 7 0 0 0 0-2.58q-1.3-.27-2.95-.43a18 18 0 0 1 0 3.44m-1.27-3.54a17 17 0 0 1 0 3.64 39 39 0 0 1-4.3 0 17 17 0 0 1 0-3.64 39 39 0 0 1 4.3 0m1.1-1.17q1.45.13 2.69.34a6.5 6.5 0 0 0-3.67-3.44q.65 1.26.98 3.1M8.48 1.5l.01.02q.41.37.84 1.31.38.89.63 2.08a40 40 0 0 0-3.92 0q.25-1.2.63-2.08a4 4 0 0 1 .85-1.32 7 7 0 0 1 .96 0m-2.75.4a6.5 6.5 0 0 0-3.67 3.44 29 29 0 0 1 2.7-.34q.31-1.83.97-3.1M4.58 6.28q-1.66.16-2.95.43a7 7 0 0 0 0 2.58q1.3.27 2.95.43a18 18 0 0 1 0-3.44m.17 4.71q-1.45-.12-2.69-.34a6.5 6.5 0 0 0 3.67 3.44q-.65-1.27-.98-3.1" fill="#666"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h16v16H0z"/></clipPath></defs></svg>
+\ No newline at end of file
+diff --git a/public/images/og-default.png b/public/images/og-default.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..b5b0a7a8ef5c54d1c63051a4d278c5273390a4db
+GIT binary patch
+literal 17054
+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
+
+literal 0
+HcmV?d00001
+
+diff --git a/public/next.svg b/public/next.svg
+deleted file mode 100644
+index 5174b28..0000000
+--- a/public/next.svg
++++ /dev/null
+@@ -1 +0,0 @@
+-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 394 80"><path fill="#000" d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z"/><path fill="#000" d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 10 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8-3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1 1.4 1.5 3 1.5 5h-5.8z"/></svg>
+\ No newline at end of file
+diff --git a/public/vercel.svg b/public/vercel.svg
+deleted file mode 100644
+index 7705396..0000000
+--- a/public/vercel.svg
++++ /dev/null
+@@ -1 +0,0 @@
+-<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1155 1000"><path d="m577.3 0 577.4 1000H0z" fill="#fff"/></svg>
+\ No newline at end of file
+diff --git a/public/window.svg b/public/window.svg
+deleted file mode 100644
+index b2b2a44..0000000
+--- a/public/window.svg
++++ /dev/null
+@@ -1 +0,0 @@
+-<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 2.5h13v10a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1zM0 1h16v11.5a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5zm3.75 4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M7 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5" fill="#666"/></svg>
+\ No newline at end of file

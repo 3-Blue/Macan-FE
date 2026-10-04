@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Macan FE
 
-## Getting Started
+Multilingual (en / fa / az / tr) corporate website for MACAN, built with the
+Next.js App Router. Farsi (`fa`) renders right-to-left; the other locales are
+left-to-right.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, SSG) + **React 19**
+- **next-intl** for routing and translations (`messages/*.json`)
+- **MUI 9** + **emotion** (RTL via `stylis-plugin-rtl`)
+- **framer-motion** for transitions
+- **Payload 3** (Postgres) as an optional CMS, behind a swappable content adapter
+- **Resend** for contact-form email
+- **Plausible** (cookieless) analytics
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 (redirects to the default locale).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` — development server
+- `npm run build` / `npm run start` — production build / serve
+- `npm run lint` — ESLint
+- `npm run typecheck` — `tsc --noEmit`
+- `npm run format` — Prettier
 
-## Learn More
+## Environment variables
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Required | Notes |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | prod | Public origin, no trailing slash. Drives canonical / hreflang / sitemap / RSS / OG URLs. **Build throws if unset in production.** |
+| `CONTENT_SOURCE` | no | `payload` to read content from the CMS; anything else uses the in-repo local adapter (default). |
+| `PAYLOAD_SECRET` | prod | Signs auth tokens / encrypts fields. **App throws at startup if unset in production.** |
+| `DATABASE_URI` | with Payload | Postgres connection string. |
+| `RESEND_API_KEY`, `CONTACT_EMAIL_TO`, `CONTACT_EMAIL_FROM` | contact email | If unset, submissions are still stored; the email notification is skipped. |
+| `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC` | no | Analytics script URL. Leave unset in local dev. |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+All pages read content through `lib/content` (a locale-aware adapter). The
+default `local` adapter serves the data in `lib/content/data`; setting
+`CONTENT_SOURCE=payload` switches to the Payload backend without touching
+components. See `docs/CMS-PAYLOAD.md` and `docs/CMS-EDITOR-GUIDE.md`.
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Node hosting (e.g. Vercel) — the app has API routes and is **not** a static
+export. On first Payload deploy, create the initial admin user immediately via
+`/admin/create-first-user`, before the route is publicly reachable.

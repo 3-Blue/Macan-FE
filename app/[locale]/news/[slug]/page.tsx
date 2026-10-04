@@ -11,7 +11,7 @@ import { Section } from "@/components/ui/Section";
 import { RelatedPosts } from "@/components/news/RelatedPosts";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { buildMetadata, articleJsonLd } from "@/lib/seo";
+import { buildMetadata, articleJsonLd, jsonLdScript } from "@/lib/seo";
 import { siteUrl } from "@/lib/site";
 import {
   getPost,
@@ -104,16 +104,16 @@ export default async function PostDetailPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
+          __html: jsonLdScript(
             articleJsonLd({
-            title: post.title,
-            description: excerpt(post.body),
-            url: articleUrl,
-            image: post.cover.url.startsWith("http")
-            ? post.cover.url
-            : `${siteUrl}${post.cover.url}`,
-            author: post.author,
-            datePublished: post.date,
+              title: post.title,
+              description: excerpt(post.body),
+              url: articleUrl,
+              image: post.cover.url.startsWith("http")
+                ? post.cover.url
+                : `${siteUrl}${post.cover.url}`,
+              author: post.author,
+              datePublished: post.date,
             }),
           ),
         }}

@@ -1,4 +1,8 @@
 {
+  "A11y": {
+    "skipToContent": "Ana içeriğe geç",
+    "selectLanguage": "Dil seçin"
+  },
   "Leadership": {
     "eyebrow": "Meet the team",
     "heading": "Our Leadership",
@@ -38,7 +42,9 @@
     "previousProject": "Önceki proje",
     "nextProject": "Sonraki proje",
     "statusCompleted": "Tamamlandı",
-    "statusOngoing": "Devam ediyor"
+    "statusOngoing": "Devam ediyor",
+    "sectionLabel": "Öne çıkan projeler",
+    "scrollRegionLabel": "Proje kartları, kaydırılabilir"
   },
   "Hero": {
     "headline": "İhracat ve ithalat için güvenilir bir ortak.",

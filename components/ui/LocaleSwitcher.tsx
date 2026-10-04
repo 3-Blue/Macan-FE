@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -18,6 +18,7 @@ export default function LocaleSwitcher() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations("A11y");
 
   function handleChange(event: SelectChangeEvent) {
     const nextLocale = event.target.value;
@@ -27,7 +28,7 @@ export default function LocaleSwitcher() {
   return (
     <FormControl size="small">
       <Select
-        aria-label="Select language"
+        aria-label={t("selectLanguage")}
         value={locale}
         onChange={handleChange}
       >

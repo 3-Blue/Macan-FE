@@ -25,7 +25,7 @@
     "framer-motion": "12.42.2",
     "graphql": "16.14.2",
     "leaflet": "1.9.4",
-    "next": "16.2.9",
+    "next": "16.3.8",
     "next-intl": "4.13.2",
     "payload": "3.89.0",
     "react": "19.2.4",
@@ -33,6 +33,8 @@
     "react-hook-form": "7.85.0",
     "react-leaflet": "5.0.0",
     "resend": "6.19.0",
+    "stylis": "4.2.0",
+    "stylis-plugin-rtl": "2.1.1",
     "zod": "4.4.3"
   },
   "devDependencies": {
@@ -41,8 +43,9 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/stylis": "4.2.7",
     "eslint": "^9",
-    "eslint-config-next": "16.2.9",
+    "eslint-config-next": "16.3.8",
     "eslint-config-prettier": "^10.1.8",
     "patch-package": "8.0.1",
     "prettier": "^3.9.4",

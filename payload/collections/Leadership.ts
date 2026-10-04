@@ -1,10 +1,11 @@
 // payload/collections/Leadership.ts
 import type { CollectionConfig } from "payload";
+import { publishedOrAuthenticated } from "@/payload/access/published";
 
 export const Leadership: CollectionConfig = {
   slug: "leadership",
   admin: { useAsTitle: "name", defaultColumns: ["name", "role", "order"] },
-  access: { read: () => true },
+  access: { read: publishedOrAuthenticated },
   versions: { drafts: true },
   fields: [
     { name: "name", type: "text", required: true }, // proper names aren't localized

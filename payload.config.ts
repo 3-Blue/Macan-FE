@@ -26,6 +26,33 @@ import { ContactSubmissions } from "./payload/collections/ContactSubmissions";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
+/**
+ * Payload signs auth tokens and encrypts fields with this secret. An empty or
+ * predictable value in production is a security hole (forgeable tokens), so we
+ * fail fast at startup instead of silently falling back to "".
+ *
+ * In development/test we fall back to a clearly-labelled insecure value so
+ * local work isn't blocked; it is never reachable in production because the
+ * branch above throws first.
+ */
+function resolvePayloadSecret(): string {
+  const secret = process.env.PAYLOAD_SECRET;
+  if (secret && secret.length > 0) return secret;
+
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "PAYLOAD_SECRET is not set. Set a strong, stable secret in the environment " +
+        "before building or starting the server in production.",
+    );
+  }
+
+  console.warn(
+    "[payload] PAYLOAD_SECRET is not set — using an insecure development-only " +
+      "fallback. Do NOT use this in production.",
+  );
+  return "dev-insecure-payload-secret-change-me";
+}
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -49,7 +76,7 @@ export default buildConfig({
     defaultLocale: "en",
     fallback: true,
   },
-  secret: process.env.PAYLOAD_SECRET || "",
+  secret: resolvePayloadSecret(),
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },

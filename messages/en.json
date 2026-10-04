@@ -1,4 +1,8 @@
 {
+  "A11y": {
+    "skipToContent": "Skip to main content",
+    "selectLanguage": "Select language"
+  },
   "Leadership": {
     "eyebrow": "Meet the team",
     "heading": "Our Leadership",
@@ -38,7 +42,9 @@
     "previousProject": "Previous project",
     "nextProject": "Next project",
     "statusCompleted": "Completed",
-    "statusOngoing": "Ongoing"
+    "statusOngoing": "Ongoing",
+    "sectionLabel": "Featured projects",
+    "scrollRegionLabel": "Project cards, scrollable"
   },
   "Hero": {
     "headline": "A trusted partner for export and import.",

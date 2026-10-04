@@ -77,15 +77,19 @@ export async function POST(request: NextRequest) {
   if (company) {
     return NextResponse.json({ success: true });
   }
-  // Persist first, independent of whether the email send succeeds — a
-  // durable record matters more than a duplicate row on rare retries.
+  // Storage is the source of truth: the submission is persisted first, and a
+  // successfully stored submission is treated as a success for the client even
+  // if the (secondary) email notification fails. This avoids the duplicate-row
+  // problem where a client retries after an email-only failure. Email failures
+  // are logged so ops can follow up; the record is never lost.
+  let saved = false;
   try {
     await saveSubmission({ name, email, subject, message, ip });
+    saved = true;
   } catch (err) {
     console.error("Failed to save submission to DB:", err);
-    // Don't fail the request over storage — the email path below is the
-    // primary notification channel; storage is a backup, not a hard gate.
   }
+
   const apiKey = process.env.RESEND_API_KEY;
   const toAddress = process.env.CONTACT_EMAIL_TO;
   const fromAddress = process.env.CONTACT_EMAIL_FROM;
@@ -94,6 +98,9 @@ export async function POST(request: NextRequest) {
     console.error(
       "Contact API misconfigured: missing RESEND_API_KEY, CONTACT_EMAIL_TO, or CONTACT_EMAIL_FROM."
     );
+    // The submission is safely stored, so don't make the user retry (which
+    // would create a duplicate). Only error out if storage also failed.
+    if (saved) return NextResponse.json({ success: true });
     return NextResponse.json(
       { error: "Server is not configured to send email." },
       { status: 500 }
@@ -119,6 +126,7 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error("Resend error:", error);
+      if (saved) return NextResponse.json({ success: true });
       return NextResponse.json(
         { error: "Failed to send email." },
         { status: 502 }
@@ -128,6 +136,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Unexpected error sending contact email:", err);
+    if (saved) return NextResponse.json({ success: true });
     return NextResponse.json(
       { error: "Unexpected server error." },
       { status: 500 }

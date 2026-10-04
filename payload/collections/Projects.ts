@@ -1,5 +1,6 @@
 // payload/collections/Projects.ts
 import type { CollectionConfig } from "payload";
+import { publishedOrAuthenticated } from "@/payload/access/published";
 
 export const Projects: CollectionConfig = {
   slug: "projects",
@@ -7,7 +8,7 @@ export const Projects: CollectionConfig = {
     useAsTitle: "title",
     defaultColumns: ["title", "slug", "sector", "stage", "featured", "order"],
   },
-  access: { read: () => true },
+  access: { read: publishedOrAuthenticated },
   versions: { drafts: true },
   fields: [
     // `slug` powers detail routes, the sitemap and cross-collection links.

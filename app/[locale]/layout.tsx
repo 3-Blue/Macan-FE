@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import ThemeRegistry from "@/components/ThemeRegistry";
 import { Header } from "@/components/layout/Header";
@@ -13,7 +12,7 @@ import { PageTransition } from "@/components/motion/PageTransition";
 import "../globals.css";
 import { CookieConsentBanner } from "@/components/legal/CookieConsentBanner";
 import { Analytics } from "@/components/legal/Analytics";
-import { organizationJsonLd } from "@/lib/seo";
+import { organizationJsonLd, jsonLdScript, DEFAULT_OG_IMAGE } from "@/lib/seo";
 
 const vazirmatn = localFont({
   src: "../../fonts/Vazirmatn[wght].ttf",
@@ -28,6 +27,15 @@ export const metadata: Metadata = {
   },
   description:
     "MACAN provides engineering, construction, supply, and project management solutions.",
+  openGraph: {
+    siteName: "MACAN",
+    type: "website",
+    images: [{ url: DEFAULT_OG_IMAGE }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [DEFAULT_OG_IMAGE],
+  },
 };
 
 export function generateStaticParams() {
@@ -48,6 +56,7 @@ export default async function RootLayout({
   // Opt into static rendering (SSG) for this locale; tells next-intl
   // the active locale without reading request headers.
   setRequestLocale(locale);
+  const t = await getTranslations("A11y");
   const dir = locale === "fa" ? "rtl" : "ltr";
   return (
     <html
@@ -58,31 +67,29 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded focus:shadow-lg"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:start-2 focus:z-50 focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded focus:shadow-lg"
         >
-          Skip to main content
+          {t("skipToContent")}
         </a>
         <Analytics />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationJsonLd()),
-          }}
+          // jsonLdScript escapes `<` so a `</script>` in CMS-authored data
+          // can't break out of this tag.
+          dangerouslySetInnerHTML={{ __html: jsonLdScript(organizationJsonLd()) }}
         />
-        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-          <ThemeRegistry>
-            <NextIntlClientProvider>
-              <Header />
-              <PageTransition>
-                <main id="main-content" className="flex-1">
-                  {children}
-                </main>
-              </PageTransition>
-              <Footer />
-              <CookieConsentBanner />
-            </NextIntlClientProvider>
-          </ThemeRegistry>
-        </AppRouterCacheProvider>
+        <ThemeRegistry direction={dir}>
+          <NextIntlClientProvider>
+            <Header />
+            <PageTransition>
+              <main id="main-content" className="flex-1">
+                {children}
+              </main>
+            </PageTransition>
+            <Footer />
+            <CookieConsentBanner />
+          </NextIntlClientProvider>
+        </ThemeRegistry>
       </body>
     </html>
   );

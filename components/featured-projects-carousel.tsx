@@ -160,8 +160,13 @@ export default function FeaturedProjectsCarousel({
       if (!track) return;
       const card = track.querySelector<HTMLElement>("[data-carousel-card]");
       const cardWidth = card ? card.offsetWidth + 24 : track.clientWidth * 0.8;
+      // In RTL the inline-scroll axis is mirrored, so "next" (direction=1) must
+      // decrease scrollLeft. Negating keeps prev/next logical in both
+      // directions; it's a no-op in LTR.
+      const isRtl = getComputedStyle(track).direction === "rtl";
+      const delta = (isRtl ? -1 : 1) * direction * cardWidth;
       track.scrollBy({
-        left: direction * cardWidth,
+        left: delta,
         behavior: prefersReducedMotion ? "auto" : "smooth",
       });
     },
@@ -199,7 +204,7 @@ export default function FeaturedProjectsCarousel({
   };
 
   return (
-    <Section aria-label="Featured projects">
+    <Section aria-label={t("sectionLabel")}>
       <Container>
         <Box
           sx={{
@@ -245,7 +250,7 @@ export default function FeaturedProjectsCarousel({
           <Box
             ref={trackRef}
             role="region"
-            aria-label="Project cards, scrollable"
+            aria-label={t("scrollRegionLabel")}
             tabIndex={0}
             onKeyDown={handleKeyDown}
             sx={{

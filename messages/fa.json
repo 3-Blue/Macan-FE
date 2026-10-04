@@ -1,4 +1,8 @@
 {
+  "A11y": {
+    "skipToContent": "پرش به محتوای اصلی",
+    "selectLanguage": "انتخاب زبان"
+  },
   "Leadership": {
     "eyebrow": "Meet the team",
     "heading": "Our Leadership",
@@ -38,7 +42,9 @@
     "previousProject": "پروژه قبلی",
     "nextProject": "پروژه بعدی",
     "statusCompleted": "تکمیل‌شده",
-    "statusOngoing": "در حال اجرا"
+    "statusOngoing": "در حال اجرا",
+    "sectionLabel": "پروژه‌های منتخب",
+    "scrollRegionLabel": "کارت‌های پروژه، قابل اسکرول"
   },
   "Hero": {
     "headline": "راهکار مطمئن برای صادرات و واردات.",
